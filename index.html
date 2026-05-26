@@ -402,7 +402,16 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .type-dist-lbl{font-size:12px;color:var(--text);min-width:110px;}
 .type-dist-val{font-size:11px;color:var(--text3);min-width:28px;text-align:right;}
 
-/* GOALS */
+/* FEATURE CARDS in settings */
+.feature-card{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--border);}
+.feature-card-icon{font-size:22px;flex-shrink:0;width:32px;text-align:center;}
+.feature-card-body{flex:1;min-width:0;}
+.feature-card-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.feature-card-desc{font-size:11px;color:var(--text3);line-height:1.4;}
+.feature-card-badge{font-size:10px;color:var(--accent2);border:1px solid var(--accent2);border-radius:10px;padding:1px 8px;white-space:nowrap;flex-shrink:0;}
+
+/* STATS TABS */
+.stat-tab-content{}
 .goals-period-bar{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;}
 .goals-kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1rem;}
 @media(max-width:640px){.goals-kanban{grid-template-columns:1fr;}}
@@ -661,8 +670,9 @@ window._c = function(fn, args) {
 <div class="page active fade-in" id="page-home">
   <div class="page-content">
     <!-- Sub-tabs -->
-    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;">
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;overflow-x:auto;">
       <button class="nav-tab active" id="homeTabBooks" onclick="switchHomeTab('books')" style="font-size:12px;padding:6px 14px;">📚 Livres</button>
+      <button class="nav-tab" id="homeTabScales" onclick="switchHomeTab('scales')" style="font-size:12px;padding:6px 14px;">📊 Échelles</button>
       <button class="nav-tab" id="homeTabModels" onclick="switchHomeTab('models')" style="font-size:12px;padding:6px 14px;">🗂 Modèles</button>
     </div>
     <!-- Books grid view -->
@@ -680,6 +690,14 @@ window._c = function(fn, args) {
         <button class="btn btn-primary btn-sm" onclick="openModelModal()">+ Nouveau</button>
       </div>
       <div id="modelsList"></div>
+    </div>
+    <!-- Scales view (inside home) -->
+    <div id="homeScalesView" style="display:none;">
+      <div class="section-header">
+        <div><h1 class="section-title">Échelles</h1><p class="section-subtitle">Mesurez votre humeur, énergie…</p></div>
+        <button class="btn btn-primary btn-sm" onclick="openScaleModal()">+ Nouvelle</button>
+      </div>
+      <div id="scalesListHome"></div>
     </div>
     <!-- Inside a book: entries list -->
     <div id="bookEntriesView" style="display:none;">
@@ -767,55 +785,111 @@ window._c = function(fn, args) {
 <!-- STATS -->
 <div class="page fade-in" id="page-stats">
   <div class="page-content">
-    <h1 class="section-title" style="margin-bottom:1rem;">Statistiques</h1>
-    <!-- Hero numbers -->
-    <div class="stats-hero" id="statsHero"></div>
-    <!-- Scale averages -->
-    <div class="stats-section-title">Humeur & Échelles</div>
-    <div class="card" style="margin-bottom:1rem;" id="scaleStatsCard">
-      <div id="scaleStatRows"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:8px;">
+      <h1 class="section-title">Statistiques</h1>
+      <div style="display:flex;gap:5px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportStatsJSON()">⬇ JSON</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportStatsPDF()">📄 PDF</button>
+      </div>
     </div>
-    <!-- Chart -->
-    <div class="stats-section-title">Évolution</div>
-    <div class="chart-wrap" id="chartWrap" style="margin-bottom:1rem;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:6px;">
-        <select id="chartScalePick" onchange="drawMoodChart()" style="height:26px;padding:0 6px;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-ui);cursor:pointer;outline:none;"></select>
-        <div style="display:flex;gap:3px;">
-          <button class="period-btn active" onclick="setPeriod(7,this)">7j</button>
-          <button class="period-btn" onclick="setPeriod(30,this)">1m</button>
-          <button class="period-btn" onclick="setPeriod(90,this)">3m</button>
-          <button class="period-btn" onclick="setPeriod(180,this)">6m</button>
-          <button class="period-btn" onclick="setPeriod(365,this)">1an</button>
-          <button class="period-btn" onclick="setPeriod(0,this)">Tout</button>
+    <!-- Stats sub-tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;overflow-x:auto;" id="statsTabBar">
+      <button class="nav-tab active" id="stab-global" onclick="switchStatTab('global')" style="font-size:11px;padding:6px 12px;">🌐 Global</button>
+      <button class="nav-tab" id="stab-journal" onclick="switchStatTab('journal')" style="font-size:11px;padding:6px 12px;">📚 Journal</button>
+      <button class="nav-tab" id="stab-goals" id="stabGoals" onclick="switchStatTab('goals')" style="font-size:11px;padding:6px 12px;display:none;">🎯 Objectifs</button>
+      <button class="nav-tab" id="stab-tracking" onclick="switchStatTab('tracking')" style="font-size:11px;padding:6px 12px;display:none;">🎬 Suivi</button>
+    </div>
+
+    <!-- GLOBAL TAB -->
+    <div id="statsTab-global">
+      <div class="stats-hero" id="statsHeroGlobal"></div>
+      <div class="stats-section-title">Activité récente</div>
+      <div class="card" style="margin-bottom:1rem;"><div class="heatmap-wrap" id="heatmapWrapGlobal"></div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
+          <span style="font-size:10px;color:var(--text3);">Moins</span>
+          <div class="heatmap-cell"></div><div class="heatmap-cell h1"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div>
+          <span style="font-size:10px;color:var(--text3);">Plus</span>
         </div>
       </div>
-      <canvas id="moodChart" style="width:100%;display:block;"></canvas>
-    </div>
-    <!-- Heatmap -->
-    <div class="stats-section-title">Activité (12 dernières semaines)</div>
-    <div class="card" style="margin-bottom:1rem;">
-      <div class="heatmap-wrap" id="heatmapWrap"></div>
-      <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
-        <span style="font-size:10px;color:var(--text3);">Moins</span>
-        <div class="heatmap-cell"></div><div class="heatmap-cell h1"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div>
-        <span style="font-size:10px;color:var(--text3);">Plus</span>
+      <div id="statsGlobalGoals" style="display:none;">
+        <div class="stats-section-title">🎯 Objectifs</div>
+        <div class="card" style="margin-bottom:1rem;" id="statsGlobalGoalsCard"></div>
+      </div>
+      <div id="statsGlobalTracking" style="display:none;">
+        <div class="stats-section-title">🎬 Suivi</div>
+        <div class="card" style="margin-bottom:1rem;" id="statsGlobalTrackingCard"></div>
       </div>
     </div>
-    <!-- Type distribution -->
-    <div class="stats-section-title">Répartition par type</div>
-    <div class="card" style="margin-bottom:1rem;" id="typeDistCard"></div>
-    <!-- Top tags -->
-    <div class="stats-section-title">Tags fréquents</div>
-    <div class="card" style="margin-bottom:1rem;"><div id="topTags" class="tags-wrap"></div></div>
-    <!-- Goals stats (conditional) -->
-    <div id="statsGoalsSection" style="display:none;">
-      <div class="stats-section-title">🎯 Objectifs</div>
-      <div class="card" style="margin-bottom:1rem;" id="statsGoalsCard"></div>
+
+    <!-- JOURNAL TAB -->
+    <div id="statsTab-journal" style="display:none;">
+      <div class="stats-hero" id="statsHeroJournal"></div>
+      <!-- Scale averages -->
+      <div class="stats-section-title" id="scaleStatTitle">Humeur & Échelles</div>
+      <div class="card" style="margin-bottom:1rem;" id="scaleStatsCard">
+        <div id="scaleStatRows"></div>
+      </div>
+      <!-- Chart -->
+      <div class="stats-section-title">Évolution humeur</div>
+      <div class="chart-wrap" id="chartWrap" style="margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:6px;">
+          <select id="chartScalePick" onchange="drawMoodChart()" style="height:26px;padding:0 6px;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-ui);cursor:pointer;outline:none;"></select>
+          <div style="display:flex;gap:3px;">
+            <button class="period-btn active" onclick="setPeriod(7,this)">7j</button>
+            <button class="period-btn" onclick="setPeriod(30,this)">1m</button>
+            <button class="period-btn" onclick="setPeriod(90,this)">3m</button>
+            <button class="period-btn" onclick="setPeriod(180,this)">6m</button>
+            <button class="period-btn" onclick="setPeriod(365,this)">1an</button>
+            <button class="period-btn" onclick="setPeriod(0,this)">Tout</button>
+          </div>
+        </div>
+        <canvas id="moodChart" style="width:100%;display:block;"></canvas>
+      </div>
+      <!-- Heatmap journal -->
+      <div class="stats-section-title">Activité Journal (12 semaines)</div>
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="heatmap-wrap" id="heatmapWrap"></div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
+          <span style="font-size:10px;color:var(--text3);">Moins</span>
+          <div class="heatmap-cell"></div><div class="heatmap-cell h1"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div>
+          <span style="font-size:10px;color:var(--text3);">Plus</span>
+        </div>
+      </div>
+      <!-- Type distribution -->
+      <div class="stats-section-title">Répartition par livre</div>
+      <div class="card" style="margin-bottom:1rem;" id="typeDistCard"></div>
+      <!-- Top tags -->
+      <div class="stats-section-title">Tags fréquents</div>
+      <div class="card" style="margin-bottom:1rem;"><div id="topTags" class="tags-wrap"></div></div>
+      <!-- Export -->
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportEntriesJSON()">⬇ JSON Journal</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportAllPDF()">📄 PDF Journal</button>
+      </div>
     </div>
-    <!-- Tracking stats (conditional) -->
-    <div id="statsTrackingSection" style="display:none;">
-      <div class="stats-section-title">🎬 Suivi</div>
-      <div class="card" id="statsTrackingCard"></div>
+
+    <!-- GOALS TAB -->
+    <div id="statsTab-goals" style="display:none;">
+      <div class="stats-hero" id="statsHeroGoals"></div>
+      <div class="stats-section-title">Répartition</div>
+      <div class="card" style="margin-bottom:1rem;" id="goalsDistCard"></div>
+      <div class="stats-section-title">Progression</div>
+      <div class="card" style="margin-bottom:1rem;" id="goalsProgressCard"></div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportGoalsJSON()">⬇ JSON Objectifs</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportGoalsPDF()">📄 PDF Objectifs</button>
+      </div>
+    </div>
+
+    <!-- TRACKING TAB -->
+    <div id="statsTab-tracking" style="display:none;">
+      <!-- Collection picker -->
+      <div style="display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;" id="trackingStatColPicker"></div>
+      <div id="trackingStatContent"></div>
+      <div style="display:flex;gap:6px;margin-top:1rem;" id="trackingStatExport">
+        <button class="btn btn-secondary btn-sm" onclick="exportTrackingJSON()">⬇ JSON Suivi</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportTrackingPDF()">📄 PDF Suivi</button>
+      </div>
     </div>
   </div>
 </div>
@@ -825,7 +899,11 @@ window._c = function(fn, args) {
   <div class="page-content">
     <div class="section-header">
       <div><h1 class="section-title">Objectifs</h1><p class="section-subtitle" id="goalsCount">–</p></div>
-      <button class="btn btn-primary btn-sm" onclick="openNewGoal()">+ Objectif</button>
+      <div style="display:flex;gap:5px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportGoalsJSON()">⬇</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportGoalsPDF()">📄</button>
+        <button class="btn btn-primary btn-sm" onclick="openNewGoal()">+ Objectif</button>
+      </div>
     </div>
     <!-- Period filter -->
     <div class="goals-period-bar">
@@ -941,6 +1019,10 @@ window._c = function(fn, args) {
         <div class="tags-wrap" id="selectedQuoteTags"></div>
       </div>
     </div>
+    <div style="display:flex;gap:6px;margin-bottom:.8rem;">
+      <button class="btn btn-secondary btn-sm" onclick="exportQuotesJSON()">⬇ JSON</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportQuotesPDF()">📄 PDF</button>
+    </div>
     <!-- Filter bar -->
     <div class="filter-bar" id="quoteFilterBar"></div>
     <!-- List -->
@@ -968,36 +1050,48 @@ window._c = function(fn, args) {
 
 <div id="entryTypesList" style="display:none;"></div>
 
-    <div class="card" style="margin-bottom:.9rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
-        <p style="font-size:13px;font-weight:500;">Échelles</p>
-        <button class="btn btn-secondary btn-sm" onclick="openScaleModal()">+ Nouvelle</button>
-      </div>
-      <div id="scalesList"></div>
+    <!-- STORAGE INFO -->
+    <div class="card" style="margin-bottom:.9rem;" id="storageInfoCard">
+      <p style="font-size:13px;font-weight:500;margin-bottom:9px;">💾 Stockage</p>
+      <div id="storageDetailInfo"></div>
     </div>
 
+    <!-- FEATURES - improved cards -->
     <div class="card" style="margin-bottom:.9rem;">
-      <p style="font-size:13px;font-weight:500;margin-bottom:9px;">Fonctionnalités</p>
-      <div class="scale-setting-row">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:500;color:var(--text);">🎯 Objectifs</div>
-          <div style="font-size:11px;color:var(--text3);">Suivi d'objectifs avec checklist et Kanban</div>
+      <p style="font-size:13px;font-weight:500;margin-bottom:12px;">Fonctionnalités</p>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="featuresGrid">
+        <div class="feature-card" id="feat-books">
+          <div class="feature-card-icon">📚</div>
+          <div class="feature-card-body">
+            <div class="feature-card-name">Livres & Journal</div>
+            <div class="feature-card-desc">Vos journaux, réflexions et rêves organisés en livres. Toujours actif.</div>
+          </div>
+          <div class="feature-card-badge">Actif</div>
         </div>
-        <button class="scale-toggle" id="goalsToggle" onclick="toggleGoalsFeature()"></button>
-      </div>
-      <div class="scale-setting-row">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:500;color:var(--text);">🎬 Suivi</div>
-          <div style="font-size:11px;color:var(--text3);">Films, séries, livres, jeux vus/lus/joués</div>
+        <div class="feature-card" id="feat-goals">
+          <div class="feature-card-icon">🎯</div>
+          <div class="feature-card-body">
+            <div class="feature-card-name">Objectifs</div>
+            <div class="feature-card-desc">Suivez vos objectifs avec checklists, progression et vue Kanban.</div>
+          </div>
+          <button class="scale-toggle" id="goalsToggle" onclick="toggleGoalsFeature()"></button>
         </div>
-        <button class="scale-toggle" id="trackingToggle" onclick="toggleTrackingFeature()"></button>
-      </div>
-      <div class="scale-setting-row">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:500;color:var(--text);">💬 Citations</div>
-          <div style="font-size:11px;color:var(--text3);">Afficher l'onglet Citations dans la navigation</div>
+        <div class="feature-card" id="feat-tracking">
+          <div class="feature-card-icon">🎬</div>
+          <div class="feature-card-body">
+            <div class="feature-card-name">Suivi</div>
+            <div class="feature-card-desc">Films, séries, livres, jeux — historique et notes de visionnage.</div>
+          </div>
+          <button class="scale-toggle" id="trackingToggle" onclick="toggleTrackingFeature()"></button>
         </div>
-        <button class="scale-toggle" id="quotesToggle" onclick="toggleQuotesFeature()"></button>
+        <div class="feature-card" id="feat-quotes">
+          <div class="feature-card-icon">💬</div>
+          <div class="feature-card-body">
+            <div class="feature-card-name">Citations</div>
+            <div class="feature-card-desc">Sauvegardez vos citations préférées avec tags et dates.</div>
+          </div>
+          <button class="scale-toggle" id="quotesToggle" onclick="toggleQuotesFeature()"></button>
+        </div>
       </div>
     </div>
 
@@ -1036,7 +1130,8 @@ window._c = function(fn, args) {
       </div>
     </div>
 
-    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v5.0</p><div id="storageUsage" style="margin-top:8px;font-size:11px;color:var(--text3);"></div></div>
+    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v6.0</p></div>
+    <div id="scalesList" style="display:none;"></div>
   </div>
 </div>
 
@@ -1792,13 +1887,16 @@ function switchTab(tab){
   if(tab==='settings'){renderEntryTypesList();renderScalesList();renderAccountInfo();renderStorageUsage();applyFeatureSettings();}
 }
 function switchHomeTab(tab){
-  const isBooks=tab==='books';
+  const isBooks=tab==='books', isScales=tab==='scales', isModels=tab==='models';
   document.getElementById('homeTabBooks').classList.toggle('active',isBooks);
-  document.getElementById('homeTabModels').classList.toggle('active',!isBooks);
+  document.getElementById('homeTabScales').classList.toggle('active',isScales);
+  document.getElementById('homeTabModels').classList.toggle('active',isModels);
   document.getElementById('booksView').style.display=isBooks?'':'none';
-  document.getElementById('homeModelsView').style.display=isBooks?'none':'';
   document.getElementById('bookEntriesView').style.display='none';
-  if(!isBooks)renderModelsPage();
+  document.getElementById('homeScalesView').style.display=isScales?'':'none';
+  document.getElementById('homeModelsView').style.display=isModels?'':'none';
+  if(isScales)renderScalesHome();
+  if(isModels)renderModelsPage();
 }
 function toggleQuotesFeature(){S.quotesEnabled=!S.quotesEnabled;saveLocal();applyFeatureSettings();if(!S.quotesEnabled&&document.getElementById('page-quotes')?.classList.contains('active'))switchTab('home');}
 function toggleGoalsFeature(){S.goalsEnabled=!S.goalsEnabled;saveLocal();applyFeatureSettings();if(!S.goalsEnabled&&['page-goals','page-goal-detail'].some(id=>document.getElementById(id)?.classList.contains('active')))switchTab('home');}
@@ -1837,8 +1935,26 @@ function onSearch(){
   const q=document.getElementById('globalSearch').value.trim().toLowerCase();
   const drop=document.getElementById('searchDrop');
   if(!q){drop.classList.remove('open');return;}
-  const res=S.entries.filter(e=>{const tx=(e.title||'')+(e.preview||'')+Object.values(e.fields||{}).join(' ')+(e.tags||[]).join(' ');return tx.toLowerCase().includes(q);}).slice(0,7);
-  drop.innerHTML=res.length?res.map(e=>{const t=getType(e.typeId);const d=e.date?formatDate(e.date):null;return`<div class="search-item" onclick="readEntry('${e.id}');document.getElementById('globalSearch').value='';document.getElementById('searchDrop').classList.remove('open');"><div class="search-item-title">${t.icon} ${e.title||(d?`${d.weekday} ${d.day} ${d.month}`:t.name)}</div><div class="search-item-sub">${(e.preview||'').slice(0,70)||'…'}</div></div>`}).join(''):'<div style="padding:9px 13px;font-size:11px;color:var(--text3);">Aucun résultat</div>';
+  const results=[];
+  // Entries
+  S.entries.filter(e=>{const tx=(e.title||'')+(e.preview||'')+Object.values(e.fields||{}).join(' ')+(e.tags||[]).join(' ');return tx.toLowerCase().includes(q);}).slice(0,4).forEach(e=>{
+    const t=getType(e.typeId),d=e.date?formatDate(e.date):null;
+    results.push(`<div class="search-item" onclick="readEntry('${e.id}');document.getElementById('globalSearch').value='';document.getElementById('searchDrop').classList.remove('open');"><div class="search-item-title">${t.icon} ${e.title||(d?`${d.weekday} ${d.day} ${d.month}`:t.name)}</div><div class="search-item-sub">${(e.preview||'').slice(0,60)||'…'}</div></div>`);
+  });
+  // Goals
+  if(S.goalsEnabled)(S.goals||[]).filter(g=>((g.title||'')+(g.desc||'')).toLowerCase().includes(q)).slice(0,2).forEach(g=>{
+    results.push(`<div class="search-item" onclick="openGoalDetail('${g.id}');document.getElementById('globalSearch').value='';document.getElementById('searchDrop').classList.remove('open');"><div class="search-item-title">🎯 ${g.title||'Objectif'}</div><div class="search-item-sub">${g.desc?g.desc.slice(0,60):'Objectif'}</div></div>`);
+  });
+  // Tracking items
+  if(S.trackingEnabled)(S.tracking?.items||[]).filter(i=>(i.title||'').toLowerCase().includes(q)).slice(0,2).forEach(i=>{
+    const col=S.tracking.collections.find(c=>c.id===i.colId);
+    results.push(`<div class="search-item" onclick="openTrackingItem('${i.id}');document.getElementById('globalSearch').value='';document.getElementById('searchDrop').classList.remove('open');"><div class="search-item-title">${col?.icon||'🎬'} ${i.title||'Sans titre'}</div><div class="search-item-sub">${col?.name||'Suivi'}</div></div>`);
+  });
+  // Quotes
+  if(S.quotesEnabled)(S.quotes||[]).filter(qo=>(qo.text||'').toLowerCase().includes(q)).slice(0,2).forEach(qo=>{
+    results.push(`<div class="search-item" onclick="switchTab('quotes');document.getElementById('globalSearch').value='';document.getElementById('searchDrop').classList.remove('open');"><div class="search-item-title">💬 ${qo.author?'— '+qo.author:' Citation'}</div><div class="search-item-sub">${qo.text.slice(0,60)}</div></div>`);
+  });
+  drop.innerHTML=results.length?results.join(''):'<div style="padding:9px 13px;font-size:11px;color:var(--text3);">Aucun résultat</div>';
   drop.classList.add('open');
 }
 
@@ -3149,11 +3265,64 @@ function goBackFromRead(){
   hideToolbar();
 }
 function renderStorageUsage(){
-  const el=document.getElementById('storageUsage');if(!el)return;
-  if(storageMode==='online'){renderOnlineStorageUsage();return;}
-  const totalBytes=new Blob([JSON.stringify(S.entries)]).size;
+  // Now handled by renderStorageDetailInfo
+  renderStorageDetailInfo();
+}
+function renderStorageDetailInfo(){
+  const el=document.getElementById('storageDetailInfo');if(!el)return;
   const fmt=b=>b>1024*1024?`${(b/1024/1024).toFixed(2)} Mo`:b>1024?`${(b/1024).toFixed(1)} Ko`:`${b} o`;
-  el.innerHTML=`<div style="margin-bottom:3px;">📱 Mode local · <strong>${fmt(totalBytes)}</strong> · ${S.entries.length} entrée${S.entries.length>1?'s':''}</div>`;
+  if(storageMode==='online'){
+    const LIMIT=52428800;
+    const totalBytes=new Blob([JSON.stringify(S.entries)]).size;
+    const pct=Math.min(100,Math.round(totalBytes/LIMIT*100));
+    const color=pct>90?'storage-full':pct>70?'storage-warn':'storage-ok';
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">☁️</span>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text);">Mode en ligne · ${currentUser?.email||''}</div>
+          <div style="font-size:11px;color:var(--text3);">Synchronisé sur les serveurs Supabase</div>
+        </div>
+      </div>
+      <div style="margin-bottom:4px;display:flex;justify-content:space-between;font-size:11px;color:var(--text3);">
+        <span>${fmt(totalBytes)} utilisés</span><span>${fmt(LIMIT-totalBytes)} restants / 50 Mo</span>
+      </div>
+      <div class="storage-bar"><div class="storage-bar-fill ${color}" style="width:${Math.max(pct,1)}%;"></div></div>
+      <div style="margin-top:6px;font-size:11px;color:var(--text3);">${S.entries.length} entrée${S.entries.length>1?'s':''} · ${(S.quotes||[]).length} citation${(S.quotes||[]).length>1?'s':''} · ${(S.goals||[]).length} objectif${(S.goals||[]).length>1?'s':''}</div>`;
+  } else {
+    const allData=JSON.stringify({entries:S.entries,quotes:S.quotes,goals:S.goals,tracking:S.tracking});
+    const totalBytes=new Blob([allData]).size;
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">📱</span>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text);">Mode local · Navigateur</div>
+          <div style="font-size:11px;color:var(--text3);">localStorage du navigateur · ${fmt(totalBytes)} utilisés</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Les données sont stockées dans le navigateur sur cet appareil. Pour les sauvegarder, utilisez l'export JSON.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="exportAllDataJSON()">⬇ Tout exporter (JSON)</button>
+        ${window.showDirectoryPicker?'<button class="btn btn-secondary btn-sm" onclick="exportToFolder()">📁 Choisir un dossier</button>':''}
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);">${S.entries.length} entrée${S.entries.length>1?'s':''} · ${(S.quotes||[]).length} citation${(S.quotes||[]).length>1?'s':''} · ${(S.goals||[]).length} objectif${(S.goals||[]).length>1?'s':''} · ${(S.tracking?.items||[]).length} éléments suivi</div>`;
+  }
+}
+function exportAllDataJSON(){
+  const b=new Blob([JSON.stringify({entries:S.entries,quotes:S.quotes||[],goals:S.goals||[],tracking:S.tracking||{},scales:S.scales,entryTypes:S.entryTypes},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`journal_complet_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+async function exportToFolder(){
+  if(!window.showDirectoryPicker)return;
+  try{
+    const dir=await window.showDirectoryPicker({mode:'readwrite'});
+    const fname=`journal_${new Date().toISOString().split('T')[0]}.json`;
+    const file=await dir.getFileHandle(fname,{create:true});
+    const writable=await file.createWritable();
+    await writable.write(JSON.stringify({entries:S.entries,quotes:S.quotes||[],goals:S.goals||[],tracking:S.tracking||{},scales:S.scales},null,2));
+    await writable.close();
+    alert(`✓ Sauvegardé dans : ${dir.name}/${fname}`);
+  }catch(e){if(e.name!=='AbortError')alert('Erreur : '+e.message);}
 }
 function editEntry(id){
   const entry=S.entries.find(e=>e.id===id);if(!entry)return;
@@ -3210,72 +3379,108 @@ function editEntry(id){
 }
 function deleteEntry(id){showConfirm('Supprimer cette entrée ?','Irréversible.',()=>{S.entries=S.entries.filter(e=>e.id!==id);saveLocal();deleteEntryFromSupabase(id);goBackFromRead();renderBooksGrid();renderStats();});}
 
-// ── STATS ──────────────────────────────────────────────────────────────────
-function renderStats(){
+// ── SCALES HOME VIEW ───────────────────────────────────────────────────────
+function renderScalesHome(){
+  const el=document.getElementById('scalesListHome');if(!el)return;
+  el.innerHTML=S.scales.length?S.scales.map(s=>`
+    <div class="scale-setting-row">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span style="font-size:13px;font-weight:500;color:var(--text);">${s.emojiLow||''} ${s.name} ${s.emojiHigh||''}</span>
+          ${s.system?`<span style="font-size:10px;color:var(--accent2);border:1px solid var(--accent2);border-radius:10px;padding:0 5px;">Défaut</span>`:''}
+        </div>
+        <div style="font-size:11px;color:var(--text3);">${s.min} → ${s.max}</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="openScaleModal('${s.id}')">✏️</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteScale('${s.id}')">🗑</button>
+    </div>`).join(''):'<p style="font-size:12px;color:var(--text3);">Aucune échelle. Ajoutez-en une.</p>';
+}
+
+// ── STATS TABS ─────────────────────────────────────────────────────────────
+let currentStatTab='global';
+function switchStatTab(tab){
+  currentStatTab=tab;
+  ['global','journal','goals','tracking'].forEach(t=>{
+    const btn=document.getElementById('stab-'+t);
+    const pane=document.getElementById('statsTab-'+t);
+    if(btn)btn.classList.toggle('active',t===tab);
+    if(pane)pane.style.display=t===tab?'':'none';
+  });
+  if(tab==='journal')renderStatsJournal();
+  else if(tab==='goals')renderStatsGoals();
+  else if(tab==='tracking')renderStatsTracking();
+  else renderStatsGlobal();
+}
+
+function renderStatsGlobal(){
   const entries=S.entries,now=new Date();
   const thisMonth=entries.filter(e=>{if(!e.date)return false;const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  const lastWeek=entries.filter(e=>{if(!e.date)return false;const diff=(now-new Date(e.date))/864e5;return diff<=7;});
-  const scaleAvgs=S.scales.map(s=>{const used=entries.filter(e=>e.scales?.[s.id]!=null);if(!used.length)return null;return{...s,avg:(used.reduce((a,e)=>a+e.scales[s.id],0)/used.length).toFixed(1),count:used.length};}).filter(Boolean);
-  const streak=calcStreak();
   const totalWords=entries.reduce((a,e)=>a+wordCount(e),0);
-
-  // Hero cards
-  document.getElementById('statsHero').innerHTML=`
-    <div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">Total entrées</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${streak}</div><div class="stat-hero-lbl">🔥 Streak</div><div class="stat-hero-sub">${streak>0?streak+' jour'+(streak>1?'s':''):'–'}</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${thisMonth.length}</div><div class="stat-hero-lbl">Ce mois</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${totalWords>999?(totalWords/1000).toFixed(1)+'k':totalWords}</div><div class="stat-hero-lbl">Mots écrits</div></div>`;
-
-  // Scale rows with progress bars
-  const scaleCard=document.getElementById('scaleStatsCard');
-  if(scaleCard){
-    if(!scaleAvgs.length){scaleCard.innerHTML='<p style="font-size:12px;color:var(--text3);">Aucune donnée d\'échelle</p>';}
-    else{
-      document.getElementById('scaleStatRows').innerHTML=scaleAvgs.map(s=>{
-        const pct=Math.round(((s.avg-s.min)/(s.max-s.min))*100);
-        return`<div class="scale-stat-row">
-          <div class="scale-stat-name">${s.emojiLow||''} ${s.name} ${s.emojiHigh||''}</div>
-          <div class="scale-stat-bar"><div class="scale-stat-fill" style="width:${pct}%;"></div></div>
-          <div class="scale-stat-val">${s.avg}<span style="font-size:10px;color:var(--text3);">/${s.max}</span></div>
+  const streak=calcStreak();
+  document.getElementById('statsHeroGlobal').innerHTML=`
+    <div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">Entrées</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${streak}</div><div class="stat-hero-lbl">🔥 Streak</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${totalWords>999?(totalWords/1000).toFixed(1)+'k':totalWords}</div><div class="stat-hero-lbl">Mots</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${thisMonth.length}</div><div class="stat-hero-lbl">Ce mois</div></div>`;
+  // Heatmap
+  const heatEl=document.getElementById('heatmapWrapGlobal');
+  if(heatEl)renderHeatmap(heatEl,entries);
+  // Goals global
+  const gg=document.getElementById('statsGlobalGoals');
+  if(gg){
+    gg.style.display=S.goalsEnabled&&S.goals&&S.goals.length?'':'none';
+    if(S.goalsEnabled&&S.goals&&S.goals.length){
+      const done=S.goals.filter(g=>g.status==='termine').length;
+      document.getElementById('statsGlobalGoalsCard').innerHTML=`
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <span style="font-size:13px;"><strong>${S.goals.length}</strong> objectif${S.goals.length>1?'s':''}</span>
+          <span style="font-size:13px;color:#2E9E6C;"><strong>${done}</strong> terminé${done>1?'s':''}</span>
+          <span style="font-size:13px;color:#3B7DD8;"><strong>${S.goals.filter(g=>g.status==='encours').length}</strong> en cours</span>
         </div>`;
+    }
+  }
+  // Tracking global
+  const gt=document.getElementById('statsGlobalTracking');
+  if(gt){
+    const hasData=S.trackingEnabled&&S.tracking&&S.tracking.items&&S.tracking.items.length;
+    gt.style.display=hasData?'':'none';
+    if(hasData){
+      document.getElementById('statsGlobalTrackingCard').innerHTML=S.tracking.collections.map(col=>{
+        const cnt=S.tracking.items.filter(i=>i.colId===col.id).length;
+        return cnt?`<span style="font-size:13px;margin-right:12px;">${col.icon} <strong>${cnt}</strong> ${col.name}</span>`:'';
       }).join('');
     }
   }
+}
 
-  // Heatmap — 12 weeks
-  const heatEl=document.getElementById('heatmapWrap');
-  if(heatEl){
-    const dayCounts={};
-    entries.filter(e=>e.date).forEach(e=>{dayCounts[e.date]=(dayCounts[e.date]||0)+1;});
-    const cells=[];
-    const start=new Date(now);start.setDate(start.getDate()-83);// 12 weeks back
-    for(let i=0;i<84;i++){
-      const d=new Date(start);d.setDate(start.getDate()+i);
-      const key=d.toISOString().split('T')[0];
-      const c=dayCounts[key]||0;
-      const cls=c===0?'':c===1?'h1':c===2?'h2':c===3?'h3':'h4';
-      const label=`${d.getDate()} ${['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'][d.getMonth()]} : ${c} entrée${c>1?'s':''}`;
-      cells.push(`<div class="heatmap-cell ${cls}" title="${label}"></div>`);
-    }
-    heatEl.innerHTML=cells.join('');
+function renderStatsJournal(){
+  const entries=S.entries,now=new Date();
+  const thisMonth=entries.filter(e=>{if(!e.date)return false;const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  const lastWeek=entries.filter(e=>{if(!e.date)return false;return(now-new Date(e.date))/864e5<=7;});
+  const totalWords=entries.reduce((a,e)=>a+wordCount(e),0);
+  const avgWords=entries.length?Math.round(totalWords/entries.length):0;
+  document.getElementById('statsHeroJournal').innerHTML=`
+    <div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">Total entrées</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${calcStreak()}</div><div class="stat-hero-lbl">🔥 Streak</div><div class="stat-hero-sub">jours</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${thisMonth.length}</div><div class="stat-hero-lbl">Ce mois</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${totalWords>999?(totalWords/1000).toFixed(1)+'k':totalWords}</div><div class="stat-hero-lbl">Mots écrits</div></div>`;
+  // Scales
+  const scaleAvgs=S.scales.map(s=>{
+    const used=entries.filter(e=>e.scales?.[s.id]!=null);
+    if(!used.length)return null;
+    return{...s,avg:(used.reduce((a,e)=>a+e.scales[s.id],0)/used.length).toFixed(1),count:used.length};
+  }).filter(Boolean);
+  const scaleCard=document.getElementById('scaleStatsCard');
+  if(scaleCard){
+    if(!scaleAvgs.length){scaleCard.innerHTML='<p style="font-size:12px;color:var(--text3);">Aucune donnée d\'échelle. Activez des échelles dans Livres → Échelles.</p>';}
+    else{document.getElementById('scaleStatRows').innerHTML=scaleAvgs.map(s=>{
+      const pct=Math.round(((s.avg-s.min)/(s.max-s.min))*100);
+      return`<div class="scale-stat-row"><div class="scale-stat-name">${s.emojiLow||''} ${s.name} ${s.emojiHigh||''}</div><div class="scale-stat-bar"><div class="scale-stat-fill" style="width:${pct}%;"></div></div><div class="scale-stat-val">${s.avg}<span style="font-size:10px;color:var(--text3);">/${s.max}</span></div></div>`;
+    }).join('');}
+    const scaleTitle=document.getElementById('scaleStatTitle');
+    if(scaleTitle)scaleTitle.style.display=scaleAvgs.length?'':'none';
+    if(scaleCard)scaleCard.style.display=scaleAvgs.length?'':'none';
   }
-
-  // Type distribution
-  const typeCard=document.getElementById('typeDistCard');
-  if(typeCard){
-    const maxCount=Math.max(1,...S.entryTypes.map(t=>entries.filter(e=>e.typeId===t.id).length));
-    typeCard.innerHTML=S.entryTypes.map(t=>{
-      const c=entries.filter(e=>e.typeId===t.id).length;
-      const col=typeColor(t);
-      const pct=Math.round(c/maxCount*100);
-      return`<div class="type-dist-row">
-        <div class="type-dist-lbl">${t.icon} ${t.name}</div>
-        <div class="type-dist-bar"><div class="type-dist-fill" style="width:${pct}%;background:${col};"></div></div>
-        <div class="type-dist-val">${c}</div>
-      </div>`;
-    }).join('')||'<p style="font-size:12px;color:var(--text3);">–</p>';
-  }
-
   // Chart
   const pick=document.getElementById('chartScalePick');
   if(pick){
@@ -3283,72 +3488,214 @@ function renderStats(){
     pick.innerHTML=scaleAvgs.length?scaleAvgs.map(s=>`<option value="${s.id}">${s.emojiLow||''} ${s.name}</option>`).join(''):'<option value="">Aucune échelle</option>';
     if(prev&&scaleAvgs.find(s=>s.id===prev))pick.value=prev;
     pick.style.display=scaleAvgs.length?'':'none';
+    document.getElementById('chartWrap').style.display=scaleAvgs.length?'':'none';
   }
   drawMoodChart();
-
+  // Heatmap
+  const heatEl=document.getElementById('heatmapWrap');if(heatEl)renderHeatmap(heatEl,entries);
+  // Type dist
+  const typeCard=document.getElementById('typeDistCard');
+  if(typeCard){
+    const maxCount=Math.max(1,...S.entryTypes.map(t=>entries.filter(e=>e.typeId===t.id).length));
+    typeCard.innerHTML=S.entryTypes.map(t=>{
+      const c=entries.filter(e=>e.typeId===t.id).length;
+      const col=typeColor(t);
+      return`<div class="type-dist-row"><div class="type-dist-lbl">${t.icon} ${t.name}</div><div class="type-dist-bar"><div class="type-dist-fill" style="width:${Math.round(c/maxCount*100)}%;background:${col};"></div></div><div class="type-dist-val">${c}</div></div>`;
+    }).join('')||'<p style="font-size:12px;color:var(--text3);">–</p>';
+  }
   // Tags
   const tags=getAllTags(),sorted=Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,10);
   document.getElementById('topTags').innerHTML=sorted.length?sorted.map(([t,n])=>`<span class="tag">#${t} <span style="opacity:.5;font-size:9px;">${n}</span></span>`).join(''):'<span style="font-size:11px;color:var(--text3);">Aucun tag</span>';
+}
 
-  // Goals stats
-  const gs=document.getElementById('statsGoalsSection');
-  if(gs){
-    gs.style.display=S.goalsEnabled&&S.goals&&S.goals.length?'':'none';
-    if(S.goalsEnabled&&S.goals&&S.goals.length){
-      const gc=document.getElementById('statsGoalsCard');
-      const total=S.goals.length;
-      const done=S.goals.filter(g=>g.status==='termine').length;
-      const inprog=S.goals.filter(g=>g.status==='encours').length;
-      const paused=S.goals.filter(g=>g.status==='pause').length;
-      const pct=total?Math.round(done/total*100):0;
-      const avgProg=total?Math.round(S.goals.reduce((a,g)=>{const p=goalProgress(g);return a+p;},0)/total):0;
-      gc.innerHTML=`
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:.8rem;">
-          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;">${total}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">Total</div></div>
-          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;color:#2E9E6C;">${done}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">Terminés</div></div>
-          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;color:#3B7DD8;">${inprog}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">En cours</div></div>
-        </div>
-        <div style="margin-bottom:4px;display:flex;justify-content:space-between;font-size:11px;color:var(--text3);">
-          <span>Progression moyenne</span><span>${avgProg}%</span>
-        </div>
-        <div class="goal-progress-bar" style="height:6px;">
-          <div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div>
-        </div>`;
-    }
+function renderStatsGoals(){
+  if(!S.goalsEnabled||!S.goals){return;}
+  const goals=S.goals;
+  const done=goals.filter(g=>g.status==='termine').length;
+  const inprog=goals.filter(g=>g.status==='encours').length;
+  const paused=goals.filter(g=>g.status==='pause').length;
+  const avgProg=goals.length?Math.round(goals.reduce((a,g)=>a+goalProgress(g),0)/goals.length):0;
+  const withDeadline=goals.filter(g=>g.dateEnd).length;
+  const overdue=goals.filter(g=>g.dateEnd&&goalDaysLeft(g)<0&&g.status!=='termine').length;
+  document.getElementById('statsHeroGoals').innerHTML=`
+    <div class="stat-hero-card"><div class="stat-hero-val">${goals.length}</div><div class="stat-hero-lbl">Total</div></div>
+    <div class="stat-hero-card" style="--card-accent:#2E9E6C"><div class="stat-hero-val" style="color:#2E9E6C;">${done}</div><div class="stat-hero-lbl">Terminés</div><div class="stat-hero-sub">${goals.length?Math.round(done/goals.length*100):0}%</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val" style="color:#3B7DD8;">${inprog}</div><div class="stat-hero-lbl">En cours</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${avgProg}%</div><div class="stat-hero-lbl">Progression moy.</div></div>`;
+  // Dist
+  const distCard=document.getElementById('goalsDistCard');
+  if(distCard){
+    const rows=[
+      {label:'En cours 🔵',count:inprog,col:'#3B7DD8'},
+      {label:'En pause ⏸',count:paused,col:'#D4882A'},
+      {label:'Terminés ✅',count:done,col:'#2E9E6C'},
+    ];
+    const max=Math.max(1,...rows.map(r=>r.count));
+    distCard.innerHTML=rows.map(r=>`<div class="type-dist-row"><div class="type-dist-lbl" style="font-size:12px;">${r.label}</div><div class="type-dist-bar"><div class="type-dist-fill" style="width:${Math.round(r.count/max*100)}%;background:${r.col};"></div></div><div class="type-dist-val">${r.count}</div></div>`).join('');
   }
+  // Progress list
+  const progCard=document.getElementById('goalsProgressCard');
+  if(progCard){
+    const sorted=[...goals].sort((a,b)=>goalProgress(b)-goalProgress(a)).slice(0,8);
+    progCard.innerHTML=sorted.length?sorted.map(g=>{
+      const pct=goalProgress(g);
+      const dl=goalDaysLeft(g);
+      return`<div style="margin-bottom:.7rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+          <span style="font-size:12px;font-weight:500;flex:1;color:var(--text);">${g.title||'Sans titre'}</span>
+          ${dl!==null?`<span style="font-size:10px;color:${dl<0?'#C8593A':dl<=7?'#D4882A':'var(--text3)'};">J-${Math.abs(dl)}${dl<0?' (retard)':''}</span>`:''}
+          <span style="font-size:11px;color:var(--accent2);">${pct}%</span>
+        </div>
+        <div class="goal-progress-bar"><div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div></div>
+      </div>`;
+    }).join(''):'<p style="font-size:12px;color:var(--text3);">Aucun objectif.</p>';
+  }
+}
 
-  // Tracking stats
-  const ts=document.getElementById('statsTrackingSection');
-  if(ts){
-    const hasData=S.trackingEnabled&&S.tracking&&S.tracking.items&&S.tracking.items.length;
-    ts.style.display=hasData?'':'none';
-    if(hasData){
-      const tc=document.getElementById('statsTrackingCard');
-      const cols=S.tracking.collections||[];
-      let html='';
-      cols.forEach(col=>{
-        const items=S.tracking.items.filter(i=>i.colId===col.id);
-        if(!items.length)return;
-        const statuses=getColStatuses(col);
-        const allReviews=items.flatMap(i=>i.reviews||[]).filter(r=>r.rating);
-        const avgRating=allReviews.length?(allReviews.reduce((a,r)=>a+r.rating,0)/allReviews.length).toFixed(1):null;
-        const totalViews=items.reduce((a,i)=>a+(i.reviews?i.reviews.length:0),0);
-        html+=`<div style="margin-bottom:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <span style="font-size:18px;">${col.icon}</span>
-            <span style="font-size:13px;font-weight:500;">${col.name}</span>
-            <span style="font-size:11px;color:var(--text3);margin-left:auto;">${items.length} élément${items.length>1?'s':''}</span>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            ${statuses.map(s=>{const c=items.filter(i=>i.status===s.id).length;return c?`<span style="font-size:11px;color:var(--text3);">${s.emoji||''} ${s.label} : ${c}</span>`:''}).join('')}
-            ${avgRating?`<span style="font-size:11px;color:var(--accent2);">★ ${avgRating}/10 moy.</span>`:''}
-            ${totalViews>items.length?`<span style="font-size:11px;color:var(--text3);">↺ ${totalViews} fois au total</span>`:''}
-          </div>
+let currentStatTrackingColId=null;
+function renderStatsTracking(){
+  if(!S.trackingEnabled)return;
+  initTracking();
+  const picker=document.getElementById('trackingStatColPicker');
+  if(!picker)return;
+  picker.innerHTML=S.tracking.collections.map(col=>`
+    <button class="filter-tab ${currentStatTrackingColId===col.id||(!currentStatTrackingColId&&S.tracking.collections[0]?.id===col.id)?'active':''}" onclick="showTrackingColStats('${col.id}')">${col.icon} ${col.name}</button>
+  `).join('');
+  showTrackingColStats(currentStatTrackingColId||S.tracking.collections[0]?.id);
+}
+function showTrackingColStats(colId){
+  currentStatTrackingColId=colId;
+  document.querySelectorAll('#trackingStatColPicker .filter-tab').forEach(b=>b.classList.toggle('active',b.textContent.includes(S.tracking.collections.find(c=>c.id===colId)?.name||'')));
+  const col=S.tracking.collections.find(c=>c.id===colId);
+  const el=document.getElementById('trackingStatContent');if(!el||!col)return;
+  const items=S.tracking.items.filter(i=>i.colId===colId);
+  const statuses=getColStatuses(col);
+  const allReviews=items.flatMap(i=>i.reviews||[]).filter(r=>r.rating);
+  const avgRating=allReviews.length?(allReviews.reduce((a,r)=>a+parseFloat(r.rating),0)/allReviews.length).toFixed(1):null;
+  const totalViews=items.reduce((a,i)=>a+(i.reviews?i.reviews.length:0),0);
+  const multiViewed=items.filter(i=>i.reviews&&i.reviews.length>1).length;
+  // Frequency: reviews per week over last 30 days
+  const now=new Date();
+  const recent=allReviews.filter(r=>{const d=r.date?new Date(r.date+'T00:00:00'):new Date(r.createdAt);return(now-d)/864e5<=30;});
+  const perWeek=recent.length?(recent.length/4).toFixed(1):0;
+  // Custom stats from col.customStats
+  const customStats=col.customStats||[];
+  el.innerHTML=`
+    <!-- Hero -->
+    <div class="stats-hero" style="margin-bottom:1rem;">
+      <div class="stat-hero-card"><div class="stat-hero-val">${items.length}</div><div class="stat-hero-lbl">Total</div></div>
+      ${avgRating?`<div class="stat-hero-card"><div class="stat-hero-val">${avgRating}</div><div class="stat-hero-lbl">⭐ Note moy./10</div></div>`:''}
+      <div class="stat-hero-card"><div class="stat-hero-val">${totalViews}</div><div class="stat-hero-lbl">Visionnages</div></div>
+      <div class="stat-hero-card"><div class="stat-hero-val">${perWeek}</div><div class="stat-hero-lbl">/ semaine (30j)</div></div>
+    </div>
+    <!-- Status dist -->
+    <div class="stats-section-title">Répartition</div>
+    <div class="card" style="margin-bottom:1rem;">
+      ${statuses.map(s=>{
+        const cnt=items.filter(i=>i.status===s.id).length;
+        const pct=items.length?Math.round(cnt/items.length*100):0;
+        return`<div class="type-dist-row"><div class="type-dist-lbl" style="font-size:12px;">${s.emoji||''} ${s.label}</div><div class="type-dist-bar"><div class="type-dist-fill" style="width:${pct}%;background:var(--accent2);"></div></div><div class="type-dist-val">${cnt}</div></div>`;
+      }).join('')}
+      ${multiViewed?`<div style="margin-top:8px;font-size:11px;color:var(--text3);">↺ ${multiViewed} élément${multiViewed>1?'s':''} revus plusieurs fois</div>`:''}
+    </div>
+    <!-- Top rated -->
+    ${allReviews.length?`
+    <div class="stats-section-title">Mieux notés</div>
+    <div class="card" style="margin-bottom:1rem;">
+      ${[...items].filter(i=>i.reviews&&i.reviews.some(r=>r.rating)).sort((a,b)=>{
+        const ar=a.reviews.reduce((s,r)=>s+(r.rating||0),0)/a.reviews.length;
+        const br=b.reviews.reduce((s,r)=>s+(r.rating||0),0)/b.reviews.length;
+        return br-ar;
+      }).slice(0,5).map(i=>{
+        const avg=(i.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/i.reviews.length).toFixed(1);
+        return`<div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);">
+          <span style="flex:1;font-size:13px;color:var(--text);">${i.title||'Sans titre'}</span>
+          ${starsHtml(parseFloat(avg))}
         </div>`;
-      });
-      tc.innerHTML=html||'<p style="font-size:12px;color:var(--text3);">–</p>';
-    }
+      }).join('')}
+    </div>`:''}
+    <!-- Custom stats -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+      <div class="stats-section-title" style="margin:0;">Stats personnalisées</div>
+      <button class="btn btn-secondary btn-sm" onclick="openCustomStatModal('${colId}')">+ Ajouter</button>
+    </div>
+    <div class="card" style="margin-bottom:1rem;" id="customStatsCard_${colId}">
+      ${customStats.length?customStats.map((cs,i)=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
+          <div style="flex:1;">
+            <div style="font-size:12px;font-weight:500;color:var(--text);">${cs.name}</div>
+            <div style="font-size:11px;color:var(--text3);">${cs.desc||''}</div>
+          </div>
+          <div style="font-family:var(--font-serif);font-size:20px;color:var(--accent2);">${computeCustomStat(colId,cs)}</div>
+          <button onclick="deleteCustomStat('${colId}',${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;">🗑</button>
+        </div>`).join(''):'<p style="font-size:12px;color:var(--text3);">Aucune stat personnalisée. Ajoutez-en une.</p>'}
+    </div>
+  `;
+}
+function computeCustomStat(colId,cs){
+  const items=S.tracking.items.filter(i=>i.colId===colId);
+  if(cs.type==='count_field'){
+    // Count items where field matches value
+    return items.filter(i=>i.customFields&&i.customFields[cs.fieldId]&&i.customFields[cs.fieldId].toLowerCase().includes((cs.value||'').toLowerCase())).length;
   }
+  if(cs.type==='count_status'){return items.filter(i=>i.status===cs.statusId).length;}
+  if(cs.type==='count_tag'){return items.filter(i=>(i.tags||[]).includes(cs.tag)).length;}
+  return '–';
+}
+function openCustomStatModal(colId){
+  const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
+  const name=prompt('Nom de la statistique (ex: Films au cinéma)');if(!name)return;
+  const types=['Compter par champ (ex: Lieu=cinéma)','Compter par statut','Compter par tag'];
+  const typeIdx=parseInt(prompt('Type :\n0 - '+types[0]+'\n1 - '+types[1]+'\n2 - '+types[2]));
+  col.customStats=col.customStats||[];
+  if(typeIdx===0){
+    const statuses=getColStatuses(col);
+    const fields=col.fields||[];
+    const fieldName=prompt('Nom du champ : '+fields.map(f=>f.name).join(', '));
+    const field=fields.find(f=>f.name.toLowerCase()===fieldName?.toLowerCase());
+    const value=prompt('Valeur à chercher (ex: cinéma)');
+    if(field&&value)col.customStats.push({name,type:'count_field',fieldId:field.id,value,desc:`${field.name} contient "${value}"`});
+  } else if(typeIdx===1){
+    const statuses=getColStatuses(col);
+    const statusLabel=prompt('Statut : '+statuses.map(s=>s.label).join(', '));
+    const st=statuses.find(s=>s.label.toLowerCase()===statusLabel?.toLowerCase());
+    if(st)col.customStats.push({name,type:'count_status',statusId:st.id,desc:`Statut: ${st.label}`});
+  } else if(typeIdx===2){
+    const tag=prompt('Tag à compter');
+    if(tag)col.customStats.push({name,type:'count_tag',tag:tag.toLowerCase(),desc:`Tag: #${tag}`});
+  }
+  saveLocal();showTrackingColStats(colId);
+}
+function deleteCustomStat(colId,idx){
+  const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
+  col.customStats=(col.customStats||[]).filter((_,i)=>i!==idx);
+  saveLocal();showTrackingColStats(colId);
+}
+
+function renderHeatmap(el,entries){
+  const now=new Date();
+  const dayCounts={};
+  entries.filter(e=>e.date).forEach(e=>{dayCounts[e.date]=(dayCounts[e.date]||0)+1;});
+  const cells=[];
+  const start=new Date(now);start.setDate(start.getDate()-83);
+  for(let i=0;i<84;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    const key=d.toISOString().split('T')[0];
+    const c=dayCounts[key]||0;
+    const cls=c===0?'':c===1?'h1':c===2?'h2':c===3?'h3':'h4';
+    cells.push(`<div class="heatmap-cell ${cls}" title="${d.getDate()}/${d.getMonth()+1} : ${c} entrée${c>1?'s':''}"></div>`);
+  }
+  el.innerHTML=cells.join('');
+}
+function renderStats(){
+  // Show/hide stats tabs based on enabled features
+  const goalsTab=document.getElementById('stab-goals');
+  const trackingTab=document.getElementById('stab-tracking');
+  if(goalsTab)goalsTab.style.display=S.goalsEnabled?'':'none';
+  if(trackingTab)trackingTab.style.display=S.trackingEnabled?'':'none';
+  if(currentStatTab==='goals'&&!S.goalsEnabled)currentStatTab='global';
+  if(currentStatTab==='tracking'&&!S.trackingEnabled)currentStatTab='global';
+  switchStatTab(currentStatTab);
 }
 function calcStreak(){if(!S.entries.length)return 0;const dates=[...new Set(S.entries.filter(e=>e.date).map(e=>e.date))].sort().reverse();let streak=0,cur=new Date();cur.setHours(0,0,0,0);for(const d of dates){const dd=new Date(d+'T00:00:00'),diff=Math.round((cur-dd)/864e5);if(diff===0||diff===1){streak++;cur=dd;}else break;}return streak;}
 let chartPeriodDays=7;
@@ -3524,8 +3871,106 @@ function generatePDF(entries){
   doc.save(entries.length===1?(entries[0].date||'entree')+'.pdf':'journal.pdf');
 }
 
-// ── IMPORT/EXPORT ──────────────────────────────────────────────────────────
-function exportJSON(){const b=new Blob([JSON.stringify({entries:S.entries},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`journal_${new Date().toISOString().split('T')[0]}.json`;a.click();}
+// ── EXPORT / IMPORT ────────────────────────────────────────────────────────
+function exportJSON(){exportEntriesJSON();}
+function exportEntriesJSON(){
+  const b=new Blob([JSON.stringify({entries:S.entries,scales:S.scales,entryTypes:S.entryTypes},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`journal_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function exportGoalsJSON(){
+  const b=new Blob([JSON.stringify({goals:S.goals||[]},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`objectifs_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function exportQuotesJSON(){
+  const b=new Blob([JSON.stringify({quotes:S.quotes||[]},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`citations_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function exportTrackingJSON(){
+  const b=new Blob([JSON.stringify({tracking:S.tracking},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`suivi_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function exportStatsJSON(){
+  const data={journal:{entries:S.entries.length,words:S.entries.reduce((a,e)=>a+wordCount(e),0),streak:calcStreak()},goals:S.goals?{total:S.goals.length,done:S.goals.filter(g=>g.status==='termine').length}:null,tracking:S.tracking?{items:S.tracking.items.length}:null};
+  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`stats_${new Date().toISOString().split('T')[0]}.json`;a.click();
+}
+function exportGoalsPDF(){
+  loadJsPDF(()=>{
+    const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,m=20,lH=6.5,mW=W-m*2;let y=m;
+    const exportDate=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    const add=(txt,sz,bold,col)=>{doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');doc.setTextColor(col||'#1A1814');doc.splitTextToSize(String(txt||''),mW).forEach(l=>{if(y>277){doc.addPage();y=m;}doc.text(l,m,y);y+=lH;});};
+    add('Objectifs — Exporté le '+exportDate,14,true);y+=4;
+    (S.goals||[]).forEach((g,i)=>{
+      if(i>0&&y>240){doc.addPage();y=m;}
+      const pct=goalProgress(g);
+      add(g.title||'Sans titre',12,true);
+      add({encours:'En cours',pause:'En pause',termine:'Terminé'}[g.status]||g.status,9,false,'#8B7355');
+      if(g.desc)add(g.desc,10);
+      if(g.dateEnd)add('Échéance : '+g.dateEnd,9,false,'#A09D99');
+      add(`Progression : ${pct}%`,9,false,'#6B6760');
+      if(g.checklist&&g.checklist.length){g.checklist.forEach(c=>add(`  ${c.done?'☑':'☐'} ${c.text}`,9));};
+      y+=4;doc.setDrawColor('#E5E2DC');doc.line(m,y,W-m,y);y+=4;
+    });
+    doc.setFontSize(8);doc.setTextColor('#A09D99');doc.text(`Exporté le ${exportDate}`,m,287);
+    doc.save(`objectifs_${new Date().toISOString().split('T')[0]}.pdf`);
+  });
+}
+function exportQuotesPDF(){
+  loadJsPDF(()=>{
+    const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,m=20,lH=7,mW=W-m*2;let y=m;
+    const exportDate=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    const add=(txt,sz,bold,col)=>{doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');doc.setTextColor(col||'#1A1814');doc.splitTextToSize(String(txt||''),mW).forEach(l=>{if(y>277){doc.addPage();y=m;}doc.text(l,m,y);y+=lH;});};
+    add('Citations — Exporté le '+exportDate,14,true);y+=6;
+    (S.quotes||[]).forEach(q=>{
+      add('\u201C'+q.text+'\u201D',12,false,'#1A1814');
+      if(q.author)add('— '+q.author,10,false,'#8B7355');
+      if(q.tags&&q.tags.length)add(q.tags.map(t=>'#'+t).join(' '),9,false,'#A09D99');
+      y+=5;if(y>270){doc.addPage();y=m;}
+    });
+    doc.setFontSize(8);doc.setTextColor('#A09D99');doc.text(`Exporté le ${exportDate}`,m,287);
+    doc.save(`citations_${new Date().toISOString().split('T')[0]}.pdf`);
+  });
+}
+function exportTrackingPDF(){
+  loadJsPDF(()=>{
+    const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,m=20,lH=6.5,mW=W-m*2;let y=m;
+    const exportDate=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    const add=(txt,sz,bold,col)=>{doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');doc.setTextColor(col||'#1A1814');doc.splitTextToSize(String(txt||''),mW).forEach(l=>{if(y>277){doc.addPage();y=m;}doc.text(l,m,y);y+=lH;});};
+    add('Suivi — Exporté le '+exportDate,14,true);y+=4;
+    (S.tracking?.collections||[]).forEach(col=>{
+      const items=S.tracking.items.filter(i=>i.colId===col.id);if(!items.length)return;
+      if(y>250){doc.addPage();y=m;}
+      add(col.icon+' '+col.name,12,true,'#8B7355');y+=2;
+      items.forEach(item=>{
+        const lastRev=item.reviews&&item.reviews.length?item.reviews[item.reviews.length-1]:null;
+        add(`${item.title||'Sans titre'}${lastRev&&lastRev.rating?' — '+lastRev.rating+'/10':''}`,10);
+        if(lastRev&&lastRev.avis){const txt=lastRev.avis.replace(/<[^>]+>/g,' ').trim();if(txt)add('  '+txt.slice(0,120),9,false,'#6B6760');}
+      });
+      y+=3;
+    });
+    doc.setFontSize(8);doc.setTextColor('#A09D99');doc.text(`Exporté le ${exportDate}`,m,287);
+    doc.save(`suivi_${new Date().toISOString().split('T')[0]}.pdf`);
+  });
+}
+function exportStatsPDF(){
+  loadJsPDF(()=>{
+    const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,m=20,mW=W-m*2;let y=m;
+    const exportDate=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    doc.setFontSize(16);doc.setFont('helvetica','bold');doc.text('Statistiques — '+exportDate,m,y);y+=12;
+    const sections=[
+      ['Journal',`${S.entries.length} entrées · ${S.entries.reduce((a,e)=>a+wordCount(e),0)} mots · Streak ${calcStreak()}j`],
+      S.goalsEnabled&&S.goals?['Objectifs',`${S.goals.length} total · ${S.goals.filter(g=>g.status==='termine').length} terminés`]:null,
+      S.trackingEnabled&&S.tracking?.items?.length?['Suivi',`${S.tracking.items.length} éléments · ${S.tracking.collections.map(c=>c.icon+c.name+'('+S.tracking.items.filter(i=>i.colId===c.id).length+')').join(' ')}`]:null,
+    ].filter(Boolean);
+    sections.forEach(([title,val])=>{doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor('#8B7355');doc.text(title,m,y);y+=6;doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor('#1A1814');doc.text(val,m,y);y+=9;});
+    doc.setFontSize(8);doc.setTextColor('#A09D99');doc.text('Exporté le '+exportDate,m,287);
+    doc.save(`stats_${new Date().toISOString().split('T')[0]}.pdf`);
+  });
+}
 function importJSON(){document.getElementById('importFile').click();}
 function handleImport(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const d=JSON.parse(ev.target.result);if(d.entries){S.entries=d.entries;saveLocal();for(const entry of d.entries){await saveEntryToSupabase(entry);}renderEntries();renderStats();alert(d.entries.length+' entrées importées et synchronisées !');}}catch(err){alert('Fichier invalide.');}};r.readAsText(f);e.target.value='';}
 function clearAllData(){showConfirm('Effacer toutes les données ?','Irréversible — supprime aussi de Supabase.',async()=>{for(const e of S.entries){await deleteEntryFromSupabase(e.id);}S.entries=[];saveLocal();renderBooksGrid();renderStats();});}
