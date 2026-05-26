@@ -451,6 +451,19 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .goal-progress-manual{display:flex;align-items:center;gap:10px;}
 .goal-progress-manual input[type=range]{flex:1;}
 
+/* SECTION CONTROLS in entry editor */
+.section-controls{display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .15s;flex-shrink:0;}
+.journal-section:hover .section-controls,.journal-section:focus-within .section-controls{opacity:1;}
+.section-ctrl-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 5px;border-radius:4px;line-height:1;}
+.section-ctrl-btn:hover{background:var(--bg3);color:var(--text);}
+
+/* MINI EVOLUTION CHARTS */
+.mini-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;margin-bottom:.7rem;}
+.mini-chart-title{font-size:11px;font-weight:500;color:var(--text2);margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;}
+.mini-period-btns{display:flex;gap:3px;}
+.mini-period-btn{padding:1px 7px;border-radius:10px;font-size:10px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;font-family:var(--font-ui);}
+.mini-period-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
 /* TRACKING */
 .tracking-collections{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem;}
 .tracking-col-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:all .2s;}
@@ -868,11 +881,23 @@ window._c = function(fn, args) {
       </div>
     </div>
 
-    <!-- GOALS TAB -->
+    <!-- Goals TAB evolution -->
     <div id="statsTab-goals" style="display:none;">
       <div class="stats-hero" id="statsHeroGoals"></div>
       <div class="stats-section-title">Répartition</div>
       <div class="card" style="margin-bottom:1rem;" id="goalsDistCard"></div>
+      <div class="stats-section-title">Évolution des ajouts</div>
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">
+          Objectifs créés
+          <div class="mini-period-btns">
+            <button class="mini-period-btn active" onclick="setGoalsChartPeriod(30,this)">1m</button>
+            <button class="mini-period-btn" onclick="setGoalsChartPeriod(90,this)">3m</button>
+            <button class="mini-period-btn" onclick="setGoalsChartPeriod(365,this)">1an</button>
+          </div>
+        </div>
+        <canvas id="goalsChart" style="width:100%;display:block;"></canvas>
+      </div>
       <div class="stats-section-title">Progression</div>
       <div class="card" style="margin-bottom:1rem;" id="goalsProgressCard"></div>
       <div style="display:flex;gap:6px;">
@@ -886,6 +911,18 @@ window._c = function(fn, args) {
       <!-- Collection picker -->
       <div style="display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;" id="trackingStatColPicker"></div>
       <div id="trackingStatContent"></div>
+      <div class="stats-section-title" style="margin-top:.5rem;">Évolution des ajouts</div>
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">
+          Éléments ajoutés
+          <div class="mini-period-btns">
+            <button class="mini-period-btn active" onclick="setTrackingChartPeriod(30,this)">1m</button>
+            <button class="mini-period-btn" onclick="setTrackingChartPeriod(90,this)">3m</button>
+            <button class="mini-period-btn" onclick="setTrackingChartPeriod(365,this)">1an</button>
+          </div>
+        </div>
+        <canvas id="trackingChart" style="width:100%;display:block;"></canvas>
+      </div>
       <div style="display:flex;gap:6px;margin-top:1rem;" id="trackingStatExport">
         <button class="btn btn-secondary btn-sm" onclick="exportTrackingJSON()">⬇ JSON Suivi</button>
         <button class="btn btn-secondary btn-sm" onclick="exportTrackingPDF()">📄 PDF Suivi</button>
@@ -1005,23 +1042,36 @@ window._c = function(fn, args) {
     <div class="section-header">
       <div><h1 class="section-title">Citations</h1><p class="section-subtitle" id="quotesCount">–</p></div>
     </div>
-    <!-- Quick add -->
-    <div class="quote-input-box">
+    <!-- Quick add / edit box -->
+    <div class="quote-input-box" id="quoteInputBox">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+        <span style="font-size:12px;font-weight:500;color:var(--text2);" id="quoteFormLabel">Nouvelle citation</span>
+        <button class="btn btn-secondary btn-sm" id="quoteCancelEditBtn" style="display:none;margin-left:auto;" onclick="cancelQuoteEdit()">Annuler</button>
+      </div>
       <textarea class="quote-textarea" id="quoteText" placeholder="Tapez ou collez une citation…" rows="3"></textarea>
       <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <input type="text" id="quoteAuthor" placeholder="Auteur (optionnel)" style="flex:1;min-width:120px;font-size:12px;padding:6px 9px;">
         <input type="date" id="quoteDate" style="width:140px;font-size:12px;padding:6px 9px;">
         <button class="btn btn-secondary btn-sm" onclick="clearQuoteDate()" title="Sans date">✕</button>
-        <button class="btn btn-primary btn-sm" onclick="saveQuote()">＋ Ajouter</button>
+        <button class="btn btn-primary btn-sm" onclick="saveQuote()" id="quoteSubmitBtn">＋ Ajouter</button>
       </div>
       <div style="margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <div class="tag-input-wrap" style="flex:1;min-width:160px;"><input type="text" id="quoteTagInput" placeholder="Tag…" onkeydown="addQuoteTagKD(event)" style="font-size:12px;padding:5px 8px;"><button class="btn btn-secondary btn-sm" onclick="addQuoteTag()">+</button></div>
         <div class="tags-wrap" id="selectedQuoteTags"></div>
       </div>
     </div>
-    <div style="display:flex;gap:6px;margin-bottom:.8rem;">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:.8rem;flex-wrap:wrap;">
       <button class="btn btn-secondary btn-sm" onclick="exportQuotesJSON()">⬇ JSON</button>
       <button class="btn btn-secondary btn-sm" onclick="exportQuotesPDF()">📄 PDF</button>
+      <div style="position:relative;margin-left:auto;">
+        <button class="btn btn-secondary btn-sm" onclick="toggleQuoteSortDD(event)">↕ <span id="quoteSortLabel">Récent</span></button>
+        <div id="quoteSortDD" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:200;min-width:150px;overflow:hidden;">
+          <div class="sort-opt" onclick="setQuoteSort('recent')">📅 Plus récent</div>
+          <div class="sort-opt" onclick="setQuoteSort('oldest')">📅 Plus ancien</div>
+          <div class="sort-opt" onclick="setQuoteSort('author')">🔤 Auteur A→Z</div>
+          <div class="sort-opt" onclick="setQuoteSort('alpha')">🔤 Citation A→Z</div>
+        </div>
+      </div>
     </div>
     <!-- Filter bar -->
     <div class="filter-bar" id="quoteFilterBar"></div>
@@ -1229,13 +1279,25 @@ window._c = function(fn, args) {
     <div class="form-group">
       <label>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
       <div id="colFieldsList" style="margin-bottom:7px;"></div>
-      <div style="display:flex;gap:6px;">
-        <input type="text" id="colFieldInput" placeholder="Lieu, Plateforme, Genre…" style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
-        <select id="colFieldType" style="width:90px;font-size:12px;padding:6px 4px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <input type="text" id="colFieldInput" placeholder="Nom du champ…" style="flex:1;min-width:100px;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
+        <select id="colFieldType" style="width:110px;font-size:12px;padding:6px 4px;" onchange="onFieldTypeChange()">
           <option value="text">Texte</option>
+          <option value="date">Date 📅</option>
+          <option value="progress">Progression %</option>
           <option value="select">Choix</option>
         </select>
         <button class="btn btn-secondary btn-sm" onclick="addColField()">+</button>
+      </div>
+      <!-- Min/max config — shown only for progress type -->
+      <div id="colProgressConfig" style="display:none;margin-top:6px;display:none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-size:11px;color:var(--text3);">De</span>
+          <input type="number" id="colFieldMin" value="0" min="0" style="width:60px;font-size:12px;padding:4px 6px;">
+          <span style="font-size:11px;color:var(--text3);">à</span>
+          <input type="number" id="colFieldMax" value="100" min="1" style="width:60px;font-size:12px;padding:4px 6px;">
+          <span style="font-size:11px;color:var(--text3);">(ex: pages, km…)</span>
+        </div>
       </div>
     </div>
     <div class="modal-actions">
@@ -1830,14 +1892,46 @@ function renderColorGrid(){
   const g=document.getElementById('colorGrid');if(!g)return;
   g.innerHTML=COLORS.map(c=>`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="color-swatch ${(S.color||'beige')===c.id?'selected':''}" style="background:${c.hex};" onclick="setColor('${c.id}')" title="${c.label}"></div><span style="font-size:9px;color:var(--text3);">${c.label}</span></div>`).join('');
 }
+// ── SECTION BUILDER ────────────────────────────────────────────────────────
+function buildSectionHTML(sec,content='',isCustom=false){
+  const id='sec_'+uid();
+  const minH=sec.toLowerCase().includes('rêve')||sec.toLowerCase().includes('pensée')||sec.toLowerCase().includes('réflexion')||sec.toLowerCase().includes('description')?'140px':'85px';
+  const nameHtml=isCustom
+    ?`<input class="section-name-input" type="text" value="${sec}" placeholder="Nom de la section…">`
+    :`<span>${sec}</span>`;
+  return`<div class="journal-section" id="${id}" style="margin-bottom:.8rem;">
+    <div class="journal-section-label" style="display:flex;align-items:center;gap:6px;">
+      ${nameHtml}
+      <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
+      <div class="section-controls">
+        <button class="section-ctrl-btn" title="Monter" onclick="moveSectionUp('${id}')">↑</button>
+        <button class="section-ctrl-btn" title="Descendre" onclick="moveSectionDown('${id}')">↓</button>
+        <button class="section-ctrl-btn" title="Supprimer cette section" onclick="removeSection('${id}')">✕</button>
+      </div>
+    </div>
+    <div class="rich-content" contenteditable="true" placeholder="${sec.replace(/"/g,'&quot;')}…" style="min-height:${minH};">${content}</div>
+  </div>`;
+}
+function moveSectionUp(id){
+  const el=document.getElementById(id);if(!el||!el.previousElementSibling)return;
+  el.parentNode.insertBefore(el,el.previousElementSibling);
+}
+function moveSectionDown(id){
+  const el=document.getElementById(id);if(!el||!el.nextElementSibling)return;
+  el.parentNode.insertBefore(el.nextElementSibling,el);
+}
+function removeSection(id){
+  if(document.querySelectorAll('#entryFields .journal-section').length<=1){alert('Gardez au moins une section.');return;}
+  document.getElementById(id)?.remove();
+}
+
 // ── ADD CUSTOM SECTION ─────────────────────────────────────────────────────
 function addCustomSection(){
   const wrap=document.getElementById('entryFields');
-  const id='custom_'+Date.now();
-  const div=document.createElement('div');
-  div.className='journal-section';div.id='sec_'+id;
-  div.innerHTML=`<div class="journal-section-label" style="display:flex;align-items:center;gap:6px;"><input class="section-name-input" type="text" placeholder="Nom de la section…"><span style="flex:1;height:1px;background:var(--border);display:block;"></span><button onclick="document.getElementById('sec_${id}').remove()" style="border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:16px;padding:0;line-height:1;">×</button></div><div class="rich-content" contenteditable="true" placeholder="Écrivez ici…" style="min-height:90px;"></div>`;
-  wrap.appendChild(div);div.querySelector('.section-name-input').focus();showToolbar();
+  const html=buildSectionHTML('Nouvelle section','',true);
+  const temp=document.createElement('div');temp.innerHTML=html;
+  const div=temp.firstElementChild;wrap.appendChild(div);
+  div.querySelector('.section-name-input')?.focus();showToolbar();
 }
 // ── CAMERA ─────────────────────────────────────────────────────────────────
 function capturePhoto(){document.getElementById('cameraInput').click();}
@@ -2105,7 +2199,7 @@ function goToWrite(){
   document.getElementById('noDate').checked=false;
   entryTags=[];renderSelTags();
   renderScalesWrite();
-  document.getElementById('entryFields').innerHTML=(model?.sections||['Contenu']).map(sec=>`<div class="journal-section"><div class="journal-section-label">${sec}</div><div class="rich-content" contenteditable="true" placeholder="${sec}…" style="min-height:${sec.toLowerCase().includes('rêve')||sec.toLowerCase().includes('pensée')||sec.toLowerCase().includes('réflexion')||sec.toLowerCase().includes('description')?'150px':'85px'};"></div></div>`).join('');
+  document.getElementById('entryFields').innerHTML=(model?.sections||['Contenu']).map(sec=>buildSectionHTML(sec,'',false)).join('');
   document.getElementById('step-type').style.display='none';
   document.getElementById('step-write').style.display='';
   showToolbar();
@@ -2385,9 +2479,9 @@ function applyOnboardSelections(){
     // Films collection with default fields
     if(onboardSelected.has('films')&&!S.tracking.collections.find(c=>c.id==='tc_films')){
       S.tracking.collections.push({
-        id:'tc_films',name:'Films & Séries',icon:'🎬',desc:'',
+        id:'tc_films',name:'Films',icon:'🎬',desc:'',
         statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-        fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]
+        fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]
       });
     }
     if(onboardSelected.has('livreslu')&&!S.tracking.collections.find(c=>c.id==='tc_livres')){
@@ -2465,22 +2559,41 @@ function addColStatus(){
   renderColStatuses();
 }
 function removeColStatus(i){colModalStatuses.splice(i,1);renderColStatuses();}
+function onFieldTypeChange(){
+  const type=document.getElementById('colFieldType').value;
+  const cfg=document.getElementById('colProgressConfig');
+  if(cfg)cfg.style.display=type==='progress'?'block':'none';
+}
 function renderColFields(){
   const el=document.getElementById('colFieldsList');if(!el)return;
   if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ additionnel</p>';return;}
-  el.innerHTML=colModalFields.map((f,i)=>`
-    <div class="col-field-row">
+  const typeLabels={text:'Texte',date:'Date 📅',select:'Choix',progress:'Progression %'};
+  el.innerHTML=colModalFields.map((f,i)=>{
+    const label=typeLabels[f.type]||f.type;
+    const extra=f.type==='progress'?` (${f.min||0}→${f.max||100})`:'';
+    return`<div class="col-field-row">
       <span class="col-field-name">${f.name}</span>
-      <span class="col-field-type">${f.type==='select'?'Choix':'Texte'}</span>
+      <span class="col-field-type">${label}${extra}</span>
       <button class="col-field-del" onclick="removeColField(${i})">✕</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function addColField(){
   const name=document.getElementById('colFieldInput').value.trim();
   const type=document.getElementById('colFieldType').value;
   if(!name)return;
-  colModalFields.push({id:uid(),name,type});
+  const field={id:uid(),name,type};
+  if(type==='progress'){
+    field.min=parseInt(document.getElementById('colFieldMin').value)||0;
+    field.max=parseInt(document.getElementById('colFieldMax').value)||100;
+  }
+  colModalFields.push(field);
   document.getElementById('colFieldInput').value='';
+  // Reset config
+  const cfg=document.getElementById('colProgressConfig');if(cfg)cfg.style.display='none';
+  document.getElementById('colFieldType').value='text';
+  document.getElementById('colFieldMin').value='0';
+  document.getElementById('colFieldMax').value='100';
   renderColFields();
 }
 function removeColField(i){colModalFields.splice(i,1);renderColFields();}
@@ -2510,20 +2623,37 @@ function initTracking(){
   if(!S.tracking)S.tracking={collections:[],items:[]};
   if(!S.tracking.collections||!S.tracking.collections.length){
     S.tracking.collections=[
-      {id:'tc_films',name:'Films & Séries',icon:'🎬',desc:'',
+      {id:'tc_films',name:'Films',icon:'🎬',desc:'',
        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]},
+       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]},
       {id:'tc_series',name:'Séries',icon:'📺',desc:'',
        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]},
+       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]},
       {id:'tc_livres',name:'Livres',icon:'📖',desc:'',
        statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-       fields:[]},
+       fields:[{id:'f_datedebut',name:'Date début lecture',type:'date'},{id:'f_datefin',name:'Date fin lecture',type:'date'},{id:'f_pages',name:'Nombre de pages',type:'progress',min:0,max:100}]},
     ];
     saveLocal();
   }
-  // Ensure existing collections have fields array
+  // Ensure existing collections have fields and statuses arrays
   S.tracking.collections.forEach(c=>{if(!c.fields)c.fields=[];if(!c.statuses)c.statuses=[];});
+  // Migration: fix known wrong names
+  const migrations={'tc_films':['Films & Séries','Films & Series'],'tc_series':['Séries']};
+  let migrated=false;
+  S.tracking.collections.forEach(c=>{
+    if(c.id==='tc_films'&&(c.name==='Films & Séries'||c.name==='Films & Series')){c.name='Films';migrated=true;}
+    // Add missing date fields to films/series
+    if((c.id==='tc_films'||c.id==='tc_series')&&!c.fields.find(f=>f.id==='f_datewatch')){
+      c.fields.push({id:'f_datewatch',name:'Date de visionnage',type:'date'});migrated=true;
+    }
+    if(c.id==='tc_livres'&&!c.fields.find(f=>f.id==='f_datedebut')){
+      c.fields.push({id:'f_datedebut',name:'Date début lecture',type:'date'},{id:'f_datefin',name:'Date fin lecture',type:'date'});migrated=true;
+    }
+    if(c.id==='tc_livres'&&!c.fields.find(f=>f.id==='f_pages')){
+      c.fields.push({id:'f_pages',name:'Nombre de pages',type:'progress',min:0,max:100});migrated=true;
+    }
+  });
+  if(migrated)saveLocal();
 }
 
 function starsHtml(rating,_unused,size){
@@ -2618,9 +2748,20 @@ function renderTrackingItems(){
     const st=statuses.find(s=>s.id===item.status)||statuses[0]||{label:'–',emoji:''};
     const statusColors={'avoir':'status-avoir','encours':'status-encours','vu':'status-vu'};
     const statusClass=statusColors[item.status]||'status-avoir';
+    const progField=col.fields?.find(f=>f.type==='progress');
+    const progVal=progField&&item.customFields?parseFloat(item.customFields[progField.id])||0:null;
+    const progPct=progField&&progVal!==null?Math.min(100,Math.round((progVal-(progField.min||0))/((progField.max||100)-(progField.min||0))*100)):null;
     return`<div class="tracking-item-card" onclick="openTrackingItem('${item.id}')">
       <div class="tracking-item-title">${item.title||'Sans titre'}</div>
       ${rating?starsHtml(rating):''}
+      ${progPct!==null?`<div style="margin:5px 0 3px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:2px;">
+          <span>${progField.name}</span><span style="color:var(--accent2);font-weight:600;">${progPct}%</span>
+        </div>
+        <div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${progPct}%;background:var(--accent2);border-radius:2px;"></div>
+        </div>
+      </div>`:''}
       <div style="margin-top:5px;"><span class="tracking-item-status ${statusClass}">${st.emoji} ${st.label}</span></div>
       ${views>1?`<div class="tracking-item-views">↺ ${views} fois</div>`:''}
     </div>`;
@@ -2660,14 +2801,40 @@ function renderTrackingItemDetail(item){
         return`<button class="goal-status-btn ${isActive?'active-encours':''}" onclick="setTrackingItemStatus('${s.id}')">${s.emoji||''} ${s.label}</button>`;
       }).join('')}
     </div>
-    <!-- Custom fields -->
+    <!-- Custom fields (text, date, progress types) -->
     ${customFields.length?`<div class="card" style="margin-bottom:1rem;">
       <p style="font-size:12px;font-weight:500;margin-bottom:.7rem;color:var(--text2);">Informations</p>
-      ${customFields.map(f=>`
-        <div class="form-group" style="margin-bottom:.6rem;">
+      ${customFields.map(f=>{
+        const val=(item.customFields&&item.customFields[f.id])||'';
+        if(f.type==='date'){
+          return`<div class="form-group" style="margin-bottom:.6rem;">
+            <label>${f.name}</label>
+            <input type="date" value="${val}" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
+          </div>`;
+        }
+        if(f.type==='progress'){
+          const min=f.min||0,max=f.max||100;
+          const cur=parseFloat(val)||0;
+          const pct=max>min?Math.min(100,Math.round((cur-min)/(max-min)*100)):0;
+          return`<div class="form-group" style="margin-bottom:.8rem;">
+            <label style="display:flex;align-items:center;justify-content:space-between;">
+              <span>${f.name}</span>
+              <span style="font-size:12px;color:var(--accent2);font-weight:600;">${pct}%</span>
+            </label>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+              <input type="number" id="pf_${f.id}" value="${cur||''}" min="${min}" max="${max}" placeholder="${min}" oninput="saveProgressField('${f.id}',this.value,${min},${max})" style="width:80px;font-size:14px;padding:5px 8px;text-align:center;">
+              <span style="font-size:11px;color:var(--text3);">/ ${max}</span>
+              <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;">
+                <div id="pfbar_${f.id}" style="height:100%;width:${pct}%;background:var(--accent2);border-radius:3px;transition:width .3s;"></div>
+              </div>
+            </div>
+          </div>`;
+        }
+        return`<div class="form-group" style="margin-bottom:.6rem;">
           <label>${f.name}</label>
-          <input type="text" value="${(item.customFields&&item.customFields[f.id])||''}" placeholder="${f.name}…" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
-        </div>`).join('')}
+          <input type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="${f.name}…" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
+        </div>`;
+      }).join('')}
     </div>`:''}
     <!-- Tags -->
     <div style="margin-bottom:1rem;">
@@ -2736,6 +2903,26 @@ function renderTrackingItemDetail(item){
   }
 }
 
+function saveTrackingDate(field,value){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  item[field]=value;saveLocal();
+}
+function saveProgressField(fieldId,value,min,max){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFields)item.customFields={};
+  const cur=parseFloat(value)||0;
+  item.customFields[fieldId]=String(cur);saveLocal();
+  // Live update bar and % label without full re-render
+  const pct=max>min?Math.min(100,Math.round((cur-min)/(max-min)*100)):0;
+  const bar=document.getElementById('pfbar_'+fieldId);
+  if(bar)bar.style.width=pct+'%';
+  // Update % label (parent label's last span)
+  const inp=document.getElementById('pf_'+fieldId);
+  if(inp){
+    const lbl=inp.closest('.form-group')?.querySelector('label span:last-child');
+    if(lbl)lbl.textContent=pct+'%';
+  }
+}
 function saveCustomField(fieldId,value){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   if(!item.customFields)item.customFields={};
@@ -2876,7 +3063,74 @@ function deleteTrackingItem(id){
   });
 }
 
-let goalPeriodFilter='all';
+let goalsChartDays=30;
+let trackingChartDays=30;
+
+function setGoalsChartPeriod(days,el){
+  goalsChartDays=days;
+  document.querySelectorAll('#goalsChart').forEach(()=>{});
+  document.querySelectorAll('[onclick*="setGoalsChartPeriod"]').forEach(b=>b.classList.remove('active'));
+  el?.classList.add('active');
+  drawGoalsChart();
+}
+function setTrackingChartPeriod(days,el){
+  trackingChartDays=days;
+  document.querySelectorAll('[onclick*="setTrackingChartPeriod"]').forEach(b=>b.classList.remove('active'));
+  el?.classList.add('active');
+  drawTrackingChart();
+}
+
+function drawMiniBarChart(canvasId,data,color){
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const W=canvas.parentElement?.offsetWidth||400,H=90;
+  const dpr=window.devicePixelRatio||1;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+  if(!data.length)return;
+  const maxV=Math.max(1,...data.map(d=>d.v));
+  const bw=Math.max(4,Math.floor((W-20)/data.length)-2);
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const tc=isDark?'#6B6860':'#A09D99';
+  data.forEach((d,i)=>{
+    const x=10+i*(bw+2);
+    const bh=Math.max(2,Math.round((d.v/maxV)*(H-20)));
+    const y=H-10-bh;
+    ctx.fillStyle=d.v>0?color:'var(--bg3)';
+    if(d.v>0){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,bw,bh,2):ctx.rect(x,y,bw,bh);ctx.fill();}
+    if(i%Math.ceil(data.length/6)===0){ctx.fillStyle=tc;ctx.font='8px DM Sans,sans-serif';ctx.textAlign='center';ctx.fillText(d.label,x+bw/2,H-1);}
+  });
+}
+
+function drawGoalsChart(){
+  const now=new Date();
+  const days=goalsChartDays;
+  const data=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(now);d.setDate(d.getDate()-i);
+    const key=d.toISOString().split('T')[0];
+    const count=(S.goals||[]).filter(g=>g.createdAt&&g.createdAt.startsWith(key)).length;
+    const label=days<=31?d.getDate().toString():`${d.getDate()}/${d.getMonth()+1}`;
+    data.push({v:count,label});
+  }
+  drawMiniBarChart('goalsChart',data,'#3B7DD8');
+}
+
+function drawTrackingChart(){
+  const now=new Date();
+  const days=trackingChartDays;
+  const data=[];
+  const colId=currentStatTrackingColId;
+  const items=S.tracking?.items?.filter(i=>!colId||i.colId===colId)||[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(now);d.setDate(d.getDate()-i);
+    const key=d.toISOString().split('T')[0];
+    const count=items.filter(item=>item.createdAt&&item.createdAt.startsWith(key)).length;
+    const label=days<=31?d.getDate().toString():`${d.getDate()}/${d.getMonth()+1}`;
+    data.push({v:count,label});
+  }
+  drawMiniBarChart('trackingChart',data,'#C44B7A');
+}
 let currentGoalId=null;
 
 function goalDaysLeft(g){
@@ -2924,11 +3178,9 @@ function renderGoals(){
   const goals=(S.goals||[]).filter(g=>goalPeriodMatch(g,goalPeriodFilter));
   const cols={encours:[],pause:[],termine:[]};
   goals.forEach(g=>{ const s=g.status||'encours'; if(cols[s])cols[s].push(g); });
-
   const total=S.goals?S.goals.length:0;
   const cnt=document.getElementById('goalsCount');
   if(cnt)cnt.textContent=total+' objectif'+(total>1?'s':'');
-
   ['encours','pause','termine'].forEach(status=>{
     const el=document.getElementById('col'+status.charAt(0).toUpperCase()+status.slice(1));
     const countEl=document.getElementById('colCount'+status.charAt(0).toUpperCase()+status.slice(1));
@@ -2938,14 +3190,33 @@ function renderGoals(){
       const pct=goalProgress(g);
       const steps=g.checklist?g.checklist.length:0;
       const doneSteps=g.checklist?g.checklist.filter(c=>c.done).length:0;
-      return`<div class="goal-card" onclick="openGoalDetail('${g.id}')">
-        <div class="goal-card-title">${g.title}</div>
-        ${g.desc?`<div class="goal-card-desc">${g.desc.slice(0,60)}${g.desc.length>60?'…':''}</div>`:''}
-        ${pct>0||steps>0?`<div class="goal-progress-bar"><div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div></div>`:''}
+      const dl=goalDaysLeft(g);
+      const col=typeColor({id:g.id,bookColor:g.color||null});
+      // Date display
+      let dateStr='';
+      if(g.dateStart&&g.dateEnd){
+        const s=formatDate(g.dateStart),e=formatDate(g.dateEnd);
+        dateStr=`${s.day} ${s.month} → ${e.day} ${e.month} ${e.year}`;
+      } else if(g.dateEnd){
+        const e=formatDate(g.dateEnd);
+        dateStr=`Échéance : ${e.day} ${e.month} ${e.year}`;
+      } else if(g.dateStart){
+        const s=formatDate(g.dateStart);
+        dateStr=`Début : ${s.day} ${s.month} ${s.year}`;
+      }
+      return`<div class="goal-card" onclick="openGoalDetail('${g.id}')" style="border-left:3px solid ${status==='termine'?'#2E9E6C':status==='pause'?'#D4882A':'#3B7DD8'};">
+        <div class="goal-card-title">${g.title||'Sans titre'}</div>
+        ${g.desc?`<div class="goal-card-desc">${g.desc.slice(0,70)}${g.desc.length>70?'…':''}</div>`:''}
+        ${dateStr?`<div style="font-size:10px;color:var(--text3);margin-bottom:5px;">📅 ${dateStr}</div>`:''}
+        ${pct>0||steps>0?`
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <div class="goal-progress-bar" style="flex:1;"><div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div></div>
+            <span style="font-size:10px;color:var(--text3);flex-shrink:0;">${pct}%</span>
+          </div>`:''}
         <div class="goal-meta">
           ${goalDaysBadge(g)}
           ${steps>0?`<span class="goal-badge goal-badge-grey">☑ ${doneSteps}/${steps}</span>`:''}
-          ${pct>0?`<span style="font-size:9px;color:var(--text3);margin-left:auto;">${pct}%</span>`:''}
+          ${g.tags&&g.tags.length?`<span style="font-size:9px;color:var(--text3);">${g.tags.map(t=>'#'+t).join(' ')}</span>`:''}
         </div>
       </div>`;
     }).join('');
@@ -3143,6 +3414,51 @@ function saveQuote(){
 }
 function deleteQuote(id){showConfirm('Supprimer cette citation ?','',()=>{S.quotes=S.quotes.filter(q=>q.id!==id);saveLocal();renderQuotes();});}
 function setQuoteTagFilter(tag){quoteFilterTag=quoteFilterTag===tag?null:tag;renderQuotes();}
+let quoteSort='recent';
+let editingQuoteId=null;
+
+function toggleQuoteSortDD(e){e.stopPropagation();const d=document.getElementById('quoteSortDD');d.style.display=d.style.display==='none'?'block':'none';}
+document.addEventListener('click',()=>{const d=document.getElementById('quoteSortDD');if(d)d.style.display='none';});
+function setQuoteSort(s){
+  quoteSort=s;
+  const labels={recent:'Récent',oldest:'Ancien',author:'Auteur',alpha:'A→Z'};
+  const el=document.getElementById('quoteSortLabel');if(el)el.textContent=labels[s]||s;
+  document.getElementById('quoteSortDD').style.display='none';
+  renderQuotes();
+}
+function editQuote(id){
+  const q=S.quotes.find(x=>x.id===id);if(!q)return;
+  editingQuoteId=id;
+  document.getElementById('quoteText').value=q.text||'';
+  document.getElementById('quoteAuthor').value=q.author||'';
+  document.getElementById('quoteDate').value=q.date||'';
+  quoteTags=[...(q.tags||[])];renderQuoteSelTags();
+  const lbl=document.getElementById('quoteFormLabel');if(lbl)lbl.textContent='Modifier la citation';
+  const btn=document.getElementById('quoteSubmitBtn');if(btn)btn.textContent='💾 Mettre à jour';
+  const cancel=document.getElementById('quoteCancelEditBtn');if(cancel)cancel.style.display='';
+  document.getElementById('quoteInputBox')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function cancelQuoteEdit(){
+  editingQuoteId=null;quoteTags=[];renderQuoteSelTags();
+  document.getElementById('quoteText').value='';
+  document.getElementById('quoteAuthor').value='';
+  document.getElementById('quoteDate').value='';
+  const lbl=document.getElementById('quoteFormLabel');if(lbl)lbl.textContent='Nouvelle citation';
+  const btn=document.getElementById('quoteSubmitBtn');if(btn)btn.textContent='＋ Ajouter';
+  const cancel=document.getElementById('quoteCancelEditBtn');if(cancel)cancel.style.display='none';
+}
+function saveQuote(){
+  const text=document.getElementById('quoteText').value.trim();
+  if(!text)return;
+  const data={text,author:document.getElementById('quoteAuthor').value.trim(),date:document.getElementById('quoteDate').value||'',tags:[...quoteTags]};
+  if(editingQuoteId){
+    const q=S.quotes.find(x=>x.id===editingQuoteId);
+    if(q)Object.assign(q,data);
+  } else {
+    S.quotes.unshift({id:uid(),...data,createdAt:new Date().toISOString()});
+  }
+  saveLocal();cancelQuoteEdit();renderQuotes();
+}
 function renderQuotes(){
   initQuotes();
   const allTags={};S.quotes.forEach(q=>(q.tags||[]).forEach(t=>{allTags[t]=(allTags[t]||0)+1;}));
@@ -3150,6 +3466,11 @@ function renderQuotes(){
   if(fb)fb.innerHTML=Object.keys(allTags).sort((a,b)=>allTags[b]-allTags[a]).slice(0,10).map(t=>`<span class="tag ${quoteFilterTag===t?'active':''}" onclick="setQuoteTagFilter('${t}')">#${t}</span>`).join('');
   let quotes=[...S.quotes];
   if(quoteFilterTag)quotes=quotes.filter(q=>(q.tags||[]).includes(quoteFilterTag));
+  // Sort
+  if(quoteSort==='oldest')quotes.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  else if(quoteSort==='author')quotes.sort((a,b)=>(a.author||'').localeCompare(b.author||'','fr'));
+  else if(quoteSort==='alpha')quotes.sort((a,b)=>(a.text||'').localeCompare(b.text||'','fr'));
+  else quotes.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const el=document.getElementById('quotesList');if(!el)return;
   const cnt=document.getElementById('quotesCount');if(cnt)cnt.textContent=S.quotes.length+' citation'+(S.quotes.length>1?'s':'');
   if(!quotes.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><h3 class="empty-title">Aucune citation</h3><p class="empty-desc">Ajoutez votre première citation ci-dessus</p></div>`;return;}
@@ -3161,7 +3482,10 @@ function renderQuotes(){
       <div class="quote-meta">
         ${d?`<span style="font-size:10px;color:var(--text3);">📅 ${d.day} ${d.month} ${d.year}</span>`:''}
         ${(q.tags||[]).map(t=>`<span class="tag" style="font-size:10px;">#${t}</span>`).join('')}
-        <button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="deleteQuote('${q.id}')">🗑</button>
+        <div style="display:flex;gap:4px;margin-left:auto;">
+          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑</button>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -3362,18 +3686,10 @@ function editEntry(id){
   const wrap=document.getElementById('entryFields');
   const savedSections=Object.entries(entry.fields||{});
   if(savedSections.length){
-    wrap.innerHTML=savedSections.map(([sec,val])=>`
-      <div class="journal-section">
-        <div class="journal-section-label">${sec}</div>
-        <div class="rich-content" contenteditable="true" placeholder="${sec}…" style="min-height:85px;">${val}</div>
-      </div>`).join('');
+    wrap.innerHTML=savedSections.map(([sec,val])=>buildSectionHTML(sec,val,false)).join('');
   } else {
     const model=S.models.find(m=>m.id===selectedModelId);
-    wrap.innerHTML=(model?.sections||['Contenu']).map(sec=>`
-      <div class="journal-section">
-        <div class="journal-section-label">${sec}</div>
-        <div class="rich-content" contenteditable="true" placeholder="${sec}…" style="min-height:85px;"></div>
-      </div>`).join('');
+    wrap.innerHTML=(model?.sections||['Contenu']).map(sec=>buildSectionHTML(sec,'',false)).join('');
   }
   showToolbar();
 }
@@ -3415,13 +3731,21 @@ function switchStatTab(tab){
 function renderStatsGlobal(){
   const entries=S.entries,now=new Date();
   const thisMonth=entries.filter(e=>{if(!e.date)return false;const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  const totalWords=entries.reduce((a,e)=>a+wordCount(e),0);
-  const streak=calcStreak();
-  document.getElementById('statsHeroGlobal').innerHTML=`
-    <div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">Entrées</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${streak}</div><div class="stat-hero-lbl">🔥 Streak</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${totalWords>999?(totalWords/1000).toFixed(1)+'k':totalWords}</div><div class="stat-hero-lbl">Mots</div></div>
-    <div class="stat-hero-card"><div class="stat-hero-val">${thisMonth.length}</div><div class="stat-hero-lbl">Ce mois</div></div>`;
+
+  // Build dynamic hero cards based on enabled features only
+  const heroCards=[];
+  heroCards.push(`<div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">📚 Entrées journal</div></div>`);
+  if(S.goalsEnabled&&S.goals&&S.goals.length){
+    const done=S.goals.filter(g=>g.status==='termine').length;
+    heroCards.push(`<div class="stat-hero-card"><div class="stat-hero-val">${S.goals.length}</div><div class="stat-hero-lbl">🎯 Objectifs</div><div class="stat-hero-sub">${done} terminé${done>1?'s':''}</div></div>`);
+  }
+  if(S.trackingEnabled&&S.tracking?.items?.length){
+    heroCards.push(`<div class="stat-hero-card"><div class="stat-hero-val">${S.tracking.items.length}</div><div class="stat-hero-lbl">🎬 Éléments suivis</div></div>`);
+  }
+  if(S.quotesEnabled&&S.quotes?.length){
+    heroCards.push(`<div class="stat-hero-card"><div class="stat-hero-val">${S.quotes.length}</div><div class="stat-hero-lbl">💬 Citations</div></div>`);
+  }
+  document.getElementById('statsHeroGlobal').innerHTML=heroCards.join('');
   // Heatmap
   const heatEl=document.getElementById('heatmapWrapGlobal');
   if(heatEl)renderHeatmap(heatEl,entries);
@@ -3550,6 +3874,7 @@ function renderStatsGoals(){
       </div>`;
     }).join(''):'<p style="font-size:12px;color:var(--text3);">Aucun objectif.</p>';
   }
+  setTimeout(drawGoalsChart,50);
 }
 
 let currentStatTrackingColId=null;
