@@ -59,10 +59,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .btn-icon:hover{background:var(--bg2);color:var(--text);}
 
 /* NAV */
-.nav-tabs{display:flex;padding:0 1.25rem;border-bottom:1px solid var(--border);background:var(--bg);overflow-x:auto;}
-.nav-tab{padding:9px 14px;font-size:13px;color:var(--text3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;font-family:var(--font-ui);}
-.nav-tab.active{color:var(--text);border-bottom-color:var(--accent2);font-weight:500;}
+.nav-tabs{display:flex;padding:0 1rem;border-bottom:1px solid var(--border);background:var(--bg);overflow-x:auto;gap:2px;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 12px 8px;font-size:10px;letter-spacing:.03em;color:var(--text3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;font-family:var(--font-ui);font-weight:400;position:relative;}
+.nav-tab-icon{font-size:17px;line-height:1;transition:transform .2s;}
+.nav-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);font-weight:500;}
+.nav-tab.active .nav-tab-icon{transform:scale(1.1);}
 .nav-tab:hover:not(.active){color:var(--text2);}
+.nav-tab:hover:not(.active) .nav-tab-icon{transform:translateY(-1px);}
+.nav-badge{position:absolute;top:4px;right:6px;min-width:14px;height:14px;border-radius:7px;background:var(--accent2);color:#fff;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 3px;}
 
 /* PAGES */
 .page{display:none;}
@@ -181,7 +186,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .period-btn{height:24px;padding:0 6px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;border-radius:5px;font-size:10px;font-family:var(--font-ui);transition:all .15s;}
 .period-btn:hover{background:var(--bg2);color:var(--text);}
 .period-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
-.rich-content img{max-width:100%;border-radius:var(--radius-sm);margin:6px 0;display:block;}
+.rich-content img{max-width:100%;border-radius:var(--radius-sm);margin:6px 0;display:block;transition:outline .15s;}
+.rich-content img:hover{outline:2px solid var(--accent2);outline-offset:2px;cursor:pointer;}
+.rich-content img.entry-img{width:50%;max-width:480px;}
+.read-text img{max-width:100%;width:auto;border-radius:var(--radius-sm);margin:6px 0;display:block;}
 /* COLOR THEMES */
 [data-color="beige"]{--accent2:#8B7355;}[data-color="blue"]{--accent2:#3B6B9E;}[data-color="sage"]{--accent2:#5A7A5A;}[data-color="bordeaux"]{--accent2:#8B2635;}[data-color="lavande"]{--accent2:#7B6FA0;}[data-color="noir"]{--accent2:#2C2C2A;}
 [data-theme="dark"][data-color="beige"]{--accent2:#C4A882;}[data-theme="dark"][data-color="blue"]{--accent2:#6B9BD2;}[data-theme="dark"][data-color="sage"]{--accent2:#8AB08A;}[data-theme="dark"][data-color="bordeaux"]{--accent2:#C4606E;}[data-theme="dark"][data-color="lavande"]{--accent2:#A89FCC;}[data-theme="dark"][data-color="noir"]{--accent2:#C8C4BC;}
@@ -189,6 +197,36 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .add-section-btn{display:flex;align-items:center;gap:6px;width:100%;padding:10px 0;border:none;background:transparent;color:var(--text3);font-size:13px;font-family:var(--font-ui);cursor:pointer;border-top:1px dashed var(--border2);margin-top:.5rem;transition:color .2s;}.add-section-btn:hover{color:var(--accent2);}
 .section-name-input{background:transparent;border:none;outline:none;font-size:10px;color:var(--text2);letter-spacing:.1em;font-family:var(--font-ui);width:120px;border-bottom:1px solid var(--border2);transition:border-color .2s;padding:1px 3px;}.section-name-input:focus{border-bottom-color:var(--accent2);}
 .chart-title{font-size:11px;color:var(--text2);margin-bottom:.8rem;font-weight:500;}
+
+/* ONBOARDING */
+.onboard-page{position:fixed;inset:0;z-index:600;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;}
+.onboard-box{width:100%;max-width:520px;}
+.onboard-step{display:none;animation:fadeIn .3s ease;}
+.onboard-step.active{display:block;}
+.onboard-logo{font-family:var(--font-serif);font-size:34px;color:var(--text);margin-bottom:6px;}
+.onboard-subtitle{font-size:13px;color:var(--text3);margin-bottom:2rem;}
+.onboard-q{font-family:var(--font-serif);font-size:20px;color:var(--text);margin-bottom:.5rem;}
+.onboard-hint{font-size:12px;color:var(--text3);margin-bottom:1.25rem;}
+.onboard-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;}
+.onboard-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:1rem .85rem;cursor:pointer;transition:all .2s;text-align:center;user-select:none;}
+.onboard-card:hover{border-color:var(--accent2);transform:translateY(-2px);}
+.onboard-card.selected{border-color:var(--accent2);background:var(--bg2);}
+.onboard-card-icon{font-size:28px;margin-bottom:6px;}
+.onboard-card-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.onboard-card-desc{font-size:10px;color:var(--text2);line-height:1.4;}
+.onboard-progress{display:flex;gap:6px;margin-bottom:1.5rem;}
+.onboard-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:background .2s;}
+.onboard-dot.active{background:var(--accent2);}
+/* COLLECTION MODAL FIELDS */
+.col-field-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
+.col-field-row:last-child{border-bottom:none;}
+.col-field-name{flex:1;font-size:13px;color:var(--text);}
+.col-field-type{font-size:11px;color:var(--text3);}
+.col-field-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;line-height:1;}
+.col-field-del:hover{color:#A32D2D;}
+.col-status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text2);}
+.col-status-chip button{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:0 2px;line-height:1;}
+.col-status-chip button:hover{color:#A32D2D;}
 
 /* AUTH PAGE */
 .auth-page{position:fixed;inset:0;z-index:500;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:1.5rem;}
@@ -284,6 +322,159 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 .fade-in{animation:fadeIn .2s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.book-color-opt{width:30px;height:30px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;flex-shrink:0;}
+.book-color-opt.selected{border-color:var(--text);transform:scale(1.15);}
+/* SORT DROPDOWN */
+.sort-opt{padding:8px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:background .15s;border-bottom:1px solid var(--border);}
+.sort-opt:last-child{border-bottom:none;}
+.sort-opt:hover{background:var(--bg2);}
+.sort-opt.active{color:var(--accent2);font-weight:500;}
+
+/* BOOK ACTION MENU */
+.book-card{position:relative;border-radius:14px;overflow:visible;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,0.13);transition:transform .22s,box-shadow .22s;aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:flex-end;user-select:none;}
+.book-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 32px rgba(0,0,0,0.18);}
+.book-card-inner{border-radius:14px;overflow:hidden;position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;}
+.book-actions-btn{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.28);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:10;opacity:0;transition:opacity .18s;line-height:1;backdrop-filter:blur(4px);}
+.book-card:hover .book-actions-btn{opacity:1;}
+.book-actions-menu{display:none;position:absolute;top:36px;right:7px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:200;min-width:140px;overflow:hidden;}
+.book-actions-menu.open{display:block;}
+.book-action-item{padding:8px 13px;font-size:12px;color:var(--text);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border);}
+.book-action-item:last-child{border-bottom:none;}
+.book-action-item:hover{background:var(--bg2);}
+.book-action-item.danger{color:#A32D2D;}
+.book-action-item.danger:hover{background:rgba(163,45,45,0.08);}
+
+/* BOOKS GRID */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:1.5rem;}
+.book-spine{position:absolute;left:0;top:0;bottom:0;width:12px;border-radius:14px 0 0 14px;opacity:.55;filter:brightness(.7);}
+.book-cover-top{position:absolute;top:0;left:0;right:0;padding:18px 14px 0 20px;}
+.book-icon{font-size:32px;margin-bottom:6px;}
+.book-title{font-family:var(--font-serif);font-size:15px;color:#fff;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,.4);}
+.book-cover-bottom{padding:10px 12px 14px 18px;background:linear-gradient(transparent,rgba(0,0,0,.45));}
+.book-count{font-size:11px;color:rgba(255,255,255,.85);margin-bottom:2px;}
+.book-last{font-size:10px;color:rgba(255,255,255,.6);}
+.book-all-card{border-radius:14px;border:2px dashed var(--border2);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;aspect-ratio:3/4;transition:all .2s;color:var(--text3);}
+.book-all-card:hover{border-color:var(--accent2);color:var(--accent2);background:var(--bg2);}
+.book-all-icon{font-size:28px;}
+.book-all-label{font-size:12px;font-weight:500;}
+.book-view-header{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;}
+.book-view-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.book-view-title{font-family:var(--font-serif);font-size:20px;color:var(--text);}
+.book-view-sub{font-size:11px;color:var(--text3);}
+
+/* QUOTES */
+.quote-input-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.35rem;margin-bottom:1rem;box-shadow:var(--shadow);}
+.quote-textarea{width:100%;background:transparent;border:none;outline:none;font-family:var(--font-serif);font-size:18px;color:var(--text);line-height:1.7;resize:none;min-height:80px;font-style:italic;}
+.quote-textarea::placeholder{color:var(--text3);font-style:italic;}
+.quote-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.35rem 1rem;margin-bottom:8px;box-shadow:var(--shadow);transition:all .2s;position:relative;}
+.quote-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.quote-card::before{content:'\201C';position:absolute;top:10px;left:14px;font-family:var(--font-serif);font-size:42px;color:var(--accent2);opacity:.25;line-height:1;}
+.quote-text{font-family:var(--font-serif);font-size:16px;color:var(--text);line-height:1.7;font-style:italic;padding-left:18px;margin-bottom:7px;}
+.quote-author{font-size:12px;color:var(--text2);padding-left:18px;margin-bottom:6px;}
+.quote-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding-left:18px;}
+
+/* STATS IMPROVED */
+.stats-hero{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:1rem;}
+@media(max-width:600px){.stats-hero{grid-template-columns:repeat(2,1fr);}}
+.stat-hero-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;text-align:center;position:relative;overflow:hidden;}
+.stat-hero-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent2);opacity:.5;}
+.stat-hero-val{font-family:var(--font-serif);font-size:32px;color:var(--text);line-height:1;}
+.stat-hero-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:4px;}
+.stat-hero-sub{font-size:10px;color:var(--accent2);margin-top:3px;}
+.stats-section-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin:1.1rem 0 .6rem;display:flex;align-items:center;gap:8px;}
+.stats-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.scale-stat-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.scale-stat-row:last-child{border-bottom:none;}
+.scale-stat-name{font-size:12px;color:var(--text);min-width:90px;}
+.scale-stat-bar{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.scale-stat-fill{height:100%;border-radius:3px;background:var(--accent2);transition:width .4s;}
+.scale-stat-val{font-family:var(--font-serif);font-size:15px;color:var(--accent2);min-width:36px;text-align:right;}
+.heatmap-wrap{display:flex;flex-wrap:wrap;gap:3px;margin-top:.5rem;}
+.heatmap-cell{width:12px;height:12px;border-radius:2px;background:var(--bg3);transition:background .2s;cursor:default;}
+.heatmap-cell.h1{background:rgba(196,168,130,.3);}
+.heatmap-cell.h2{background:rgba(196,168,130,.55);}
+.heatmap-cell.h3{background:rgba(196,168,130,.8);}
+.heatmap-cell.h4{background:var(--accent2);}
+.type-dist-row{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.type-dist-bar{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.type-dist-fill{height:100%;border-radius:4px;}
+.type-dist-lbl{font-size:12px;color:var(--text);min-width:110px;}
+.type-dist-val{font-size:11px;color:var(--text3);min-width:28px;text-align:right;}
+
+/* GOALS */
+.goals-period-bar{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;}
+.goals-kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1rem;}
+@media(max-width:640px){.goals-kanban{grid-template-columns:1fr;}}
+.goals-col{background:var(--bg2);border-radius:var(--radius);padding:.75rem;}
+.goals-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.goals-col-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);}
+.goals-col-count{font-size:10px;background:var(--bg3);color:var(--text3);border-radius:10px;padding:1px 7px;}
+.goal-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .85rem;margin-bottom:7px;cursor:pointer;transition:all .18s;position:relative;}
+.goal-card:hover{border-color:var(--accent2);transform:translateY(-1px);box-shadow:var(--shadow);}
+.goal-card-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;}
+.goal-card-desc{font-size:11px;color:var(--text2);margin-bottom:7px;line-height:1.5;}
+.goal-progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:5px;}
+.goal-progress-fill{height:100%;border-radius:2px;background:var(--accent2);transition:width .4s;}
+.goal-progress-fill.done{background:#2E9E6C;}
+.goal-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.goal-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:500;}
+.goal-badge-green{background:rgba(46,158,108,.15);color:#2E9E6C;}
+.goal-badge-orange{background:rgba(212,136,42,.15);color:#D4882A;}
+.goal-badge-red{background:rgba(200,89,58,.15);color:#C8593A;}
+.goal-badge-grey{background:var(--bg3);color:var(--text3);}
+.goal-badge-blue{background:rgba(59,125,216,.15);color:#3B7DD8;}
+.goal-add-btn{width:100%;padding:7px;border:1px dashed var(--border2);border-radius:var(--radius-sm);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;transition:all .18s;font-family:var(--font-ui);}
+.goal-add-btn:hover{border-color:var(--accent2);color:var(--accent2);background:var(--bg2);}
+.goal-detail-header{margin-bottom:1.1rem;}
+.goal-status-select{display:inline-flex;gap:5px;flex-wrap:wrap;margin-bottom:.8rem;}
+.goal-status-btn{padding:4px 12px;border-radius:20px;font-size:11px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font-ui);transition:all .18s;}
+.goal-status-btn.active-encours{background:#3B7DD8;color:#fff;border-color:#3B7DD8;}
+.goal-status-btn.active-pause{background:#D4882A;color:#fff;border-color:#D4882A;}
+.goal-status-btn.active-termine{background:#2E9E6C;color:#fff;border-color:#2E9E6C;}
+.checklist-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
+.checklist-item:last-child{border-bottom:none;}
+.checklist-cb{width:16px;height:16px;cursor:pointer;flex-shrink:0;accent-color:var(--accent2);}
+.checklist-label{flex:1;font-size:13px;color:var(--text);}
+.checklist-label.done{text-decoration:line-through;color:var(--text3);}
+.checklist-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:0 3px;line-height:1;}
+.checklist-del:hover{color:#A32D2D;}
+.goal-progress-manual{display:flex;align-items:center;gap:10px;}
+.goal-progress-manual input[type=range]{flex:1;}
+
+/* TRACKING */
+.tracking-collections{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem;}
+.tracking-col-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:all .2s;}
+.tracking-col-card:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:var(--shadow);}
+.tracking-col-icon{font-size:28px;margin-bottom:6px;}
+.tracking-col-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.tracking-col-count{font-size:11px;color:var(--text3);}
+.tracking-col-new{border:2px dashed var(--border2);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text3);min-height:90px;}
+.tracking-col-new:hover{border-color:var(--accent2);color:var(--accent2);background:var(--bg2);}
+.tracking-items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:1rem;}
+.tracking-item-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;cursor:pointer;transition:all .18s;}
+.tracking-item-card:hover{border-color:var(--accent2);transform:translateY(-1px);box-shadow:var(--shadow);}
+.tracking-item-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;line-height:1.3;}
+.tracking-item-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;}
+.status-vu{background:rgba(46,158,108,.15);color:#2E9E6C;}
+.status-encours{background:rgba(59,125,216,.15);color:#3B7DD8;}
+.status-avoir{background:rgba(160,157,153,.15);color:#6B6760;}
+.tracking-item-views{font-size:10px;color:var(--text3);margin-top:4px;}
+.tracking-review-item{background:var(--bg2);border-radius:var(--radius-sm);padding:.85rem;margin-bottom:.7rem;position:relative;}
+.tracking-review-date{font-size:10px;color:var(--text3);margin-bottom:4px;}
+.tracking-review-avis{font-size:13px;color:var(--text);line-height:1.6;margin-top:4px;}
+.tracking-review-del{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;}
+.tracking-review-del:hover{color:#A32D2D;}
+.tracking-add-review{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;}
+.star-input{display:flex;gap:5px;margin-bottom:.7rem;}
+.star-input .ts{font-size:24px;cursor:pointer;transition:transform .1s;user-select:none;line-height:1;}
+.star-input .ts:hover{transform:scale(1.15);}
+/* Review mini toolbar */
+.review-toolbar{display:flex;gap:3px;padding:5px 8px;background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:.5rem;flex-wrap:wrap;}
+.review-tb-btn{height:26px;min-width:26px;padding:0 5px;border:none;background:transparent;color:var(--text2);cursor:pointer;border-radius:4px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:var(--font-ui);}
+.review-tb-btn:hover{background:var(--bg3);color:var(--text);}
+.review-tb-sep{width:1px;height:16px;background:var(--border2);margin:0 2px;align-self:center;}
+
 @media(max-width:600px){
   .page-content{padding:1rem .9rem 6rem;}
   .topbar{padding:0 .9rem;gap:7px;}
@@ -291,11 +482,26 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
   .logo{font-size:17px;}
   .nav-tabs{padding:0 .9rem;}
   .type-grid{grid-template-columns:repeat(3,1fr);}
+  .books-grid{grid-template-columns:repeat(2,1fr);}
+  .tracking-collections{grid-template-columns:repeat(2,1fr);}
+  .tracking-items-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media print{.topbar,.nav-tabs,.back-btn,.btn,.float-toolbar{display:none!important;}.page{display:block!important;}body{background:#fff;color:#000;}}
 </style>
 </head>
 <body>
+<script>
+// Simple early call queue - no return at top level
+window._q = [];
+window._rdy = false;
+window._c = function(fn, args) {
+  if (window._rdy && typeof window[fn] === 'function') {
+    window[fn].apply(null, args);
+  } else {
+    window._q.push([fn, args]);
+  }
+};
+</script>
 
 <!-- FLOATING TOOLBAR -->
 <div class="float-toolbar" id="floatToolbar">
@@ -324,13 +530,64 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
   <input type="file" id="imgUploadInput" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="insertImageFromFile(event)">
 </div>
 
+<!-- ONBOARDING -->
+<div class="onboard-page" id="onboardPage" style="display:none;">
+  <div class="onboard-box">
+    <div class="onboard-logo">Journal ✦</div>
+    <p class="onboard-subtitle">Votre espace personnel tout-en-un</p>
+    <div class="onboard-progress">
+      <div class="onboard-dot active" id="odot0"></div>
+      <div class="onboard-dot" id="odot1"></div>
+    </div>
+    <!-- Step 1: choose interests -->
+    <div class="onboard-step active" id="ostep0">
+      <p class="onboard-q">Pourquoi veux-tu utiliser cette app ?</p>
+      <p class="onboard-hint">Sélectionne tout ce qui te parle — tu pourras changer plus tard dans les Réglages.</p>
+      <div class="onboard-cards" id="onboardCards"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="onboardNext()">Continuer →</button>
+    </div>
+    <!-- Step 2: storage -->
+    <div class="onboard-step" id="ostep1">
+      <p class="onboard-q">Comment stocker tes données ?</p>
+      <p class="onboard-hint">Tu pourras changer d'avis à tout moment.</p>
+      <div class="auth-mode-grid">
+        <div class="auth-mode-card selected" id="ob_modeLocalCard" onclick="obSelectMode('local')">
+          <div class="auth-mode-icon">📱</div>
+          <div class="auth-mode-name">Mode local</div>
+          <div class="auth-mode-desc">Données sur cet appareil, sans compte</div>
+        </div>
+        <div class="auth-mode-card" id="ob_modeOnlineCard" onclick="obSelectMode('online')">
+          <div class="auth-mode-icon">☁️</div>
+          <div class="auth-mode-name">Mode en ligne</div>
+          <div class="auth-mode-desc">Synchronisé entre appareils, 50 Mo gratuits</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:.5rem;" onclick="onboardFinish()">C'est parti ! →</button>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;cursor:pointer;" onclick="onboardNext()">← Retour</p>
+    </div>
+    <!-- Auth form for online mode -->
+    <div id="ob_authForm" style="display:none;margin-top:1rem;">
+      <div class="auth-form">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchAuthTab('login')">Se connecter</button>
+          <button class="auth-tab" onclick="switchAuthTab('signup')">Créer un compte</button>
+        </div>
+        <div id="ob_authError" class="auth-error"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="ob_authEmail" placeholder="votre@email.com" autocomplete="email"></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="ob_authPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitAuth()"></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="submitAuth()">Connexion →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- AUTH PAGE -->
 <div class="auth-page" id="authPage">
   <div class="auth-box">
     <div class="auth-logo">Journal ✦</div>
     <p class="auth-sub">Votre journal intime personnel</p>
 
-    <!-- MODE CHOICE -->
+    <!-- MODE CHOICE (shown only when not coming from onboarding) -->
     <div id="authModeChoice">
       <p style="font-size:12px;color:var(--text2);margin-bottom:.9rem;">Comment voulez-vous utiliser l'appli ?</p>
       <div class="auth-mode-grid">
@@ -391,22 +648,66 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 </div>
 
 <!-- NAV -->
-<div class="nav-tabs">
-  <button class="nav-tab active" onclick="switchTab('home')">Entrées</button>
-  <button class="nav-tab" onclick="switchTab('stats')">Statistiques</button>
-  <button class="nav-tab" onclick="switchTab('models')">Modèles</button>
-  <button class="nav-tab" onclick="switchTab('settings')">Paramètres</button>
+<div class="nav-tabs" id="mainNav">
+  <button class="nav-tab active" onclick="switchTab('home')"><span class="nav-tab-icon">📚</span>Livres</button>
+  <button class="nav-tab" onclick="switchTab('stats')"><span class="nav-tab-icon">📊</span>Stats</button>
+  <button class="nav-tab" id="navGoalsBtn" onclick="switchTab('goals')"><span class="nav-tab-icon">🎯</span>Objectifs</button>
+  <button class="nav-tab" id="navTrackingBtn" onclick="switchTab('tracking')"><span class="nav-tab-icon">🎬</span>Suivi</button>
+  <button class="nav-tab" id="navQuotesBtn" onclick="switchTab('quotes')"><span class="nav-tab-icon">💬</span>Citations</button>
+  <button class="nav-tab" onclick="switchTab('settings')"><span class="nav-tab-icon">⚙️</span>Réglages</button>
 </div>
 
-<!-- HOME -->
+<!-- HOME: BOOKS GRID -->
 <div class="page active fade-in" id="page-home">
   <div class="page-content">
-    <div class="section-header">
-      <div><h1 class="section-title">Mes entrées</h1><p class="section-subtitle" id="entryCount">–</p></div>
+    <!-- Sub-tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;">
+      <button class="nav-tab active" id="homeTabBooks" onclick="switchHomeTab('books')" style="font-size:12px;padding:6px 14px;">📚 Livres</button>
+      <button class="nav-tab" id="homeTabModels" onclick="switchHomeTab('models')" style="font-size:12px;padding:6px 14px;">🗂 Modèles</button>
     </div>
-    <div class="filter-tabs" id="typeFilterTabs"></div>
-    <div class="filter-bar" id="filterBar"></div>
-    <div id="entriesList"></div>
+    <!-- Books grid view -->
+    <div id="booksView">
+      <div class="section-header">
+        <div><h1 class="section-title">Mes livres</h1><p class="section-subtitle" id="entryCount">–</p></div>
+        <button class="btn btn-primary btn-sm" onclick="openTypeModal()">+ Livre</button>
+      </div>
+      <div class="books-grid" id="booksGrid"></div>
+    </div>
+    <!-- Models view (inside home) -->
+    <div id="homeModelsView" style="display:none;">
+      <div class="section-header">
+        <div><h1 class="section-title">Modèles</h1><p class="section-subtitle">Personnalisables</p></div>
+        <button class="btn btn-primary btn-sm" onclick="openModelModal()">+ Nouveau</button>
+      </div>
+      <div id="modelsList"></div>
+    </div>
+    <!-- Inside a book: entries list -->
+    <div id="bookEntriesView" style="display:none;">
+      <div class="book-view-header">
+        <button class="back-btn" style="margin:0;" onclick="closeBook()">← Livres</button>
+        <div id="bookViewIcon" class="book-view-icon"></div>
+        <div style="flex:1;">
+          <div class="book-view-title" id="bookViewTitle"></div>
+          <div class="book-view-sub" id="bookViewSub"></div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="bookAddEntryBtn" onclick="newEntryDirectFromBook()">+ Entrée</button>
+      </div>
+      <!-- Filter + sort for book -->
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:.7rem;flex-wrap:wrap;">
+        <div style="position:relative;">
+          <button class="btn btn-secondary btn-sm" onclick="toggleSortDropdown(event)" id="sortBtnBook">↕ <span id="sortLabelBook">Récent</span></button>
+          <div id="sortDropdownBook" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:200;min-width:160px;overflow:hidden;">
+            <div class="sort-opt" data-sort="date-desc" onclick="setSort('date-desc')">📅 Plus récent</div>
+            <div class="sort-opt" data-sort="date-asc" onclick="setSort('date-asc')">📅 Plus ancien</div>
+            <div class="sort-opt" data-sort="title-asc" onclick="setSort('title-asc')">🔤 Titre A→Z</div>
+            <div class="sort-opt" data-sort="wordcount-desc" onclick="setSort('wordcount-desc')">📝 Plus long</div>
+            <div class="sort-opt" data-sort="has-scale" onclick="setSort('has-scale')">📊 Avec échelle</div>
+          </div>
+        </div>
+      </div>
+      <div class="filter-bar" id="filterBar"></div>
+      <div id="entriesList"></div>
+    </div>
   </div>
 </div>
 
@@ -455,7 +756,7 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 <div class="page fade-in" id="page-read">
   <div class="page-content">
     <div style="display:flex;gap:7px;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap;">
-      <button class="back-btn" style="margin:0;" onclick="goHome()">← Retour</button>
+      <button class="back-btn" style="margin:0;" onclick="goBackFromRead()">← Retour</button>
       <div style="flex:1;"></div>
       <button class="btn btn-secondary btn-sm" onclick="exportCurrentPDF()">📄 PDF</button>
     </div>
@@ -466,16 +767,19 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 <!-- STATS -->
 <div class="page fade-in" id="page-stats">
   <div class="page-content">
-    <h1 class="section-title" style="margin-bottom:1.1rem;">Statistiques</h1>
-    <div class="stats-grid-main" id="statsGridMain"></div>
-    <div class="stats-grid-types" id="statsGridTypes"></div>
-    <div class="stats-grid-scales" id="statsGridScales"></div>
-    <div class="chart-wrap" id="chartWrap">
+    <h1 class="section-title" style="margin-bottom:1rem;">Statistiques</h1>
+    <!-- Hero numbers -->
+    <div class="stats-hero" id="statsHero"></div>
+    <!-- Scale averages -->
+    <div class="stats-section-title">Humeur & Échelles</div>
+    <div class="card" style="margin-bottom:1rem;" id="scaleStatsCard">
+      <div id="scaleStatRows"></div>
+    </div>
+    <!-- Chart -->
+    <div class="stats-section-title">Évolution</div>
+    <div class="chart-wrap" id="chartWrap" style="margin-bottom:1rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:6px;">
-        <div style="display:flex;align-items:center;gap:6px;">
-          <p class="chart-title" style="margin:0;">Évolution</p>
-          <select id="chartScalePick" onchange="drawMoodChart()" style="height:26px;padding:0 6px;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-ui);cursor:pointer;outline:none;"></select>
-        </div>
+        <select id="chartScalePick" onchange="drawMoodChart()" style="height:26px;padding:0 6px;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-ui);cursor:pointer;outline:none;"></select>
         <div style="display:flex;gap:3px;">
           <button class="period-btn active" onclick="setPeriod(7,this)">7j</button>
           <button class="period-btn" onclick="setPeriod(30,this)">1m</button>
@@ -485,22 +789,162 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
           <button class="period-btn" onclick="setPeriod(0,this)">Tout</button>
         </div>
       </div>
-      <div style="width:100%;overflow:hidden;">
-        <canvas id="moodChart" style="width:100%;display:block;"></canvas>
+      <canvas id="moodChart" style="width:100%;display:block;"></canvas>
+    </div>
+    <!-- Heatmap -->
+    <div class="stats-section-title">Activité (12 dernières semaines)</div>
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="heatmap-wrap" id="heatmapWrap"></div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
+        <span style="font-size:10px;color:var(--text3);">Moins</span>
+        <div class="heatmap-cell"></div><div class="heatmap-cell h1"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div>
+        <span style="font-size:10px;color:var(--text3);">Plus</span>
       </div>
     </div>
-    <div class="card"><p style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:7px;">Tags fréquents</p><div id="topTags" class="tags-wrap"></div></div>
+    <!-- Type distribution -->
+    <div class="stats-section-title">Répartition par type</div>
+    <div class="card" style="margin-bottom:1rem;" id="typeDistCard"></div>
+    <!-- Top tags -->
+    <div class="stats-section-title">Tags fréquents</div>
+    <div class="card" style="margin-bottom:1rem;"><div id="topTags" class="tags-wrap"></div></div>
+    <!-- Goals stats (conditional) -->
+    <div id="statsGoalsSection" style="display:none;">
+      <div class="stats-section-title">🎯 Objectifs</div>
+      <div class="card" style="margin-bottom:1rem;" id="statsGoalsCard"></div>
+    </div>
+    <!-- Tracking stats (conditional) -->
+    <div id="statsTrackingSection" style="display:none;">
+      <div class="stats-section-title">🎬 Suivi</div>
+      <div class="card" id="statsTrackingCard"></div>
+    </div>
   </div>
 </div>
 
-<!-- MODELS -->
-<div class="page fade-in" id="page-models">
+<!-- GOALS -->
+<div class="page fade-in" id="page-goals">
   <div class="page-content">
     <div class="section-header">
-      <div><h1 class="section-title">Modèles</h1><p class="section-subtitle">Tous modifiables</p></div>
-      <button class="btn btn-primary" onclick="openModelModal()">+ Nouveau</button>
+      <div><h1 class="section-title">Objectifs</h1><p class="section-subtitle" id="goalsCount">–</p></div>
+      <button class="btn btn-primary btn-sm" onclick="openNewGoal()">+ Objectif</button>
     </div>
-    <div id="modelsList"></div>
+    <!-- Period filter -->
+    <div class="goals-period-bar">
+      <button class="filter-tab active" id="gpAll" onclick="setGoalPeriod('all',this)">Tous</button>
+      <button class="filter-tab" id="gpWeek" onclick="setGoalPeriod('week',this)">Cette semaine</button>
+      <button class="filter-tab" id="gpMonth" onclick="setGoalPeriod('month',this)">Ce mois</button>
+      <button class="filter-tab" id="gpYear" onclick="setGoalPeriod('year',this)">Cette année</button>
+      <button class="filter-tab" id="gpNone" onclick="setGoalPeriod('none',this)">Sans date</button>
+    </div>
+    <!-- Kanban -->
+    <div class="goals-kanban">
+      <div class="goals-col">
+        <div class="goals-col-header">
+          <span class="goals-col-title" style="color:#3B7DD8;">🔵 En cours</span>
+          <span class="goals-col-count" id="colCountEncours">0</span>
+        </div>
+        <div id="colEncours"></div>
+        <button class="goal-add-btn" onclick="openNewGoal('encours')">＋ Ajouter</button>
+      </div>
+      <div class="goals-col">
+        <div class="goals-col-header">
+          <span class="goals-col-title" style="color:#D4882A;">⏸ En pause</span>
+          <span class="goals-col-count" id="colCountPause">0</span>
+        </div>
+        <div id="colPause"></div>
+        <button class="goal-add-btn" onclick="openNewGoal('pause')">＋ Ajouter</button>
+      </div>
+      <div class="goals-col">
+        <div class="goals-col-header">
+          <span class="goals-col-title" style="color:#2E9E6C;">✅ Terminé</span>
+          <span class="goals-col-count" id="colCountTermine">0</span>
+        </div>
+        <div id="colTermine"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL DETAIL -->
+<div class="page fade-in" id="page-goal-detail">
+  <div class="page-content">
+    <div style="display:flex;gap:7px;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap;">
+      <button class="back-btn" style="margin:0;" onclick="switchTab('goals')">← Objectifs</button>
+      <div style="flex:1;"></div>
+      <button class="btn btn-danger btn-sm" id="goalDeleteBtn">🗑</button>
+    </div>
+    <div id="goalDetailContent"></div>
+  </div>
+</div>
+
+<!-- TRACKING: COLLECTIONS -->
+<div class="page fade-in" id="page-tracking">
+  <div class="page-content">
+    <div class="section-header">
+      <div><h1 class="section-title">Suivi</h1><p class="section-subtitle" id="trackingCount">–</p></div>
+    </div>
+    <div class="tracking-collections" id="trackingCollections"></div>
+  </div>
+</div>
+
+<!-- TRACKING: ITEMS IN A COLLECTION -->
+<div class="page fade-in" id="page-tracking-col">
+  <div class="page-content">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap;">
+      <button class="back-btn" style="margin:0;" onclick="switchTab('tracking')">← Suivi</button>
+      <div id="trackingColIcon" style="font-size:22px;"></div>
+      <div style="flex:1;">
+        <div style="font-family:var(--font-serif);font-size:18px;color:var(--text);" id="trackingColTitle"></div>
+        <div style="font-size:11px;color:var(--text3);" id="trackingColSub"></div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openNewTrackingItem()">+ Ajouter</button>
+    </div>
+    <!-- Filter by status -->
+    <div style="display:flex;gap:5px;margin-bottom:.8rem;flex-wrap:wrap;" id="trackingStatusFilter">
+      <button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>
+      <button class="filter-tab" onclick="setTrackingStatusFilter('vu',this)">✅ Vu/Lu</button>
+      <button class="filter-tab" onclick="setTrackingStatusFilter('encours',this)">▶ En cours</button>
+      <button class="filter-tab" onclick="setTrackingStatusFilter('avoir',this)">🔖 À voir/lire</button>
+    </div>
+    <div class="tracking-items-grid" id="trackingItemsGrid"></div>
+  </div>
+</div>
+
+<!-- TRACKING: ITEM DETAIL -->
+<div class="page fade-in" id="page-tracking-item">
+  <div class="page-content">
+    <div style="display:flex;gap:7px;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap;">
+      <button class="back-btn" style="margin:0;" id="trackingItemBack">← Retour</button>
+      <div style="flex:1;"></div>
+      <button class="btn btn-danger btn-sm" id="trackingItemDelBtn">🗑</button>
+    </div>
+    <div id="trackingItemDetail"></div>
+  </div>
+</div>
+
+<!-- QUOTES -->
+<div class="page fade-in" id="page-quotes">
+  <div class="page-content">
+    <div class="section-header">
+      <div><h1 class="section-title">Citations</h1><p class="section-subtitle" id="quotesCount">–</p></div>
+    </div>
+    <!-- Quick add -->
+    <div class="quote-input-box">
+      <textarea class="quote-textarea" id="quoteText" placeholder="Tapez ou collez une citation…" rows="3"></textarea>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <input type="text" id="quoteAuthor" placeholder="Auteur (optionnel)" style="flex:1;min-width:120px;font-size:12px;padding:6px 9px;">
+        <input type="date" id="quoteDate" style="width:140px;font-size:12px;padding:6px 9px;">
+        <button class="btn btn-secondary btn-sm" onclick="clearQuoteDate()" title="Sans date">✕</button>
+        <button class="btn btn-primary btn-sm" onclick="saveQuote()">＋ Ajouter</button>
+      </div>
+      <div style="margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <div class="tag-input-wrap" style="flex:1;min-width:160px;"><input type="text" id="quoteTagInput" placeholder="Tag…" onkeydown="addQuoteTagKD(event)" style="font-size:12px;padding:5px 8px;"><button class="btn btn-secondary btn-sm" onclick="addQuoteTag()">+</button></div>
+        <div class="tags-wrap" id="selectedQuoteTags"></div>
+      </div>
+    </div>
+    <!-- Filter bar -->
+    <div class="filter-bar" id="quoteFilterBar"></div>
+    <!-- List -->
+    <div id="quotesList"></div>
   </div>
 </div>
 
@@ -522,13 +966,7 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
       <button class="btn btn-secondary btn-sm" onclick="forceSync()">↺ Sync</button>
     </div>
 
-    <div class="card" style="margin-bottom:.9rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
-        <p style="font-size:13px;font-weight:500;">Types d'entrées</p>
-        <button class="btn btn-secondary btn-sm" onclick="openTypeModal()">+ Nouveau</button>
-      </div>
-      <div id="entryTypesList"></div>
-    </div>
+<div id="entryTypesList" style="display:none;"></div>
 
     <div class="card" style="margin-bottom:.9rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
@@ -536,6 +974,31 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
         <button class="btn btn-secondary btn-sm" onclick="openScaleModal()">+ Nouvelle</button>
       </div>
       <div id="scalesList"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:.9rem;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:9px;">Fonctionnalités</p>
+      <div class="scale-setting-row">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;color:var(--text);">🎯 Objectifs</div>
+          <div style="font-size:11px;color:var(--text3);">Suivi d'objectifs avec checklist et Kanban</div>
+        </div>
+        <button class="scale-toggle" id="goalsToggle" onclick="toggleGoalsFeature()"></button>
+      </div>
+      <div class="scale-setting-row">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;color:var(--text);">🎬 Suivi</div>
+          <div style="font-size:11px;color:var(--text3);">Films, séries, livres, jeux vus/lus/joués</div>
+        </div>
+        <button class="scale-toggle" id="trackingToggle" onclick="toggleTrackingFeature()"></button>
+      </div>
+      <div class="scale-setting-row">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;color:var(--text);">💬 Citations</div>
+          <div style="font-size:11px;color:var(--text3);">Afficher l'onglet Citations dans la navigation</div>
+        </div>
+        <button class="scale-toggle" id="quotesToggle" onclick="toggleQuotesFeature()"></button>
+      </div>
     </div>
 
     <div class="card" style="margin-bottom:.9rem;">
@@ -600,6 +1063,21 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
     <div class="form-group"><label>Icône (emoji)</label><input type="text" id="typeIcon" maxlength="4"></div>
     <div class="form-group"><label>Nom</label><input type="text" id="typeName"></div>
     <div class="form-group"><label>Description</label><input type="text" id="typeDesc"></div>
+    <div class="form-group">
+      <label>Couleur du livre</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;" id="bookColorPicker">
+        <div class="book-color-opt" data-color="#7B5EA7" style="background:#7B5EA7;" onclick="selectBookColor('#7B5EA7')"></div>
+        <div class="book-color-opt" data-color="#3B7DD8" style="background:#3B7DD8;" onclick="selectBookColor('#3B7DD8')"></div>
+        <div class="book-color-opt" data-color="#2E9E6C" style="background:#2E9E6C;" onclick="selectBookColor('#2E9E6C')"></div>
+        <div class="book-color-opt" data-color="#C8593A" style="background:#C8593A;" onclick="selectBookColor('#C8593A')"></div>
+        <div class="book-color-opt" data-color="#D4882A" style="background:#D4882A;" onclick="selectBookColor('#D4882A')"></div>
+        <div class="book-color-opt" data-color="#8B5E3C" style="background:#8B5E3C;" onclick="selectBookColor('#8B5E3C')"></div>
+        <div class="book-color-opt" data-color="#C44B7A" style="background:#C44B7A;" onclick="selectBookColor('#C44B7A')"></div>
+        <div class="book-color-opt" data-color="#2C7B8C" style="background:#2C7B8C;" onclick="selectBookColor('#2C7B8C')"></div>
+        <div class="book-color-opt" data-color="#4A5568" style="background:#4A5568;" onclick="selectBookColor('#4A5568')"></div>
+        <div class="book-color-opt" data-color="#2D3748" style="background:#2D3748;" onclick="selectBookColor('#2D3748')"></div>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closeModal('typeModal')">Annuler</button>
       <button class="btn btn-primary" onclick="saveEntryType()">Créer</button>
@@ -635,9 +1113,56 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
   </div>
 </div>
 
+<div class="modal-overlay" id="collectionModal">
+  <div class="modal">
+    <h3 class="modal-title" id="colModalTitle">Nouvelle collection</h3>
+    <div style="display:grid;grid-template-columns:64px 1fr;gap:9px;margin-bottom:1rem;">
+      <div><label>Icône</label><input type="text" id="colIcon" maxlength="4" placeholder="🎬" style="text-align:center;font-size:22px;"></div>
+      <div><label>Nom</label><input type="text" id="colName" placeholder="Films vus"></div>
+    </div>
+    <!-- Statuts personnalisables -->
+    <div class="form-group">
+      <label>Statuts <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(glissez pour réordonner)</span></label>
+      <div id="colStatusesList" style="margin-bottom:7px;"></div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="colStatusInput" placeholder="Nouveau statut…" style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColStatus();}">
+        <input type="text" id="colStatusEmoji" placeholder="📌" maxlength="4" style="width:50px;font-size:12px;text-align:center;">
+        <button class="btn btn-secondary btn-sm" onclick="addColStatus()">+</button>
+      </div>
+    </div>
+    <!-- Champs personnalisables -->
+    <div class="form-group">
+      <label>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
+      <div id="colFieldsList" style="margin-bottom:7px;"></div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="colFieldInput" placeholder="Lieu, Plateforme, Genre…" style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
+        <select id="colFieldType" style="width:90px;font-size:12px;padding:6px 4px;">
+          <option value="text">Texte</option>
+          <option value="select">Choix</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="addColField()">+</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('collectionModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCollection()">Créer</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+// Load jsPDF lazily when needed
+function loadJsPDF(cb){
+  if(window.jspdf){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload=cb;s.onerror=()=>{alert('Impossible de charger le module PDF. Vérifiez votre connexion.');};
+  document.head.appendChild(s);
+}
+function exportCurrentPDF(){if(!currentReadId)return;loadJsPDF(()=>generatePDF([S.entries.find(e=>e.id===currentReadId)].filter(Boolean)));}
+function exportAllPDF(){if(!S.entries.length){alert('Aucune entrée.');return;}loadJsPDF(()=>generatePDF([...S.entries].sort((a,b)=>new Date(a.date||a.createdAt)-new Date(b.date||b.createdAt))));}
+
 // ── SUPABASE CONFIG ────────────────────────────────────────────────────────
 const SB_URL = 'https://ourecbnwvasfildqkkdv.supabase.co';
 const SB_KEY = 'sb_publishable_kM9YyeLdmMfvqNlRJVxXmw_f4uBpu66';
@@ -672,9 +1197,9 @@ const FONTS=[
   {id:'mono',name:'Mono',css:"'JetBrains Mono',monospace",prev:'Aa — Net'},
 ];
 const DEFAULT_ENTRY_TYPES=[
-  {id:'journal',system:true,icon:'📅',name:'Journal du jour',desc:'Quotidien structuré'},
-  {id:'reflexion',system:true,icon:'💭',name:'Réflexion libre',desc:'Pensées et idées'},
-  {id:'reve',system:true,icon:'🌙',name:'Journal des rêves',desc:'Rêves et songes'},
+  {id:'journal',system:true,icon:'📅',name:'Journal du jour',desc:'Quotidien structuré',bookColor:'#7B5EA7'},
+  {id:'reflexion',system:true,icon:'💭',name:'Réflexion libre',desc:'Pensées et idées',bookColor:'#2E9E6C'},
+  {id:'reve',system:true,icon:'🌙',name:'Journal des rêves',desc:'Rêves et songes',bookColor:'#2C7B8C'},
 ];
 const DEFAULT_MODELS=[
   {id:'m1',system:true,typeId:'journal',name:'Complet',desc:'Toutes les sections',sections:['Récap du jour','Pensées libres','Meilleur moment','Demain']},
@@ -696,11 +1221,13 @@ const DEFAULT_SCALES=[
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let S={
-  entries:[],
+  entries:[],quotes:[],goals:[],
+  tracking:{collections:[],items:[]},
   entryTypes:JSON.parse(JSON.stringify(DEFAULT_ENTRY_TYPES)),
   models:JSON.parse(JSON.stringify(DEFAULT_MODELS)),
   scales:JSON.parse(JSON.stringify(DEFAULT_SCALES)),
   theme:'light',font:'dm-sans',color:'beige',filterTag:null,filterType:'all',
+  quotesEnabled:true,goalsEnabled:true,trackingEnabled:true,
 };
 let editingModelId=null,editingTypeId=null,editingScaleId=null;
 let currentEntryId=null,currentReadId=null;
@@ -708,7 +1235,12 @@ let selectedTypeId='journal',selectedModelId='m1';
 let entryTags=[],scaleValues={};
 let storageMode='';
 let currentUser=null;
-let selectedAuthMode='local'; // default to local
+let selectedAuthMode='local';
+let currentSort='date-desc';
+let currentBookTypeId=null; // null=all books shown, string=inside a book
+let selectedBookColor='#7B5EA7';
+let quoteFilterTag=null;
+let quoteTags=[];
 
 // ── AUTH UI ────────────────────────────────────────────────────────────────
 function selectStorageMode(mode){
@@ -983,10 +1515,16 @@ async function forceSync(){await loadFromSupabase();renderAll();}
 // ── LOCAL CACHE ────────────────────────────────────────────────────────────
 function saveLocal(){
   localStorage.setItem('journal_pwa',JSON.stringify({
-    entries:S.entries,theme:S.theme,font:S.font,color:S.color||'beige',
+    entries:S.entries,quotes:S.quotes||[],goals:S.goals||[],
+    tracking:S.tracking||{collections:[],items:[]},
+    theme:S.theme,font:S.font,color:S.color||'beige',
     scales:S.scales,
+    quotesEnabled:S.quotesEnabled!==false,
+    goalsEnabled:S.goalsEnabled!==false,
+    trackingEnabled:S.trackingEnabled!==false,
     customTypes:S.entryTypes.filter(t=>!DEFAULT_ENTRY_TYPES.find(d=>d.id===t.id)),
     customModels:S.models.filter(m=>!m.system),
+    bookColors:S.entryTypes.reduce((a,t)=>{a[t.id]=t.bookColor;return a;},{}),
   }));
 }
 function loadFromLocal(){
@@ -994,10 +1532,17 @@ function loadFromLocal(){
   if(!p)return;
   try{
     const d=JSON.parse(p);
-    S.entries=d.entries||[];
+    S.entries=d.entries||[];S.quotes=d.quotes||[];S.goals=d.goals||[];
+    S.tracking=d.tracking||{collections:[],items:[]};
+    if(!S.tracking.collections)S.tracking.collections=[];
+    if(!S.tracking.items)S.tracking.items=[];
     S.theme=d.theme||'light';S.font=d.font||'dm-sans';S.color=d.color||'beige';
+    S.quotesEnabled=d.quotesEnabled!==false;
+    S.goalsEnabled=d.goalsEnabled!==false;
+    S.trackingEnabled=d.trackingEnabled!==false;
     if(d.scales)S.scales=[...DEFAULT_SCALES.map(ds=>{const ps=d.scales.find(x=>x.id===ds.id);return ps?{...ds,...ps}:ds;}),...(d.scales.filter(x=>!DEFAULT_SCALES.find(dd=>dd.id===x.id)))];
-    S.entryTypes=[...DEFAULT_ENTRY_TYPES,...(d.customTypes||[])];
+    const bc=d.bookColors||{};
+    S.entryTypes=[...DEFAULT_ENTRY_TYPES.map(t=>({...t,bookColor:bc[t.id]||t.bookColor})),...(d.customTypes||[])];
     S.models=[...DEFAULT_MODELS,...(d.customModels||[])];
   }catch(e){}
 }
@@ -1048,10 +1593,11 @@ function switchToOnline(){
 // ── INIT ───────────────────────────────────────────────────────────────────
 function renderAll(){
   applyTheme();applyFont();applyColor();
-  renderEntries();renderStats();renderModelsPage();renderFontGrid();renderColorGrid();
+  initQuotes();
+  applyFeatureSettings();
+  renderBooksGrid();updateEntryCount();
+  renderModelsPage();renderFontGrid();renderColorGrid();
   renderEntryTypesList();renderScalesList();renderTypeFilterTabs();
-  updateEntryCount();
-  // Show/hide sync banner
   const sb=document.getElementById('syncBanner');
   if(sb)sb.style.display=storageMode==='online'?'':'none';
   const sd=document.querySelector('.sync-bar');
@@ -1072,10 +1618,21 @@ function setupEventListeners(){
 }
 
 async function init(){
-  // Check if already authenticated or mode chosen
+  applyTheme();applyFont();
+  // Check onboarding
+  const onboardDone=localStorage.getItem('journal_onboarding_done');
   const savedMode=localStorage.getItem('journal_storage_mode');
   const savedToken=localStorage.getItem('sb_access_token');
   const savedUserId=localStorage.getItem('sb_user_id');
+
+  if(!onboardDone&&!savedMode&&!savedToken){
+    // First launch — show onboarding
+    initOnboard();
+    document.getElementById('onboardPage').style.display='flex';
+    document.getElementById('authPage').style.display='none';
+    document.getElementById('app').style.display='none';
+    return;
+  }
 
   if(savedMode==='local'){
     startLocalMode();
@@ -1161,6 +1718,10 @@ function applyColor(){
   const t=themes[S.color||'beige']||themes.beige;
   const root=document.documentElement;
   if(isDark){
+    // Reset any light-mode bg overrides so CSS [data-theme=dark] takes over
+    root.style.removeProperty('--bg');
+    root.style.removeProperty('--bg2');
+    root.style.removeProperty('--bg3');
     root.style.setProperty('--accent2',t.da);
   } else {
     root.style.setProperty('--bg',t.bg);
@@ -1213,16 +1774,52 @@ function execHighlight(){document.execCommand('hiliteColor',false,'rgba(239,159,
 
 // ── TABS ───────────────────────────────────────────────────────────────────
 function switchTab(tab){
-  ['home','stats','models','settings'].forEach((t,i)=>document.querySelectorAll('.nav-tab')[i].classList.toggle('active',t===tab));
+  if(tab==='quotes'&&!S.quotesEnabled)tab='home';
+  if(tab==='goals'&&!S.goalsEnabled)tab='home';
+  if(tab==='tracking'&&!S.trackingEnabled)tab='home';
+  if(tab==='models')tab='home'; // models now inside home
+  const TABS=['home','stats','goals','tracking','quotes','settings'];
+  document.querySelectorAll('#mainNav .nav-tab').forEach((el,i)=>el.classList.toggle('active',TABS[i]===tab));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+tab).classList.add('active');
+  const pg=document.getElementById('page-'+tab);
+  if(pg)pg.classList.add('active');
   hideToolbar();
   if(tab==='stats')renderStats();
-  if(tab==='models')renderModelsPage();
-  if(tab==='home'){renderEntries();renderTypeFilterTabs();}
-  if(tab==='settings'){renderEntryTypesList();renderScalesList();renderAccountInfo();renderStorageUsage();}
+  if(tab==='quotes')renderQuotes();
+  if(tab==='goals')renderGoals();
+  if(tab==='tracking'){initTracking();renderTrackingCollections();}
+  if(tab==='home'){renderBooksGrid();updateEntryCount();}
+  if(tab==='settings'){renderEntryTypesList();renderScalesList();renderAccountInfo();renderStorageUsage();applyFeatureSettings();}
 }
-function goHome(){switchTab('home');}
+function switchHomeTab(tab){
+  const isBooks=tab==='books';
+  document.getElementById('homeTabBooks').classList.toggle('active',isBooks);
+  document.getElementById('homeTabModels').classList.toggle('active',!isBooks);
+  document.getElementById('booksView').style.display=isBooks?'':'none';
+  document.getElementById('homeModelsView').style.display=isBooks?'none':'';
+  document.getElementById('bookEntriesView').style.display='none';
+  if(!isBooks)renderModelsPage();
+}
+function toggleQuotesFeature(){S.quotesEnabled=!S.quotesEnabled;saveLocal();applyFeatureSettings();if(!S.quotesEnabled&&document.getElementById('page-quotes')?.classList.contains('active'))switchTab('home');}
+function toggleGoalsFeature(){S.goalsEnabled=!S.goalsEnabled;saveLocal();applyFeatureSettings();if(!S.goalsEnabled&&['page-goals','page-goal-detail'].some(id=>document.getElementById(id)?.classList.contains('active')))switchTab('home');}
+function toggleTrackingFeature(){S.trackingEnabled=!S.trackingEnabled;saveLocal();applyFeatureSettings();if(!S.trackingEnabled&&['page-tracking','page-tracking-col','page-tracking-item'].some(id=>document.getElementById(id)?.classList.contains('active')))switchTab('home');}
+function applyFeatureSettings(){
+  const qb=document.getElementById('navQuotesBtn');if(qb)qb.style.display=S.quotesEnabled?'':'none';
+  const gb=document.getElementById('navGoalsBtn');if(gb)gb.style.display=S.goalsEnabled?'':'none';
+  const tb=document.getElementById('navTrackingBtn');if(tb)tb.style.display=S.trackingEnabled?'':'none';
+  const qt=document.getElementById('quotesToggle');if(qt)qt.classList.toggle('on',S.quotesEnabled);
+  const gtt=document.getElementById('goalsToggle');if(gtt)gtt.classList.toggle('on',S.goalsEnabled);
+  const tt=document.getElementById('trackingToggle');if(tt)tt.classList.toggle('on',S.trackingEnabled);
+}
+function applyQuotesSetting(){applyFeatureSettings();}
+function goHome(){
+  currentBookTypeId=null;
+  document.getElementById('booksView').style.display='';
+  document.getElementById('bookEntriesView').style.display='none';
+  const mv=document.getElementById('homeModelsView');if(mv)mv.style.display='none';
+  switchHomeTab('books');
+  switchTab('home');
+}
 
 // ── UTILS ──────────────────────────────────────────────────────────────────
 function setTodayDate(){const t=new Date().toISOString().split('T')[0];document.querySelectorAll('input[type=date]').forEach(i=>i.value=t);}
@@ -1254,11 +1851,42 @@ function renderSelTags(){const w=document.getElementById('selectedTags');if(w)w.
 // ── ENTRY TYPES ────────────────────────────────────────────────────────────
 function renderTypeGrid(){document.getElementById('typeGrid').innerHTML=S.entryTypes.map(t=>`<div class="type-card ${t.id===selectedTypeId?'selected':''}" onclick="selectType('${t.id}')"><div class="type-card-icon">${t.icon}</div><div class="type-card-name">${t.name}</div></div>`).join('');}
 function selectType(id){selectedTypeId=id;renderTypeGrid();renderModelPicker();}
-function renderTypeFilterTabs(){document.getElementById('typeFilterTabs').innerHTML=`<button class="filter-tab ${S.filterType==='all'?'active':''}" onclick="setTypeFilter('all',this)">Tout</button>`+S.entryTypes.map(t=>`<button class="filter-tab ${S.filterType===t.id?'active':''}" onclick="setTypeFilter('${t.id}',this)">${t.icon} ${t.name}</button>`).join('');}
+function renderTypeFilterTabs(){const el=document.getElementById('typeFilterTabs');if(!el)return;el.innerHTML=`<button class="filter-tab ${S.filterType==='all'?'active':''}" onclick="setTypeFilter('all',this)">Tout</button>`+S.entryTypes.map(t=>`<button class="filter-tab ${S.filterType===t.id?'active':''}" onclick="setTypeFilter('${t.id}',this)">${t.icon} ${t.name}</button>`).join('');}
 function setTypeFilter(type,el){S.filterType=type;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));el?.classList.add('active');renderEntries();}
-function renderEntryTypesList(){document.getElementById('entryTypesList').innerHTML=S.entryTypes.map(t=>`<div class="scale-setting-row"><span style="font-size:19px;flex-shrink:0;">${t.icon}</span><div style="flex:1;"><div style="font-size:13px;font-weight:500;color:var(--text);">${t.name}</div><div style="font-size:11px;color:var(--text3);">${t.desc}</div></div><button class="btn btn-danger btn-sm" onclick="deleteEntryType('${t.id}')">🗑</button></div>`).join('');}
-function openTypeModal(id){editingTypeId=id||null;document.getElementById('typeModalTitle').textContent=id?'Modifier':'Nouveau type';if(id){const t=S.entryTypes.find(x=>x.id===id);document.getElementById('typeIcon').value=t.icon;document.getElementById('typeName').value=t.name;document.getElementById('typeDesc').value=t.desc;}else{document.getElementById('typeIcon').value='';document.getElementById('typeName').value='';document.getElementById('typeDesc').value='';}document.getElementById('typeModal').classList.add('open');}
-function saveEntryType(){const icon=document.getElementById('typeIcon').value.trim()||'📝',name=document.getElementById('typeName').value.trim(),desc=document.getElementById('typeDesc').value.trim();if(!name)return;if(editingTypeId){const t=S.entryTypes.find(x=>x.id===editingTypeId);if(t){t.icon=icon;t.name=name;t.desc=desc;}}else S.entryTypes.push({id:uid(),system:false,icon,name,desc});closeModal('typeModal');saveLocal();saveSettingsToSupabase();renderEntryTypesList();renderTypeFilterTabs();renderTypeGrid();renderModelTypeSelect();}
+function renderEntryTypesList(){document.getElementById('entryTypesList').innerHTML=S.entryTypes.map(t=>`<div class="scale-setting-row"><span style="font-size:19px;flex-shrink:0;">${t.icon}</span><div style="flex:1;"><div style="font-size:13px;font-weight:500;color:var(--text);">${t.name}${t.system?` <span style="font-size:10px;color:var(--accent2);border:1px solid var(--accent2);border-radius:10px;padding:0 5px;">Par défaut</span>`:''}</div><div style="font-size:11px;color:var(--text3);">${t.desc}</div></div><button class="btn btn-secondary btn-sm" onclick="openTypeModal('${t.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteEntryType('${t.id}')">🗑</button></div>`).join('');}
+function openTypeModal(id){
+  editingTypeId=id||null;
+  document.getElementById('typeModalTitle').textContent=id?'Modifier':'Nouveau type';
+  if(id){
+    const t=S.entryTypes.find(x=>x.id===id);
+    document.getElementById('typeIcon').value=t.icon;
+    document.getElementById('typeName').value=t.name;
+    document.getElementById('typeDesc').value=t.desc;
+    selectedBookColor=t.bookColor||'#7B5EA7';
+  } else {
+    document.getElementById('typeIcon').value='';
+    document.getElementById('typeName').value='';
+    document.getElementById('typeDesc').value='';
+    selectedBookColor='#7B5EA7';
+  }
+  document.querySelectorAll('.book-color-opt').forEach(o=>o.classList.toggle('selected',o.dataset.color===selectedBookColor));
+  document.getElementById('typeModal').classList.add('open');
+}
+function saveEntryType(){
+  const icon=document.getElementById('typeIcon').value.trim()||'📝';
+  const name=document.getElementById('typeName').value.trim();
+  const desc=document.getElementById('typeDesc').value.trim();
+  const color=selectedBookColor||'#7B5EA7';
+  if(!name)return;
+  if(editingTypeId){
+    const t=S.entryTypes.find(x=>x.id===editingTypeId);
+    if(t){t.icon=icon;t.name=name;t.desc=desc;t.bookColor=color;}
+  } else {
+    S.entryTypes.push({id:uid(),system:false,icon,name,desc,bookColor:color});
+  }
+  closeModal('typeModal');saveLocal();saveSettingsToSupabase();
+  renderEntryTypesList();renderTypeFilterTabs();renderTypeGrid();renderModelTypeSelect();renderBooksGrid();
+}
 function deleteEntryType(id){showConfirm('Supprimer ce type ?','',()=>{S.entryTypes=S.entryTypes.filter(t=>t.id!==id);saveLocal();saveSettingsToSupabase();renderEntryTypesList();renderTypeFilterTabs();renderTypeGrid();});}
 
 // ── SCALES ─────────────────────────────────────────────────────────────────
@@ -1380,43 +2008,1092 @@ function saveEntry(){
     if(!preview)preview=contentEl?.textContent?.slice(0,120)||'';
   });
   const noDate=document.getElementById('noDate')?.checked;
+  const existingEntry=S.entries.find(e=>e.id===(currentEntryId||''));
   const entry={
     id:currentEntryId||uid(),typeId:selectedTypeId,
     date:noDate?'':(document.getElementById('entryDate')?.value||''),
     title:document.getElementById('entryTitleField').value.trim(),
     tags:[...entryTags],modelId:selectedModelId,modelName:model?.name||'Libre',
-    fields,scales:{...scaleValues},preview,createdAt:new Date().toISOString()
+    fields,scales:{...scaleValues},preview,
+    createdAt:existingEntry?.createdAt||new Date().toISOString(),
+    updatedAt:new Date().toISOString()
   };
   if(currentEntryId){const i=S.entries.findIndex(e=>e.id===currentEntryId);if(i>-1)S.entries[i]=entry;}
   else S.entries.unshift(entry);
   saveLocal();saveEntryToSupabase(entry);
-  hideToolbar();goHome();renderEntries();renderStats();updateEntryCount();
+  hideToolbar();
+  // Go back to the book we were in
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('.nav-tab')[0].classList.add('active');
+  if(currentBookTypeId){
+    S.filterType=currentBookTypeId==='all'?'all':currentBookTypeId;
+    document.getElementById('booksView').style.display='none';
+    document.getElementById('bookEntriesView').style.display='';
+    renderEntries();
+  } else {
+    document.getElementById('booksView').style.display='';
+    document.getElementById('bookEntriesView').style.display='none';
+    renderBooksGrid();
+  }
+  renderStats();updateEntryCount();
 }
 
-// ── ENTRIES LIST ───────────────────────────────────────────────────────────
-function updateEntryCount(){const c=S.entries.length;document.getElementById('entryCount').textContent=c===0?'Aucune entrée':c===1?'1 entrée':`${c} entrées`;}
+// ── BOOKS ──────────────────────────────────────────────────────────────────
+const BOOK_COLORS=['#7B5EA7','#3B7DD8','#2E9E6C','#C8593A','#D4882A','#8B5E3C','#C44B7A','#2C7B8C','#4A5568','#2D3748'];
+function typeColor(t){return t.bookColor||BOOK_COLORS[Math.abs([...t.id].reduce((a,c)=>a+c.charCodeAt(0),0))%BOOK_COLORS.length];}
+function lighten(hex,amt){let c=hex.replace('#','');const r=Math.min(255,parseInt(c.slice(0,2),16)+amt),g=Math.min(255,parseInt(c.slice(2,4),16)+amt),b=Math.min(255,parseInt(c.slice(4,6),16)+amt);return`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;}
+
+function renderBooksGrid(){
+  const grid=document.getElementById('booksGrid');if(!grid)return;
+  let html='';
+  // "All entries" card
+  html+=`<div class="book-all-card" onclick="openBook('all')"><div class="book-all-icon">📚</div><div class="book-all-label">Toutes</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">${S.entries.length} entrée${S.entries.length>1?'s':''}</div></div>`;
+  S.entryTypes.forEach(t=>{
+    const entries=S.entries.filter(e=>e.typeId===t.id);
+    const col=typeColor(t);
+    const col2=lighten(col,40);
+    const last=entries.filter(e=>e.date).sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    const lastStr=last?formatDate(last.date).day+' '+formatDate(last.date).month:'–';
+    html+=`<div class="book-card" id="bookcard_${t.id}">
+      <div class="book-card-inner" onclick="openBook('${t.id}')" style="background:linear-gradient(145deg,${col2} 0%,${col} 100%);">
+        <div class="book-spine" style="background:${col};"></div>
+        <div class="book-cover-top">
+          <div class="book-icon">${t.icon}</div>
+          <div class="book-title">${t.name}</div>
+        </div>
+        <div class="book-cover-bottom">
+          <div class="book-count">${entries.length} entrée${entries.length>1?'s':''}</div>
+          <div class="book-last">Dernière : ${lastStr}</div>
+        </div>
+      </div>
+      <button class="book-actions-btn" onclick="toggleBookMenu(event,'${t.id}')">⋯</button>
+      <div class="book-actions-menu" id="bookmenu_${t.id}">
+        <div class="book-action-item" onclick="editBook('${t.id}')">✏️ Modifier</div>
+        <div class="book-action-item" onclick="openBook('${t.id}')">📖 Ouvrir</div>
+        <div class="book-action-item" onclick="newEntryInBook('${t.id}')">＋ Nouvelle entrée</div>
+        <div class="book-action-item danger" onclick="deleteBookFromGrid('${t.id}')">🗑 Supprimer</div>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML=html;
+  updateEntryCount();
+}
+
+function openBook(typeId){
+  currentBookTypeId=typeId;
+  S.filterType=typeId==='all'?'all':typeId;
+  S.filterTag=null;
+  document.getElementById('booksView').style.display='none';
+  document.getElementById('bookEntriesView').style.display='';
+  const icon=document.getElementById('bookViewIcon');
+  const title=document.getElementById('bookViewTitle');
+  const sub=document.getElementById('bookViewSub');
+  if(typeId==='all'){
+    icon.style.background='var(--bg3)';icon.textContent='📚';
+    title.textContent='Toutes les entrées';
+    sub.textContent=S.entries.length+' entrée'+(S.entries.length>1?'s':'');
+  } else {
+    const t=getType(typeId);
+    const col=typeColor(t);
+    icon.style.background=col;icon.style.color='#fff';icon.textContent=t.icon;
+    title.textContent=t.name;
+    const c=S.entries.filter(e=>e.typeId===typeId).length;
+    sub.textContent=c+' entrée'+(c>1?'s':'');
+  }
+  renderEntries();
+}
+
+function closeBook(){
+  currentBookTypeId=null;S.filterType='all';S.filterTag=null;
+  document.getElementById('booksView').style.display='';
+  document.getElementById('bookEntriesView').style.display='none';
+  renderBooksGrid();
+}
+
+function toggleBookMenu(e,typeId){
+  e.stopPropagation();
+  // Close all other menus
+  document.querySelectorAll('.book-actions-menu').forEach(m=>{
+    if(m.id!=='bookmenu_'+typeId)m.classList.remove('open');
+  });
+  document.getElementById('bookmenu_'+typeId)?.classList.toggle('open');
+}
+function editBook(typeId){
+  document.querySelectorAll('.book-actions-menu').forEach(m=>m.classList.remove('open'));
+  openTypeModal(typeId);
+}
+function newEntryInBook(typeId){
+  // Called from book card ⋯ menu — shows model picker then goes to write
+  document.querySelectorAll('.book-actions-menu').forEach(m=>m.classList.remove('open'));
+  currentBookTypeId=typeId;
+  selectedTypeId=typeId;
+  currentEntryId=null;entryTags=[];scaleValues={};
+  document.getElementById('newEntryTitle').textContent='Nouvelle entrée';
+  selectedModelId=S.models.find(m=>m.typeId===typeId)?.id||'';
+  renderTypeGrid();renderModelPicker();
+  hideToolbar();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-new').classList.add('active');
+  // Show model picker (step-type) but hide type selection since we already know the type
+  document.getElementById('step-type').style.display='';
+  document.getElementById('step-write').style.display='none';
+  // Hide the type grid — user only picks the model
+  document.querySelector('#step-type > p').style.display='none';
+  document.getElementById('typeGrid').style.display='none';
+}
+
+function newEntryDirectFromBook(){
+  // Called from + Entrée button inside a book — skips ALL selection, goes straight to write
+  if(!currentBookTypeId||currentBookTypeId==='all'){
+    // "All" book: show full type+model picker
+    showNewEntry();return;
+  }
+  currentEntryId=null;entryTags=[];scaleValues={};
+  selectedTypeId=currentBookTypeId;
+  selectedModelId=S.models.find(m=>m.typeId===currentBookTypeId)?.id||'';
+  document.getElementById('newEntryTitle').textContent='Nouvelle entrée';
+  hideToolbar();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-new').classList.add('active');
+  document.getElementById('step-type').style.display='none';
+  document.getElementById('step-write').style.display='none';
+  // Restore hidden elements in case they were hidden before
+  const typeGridEl=document.getElementById('typeGrid');if(typeGridEl)typeGridEl.style.display='';
+  const typeStepP=document.querySelector('#step-type > p');if(typeStepP)typeStepP.style.display='';
+  // Go directly to write
+  goToWrite();
+}
+function deleteBookFromGrid(typeId){
+  document.querySelectorAll('.book-actions-menu').forEach(m=>m.classList.remove('open'));
+  const t=S.entryTypes.find(x=>x.id===typeId);
+  const count=S.entries.filter(e=>e.typeId===typeId).length;
+  const msg=count>0?`Ce livre contient ${count} entrée${count>1?'s':''}. Elles seront conservées.`:'';
+  showConfirm(`Supprimer "${t?.name}" ?`,msg,()=>{
+    S.entryTypes=S.entryTypes.filter(t=>t.id!==typeId);
+    saveLocal();saveSettingsToSupabase();
+    renderBooksGrid();renderEntryTypesList();renderTypeFilterTabs();renderTypeGrid();
+  });
+}
+// Close book menus on outside click
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.book-card'))
+    document.querySelectorAll('.book-actions-menu').forEach(m=>m.classList.remove('open'));
+});
+
+// ── SORT DROPDOWN ──────────────────────────────────────────────────────────
+const SORT_LABELS={'date-desc':'Récent','date-asc':'Ancien','title-asc':'A→Z','wordcount-desc':'Plus long','has-scale':'Avec échelle'};
+function toggleSortDropdown(e){
+  e.stopPropagation();
+  ['sortDropdown','sortDropdownBook'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.display=el.style.display==='none'?'block':'none';
+  });
+}
+document.addEventListener('click',()=>{
+  ['sortDropdown','sortDropdownBook'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+});
+
+function setSort(sort){
+  currentSort=sort;
+  ['sortDropdown','sortDropdownBook'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['sortLabel','sortLabelBook'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=SORT_LABELS[sort]||sort;});
+  document.querySelectorAll('.sort-opt').forEach(o=>o.classList.toggle('active',o.dataset.sort===sort));
+  renderEntries();
+}
+
+// ── BOOK COLOR PICKER ──────────────────────────────────────────────────────
+function selectBookColor(col){
+  selectedBookColor=col;
+  document.querySelectorAll('.book-color-opt').forEach(o=>o.classList.toggle('selected',o.dataset.color===col));
+}
+
+// ── ONBOARDING ─────────────────────────────────────────────────────────────
+const ONBOARD_OPTIONS=[
+  {id:'journal',icon:'📅',name:'Journal quotidien',desc:'Écrire chaque jour',enablesType:'journal',feature:null},
+  {id:'reflexion',icon:'💭',name:'Réflexions & idées',desc:'Capturer mes pensées',enablesType:'reflexion',feature:null},
+  {id:'reve',icon:'🌙',name:'Journal des rêves',desc:'Mes rêves et songes',enablesType:'reve',feature:null},
+  {id:'objectifs',icon:'🎯',name:'Mes objectifs',desc:'Suivre ma progression',enablesType:null,feature:'goals'},
+  {id:'films',icon:'🎬',name:'Films & séries',desc:'Ce que j\'ai regardé',enablesType:null,feature:'tracking'},
+  {id:'livreslu',icon:'📖',name:'Livres lus',desc:'Ma liste de lecture',enablesType:null,feature:'tracking'},
+  {id:'citations',icon:'💬',name:'Citations',desc:'Mes phrases inspirantes',enablesType:null,feature:'quotes'},
+  {id:'libre',icon:'✏️',name:'Écriture libre',desc:'Sans structure imposée',enablesType:'reflexion',feature:null},
+];
+let onboardSelected=new Set();
+let obMode='local';
+let currentOnboardStep=0;
+
+function initOnboard(){
+  const el=document.getElementById('onboardCards');if(!el)return;
+  el.innerHTML=ONBOARD_OPTIONS.map(o=>`
+    <div class="onboard-card" id="ocard_${o.id}" onclick="toggleOnboard('${o.id}')">
+      <div class="onboard-card-icon">${o.icon}</div>
+      <div class="onboard-card-name">${o.name}</div>
+      <div class="onboard-card-desc">${o.desc}</div>
+    </div>`).join('');
+}
+function toggleOnboard(id){
+  if(onboardSelected.has(id))onboardSelected.delete(id);
+  else onboardSelected.add(id);
+  document.getElementById('ocard_'+id)?.classList.toggle('selected',onboardSelected.has(id));
+}
+function onboardNext(){
+  if(currentOnboardStep===0){
+    currentOnboardStep=1;
+    document.getElementById('ostep0').classList.remove('active');
+    document.getElementById('ostep1').classList.add('active');
+    document.getElementById('odot0').classList.remove('active');
+    document.getElementById('odot1').classList.add('active');
+  } else {
+    // Back
+    currentOnboardStep=0;
+    document.getElementById('ostep1').classList.remove('active');
+    document.getElementById('ostep0').classList.add('active');
+    document.getElementById('odot1').classList.remove('active');
+    document.getElementById('odot0').classList.add('active');
+    document.getElementById('ob_authForm').style.display='none';
+  }
+}
+function obSelectMode(mode){
+  obMode=mode;
+  document.getElementById('ob_modeLocalCard').classList.toggle('selected',mode==='local');
+  document.getElementById('ob_modeOnlineCard').classList.toggle('selected',mode==='online');
+  document.getElementById('ob_authForm').style.display=mode==='online'?'':'none';
+}
+function applyOnboardSelections(){
+  S.goalsEnabled=onboardSelected.has('objectifs');
+  S.trackingEnabled=onboardSelected.has('films')||onboardSelected.has('livreslu');
+  S.quotesEnabled=onboardSelected.has('citations');
+  if(S.trackingEnabled){
+    initTracking();
+    // Films collection with default fields
+    if(onboardSelected.has('films')&&!S.tracking.collections.find(c=>c.id==='tc_films')){
+      S.tracking.collections.push({
+        id:'tc_films',name:'Films & Séries',icon:'🎬',desc:'',
+        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+        fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]
+      });
+    }
+    if(onboardSelected.has('livreslu')&&!S.tracking.collections.find(c=>c.id==='tc_livres')){
+      S.tracking.collections.push({
+        id:'tc_livres',name:'Livres',icon:'📖',desc:'',
+        statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
+        fields:[]
+      });
+    }
+  }
+  saveLocal();
+}
+async function onboardFinish(){
+  applyOnboardSelections();
+  selectedAuthMode=obMode;
+  localStorage.setItem('journal_onboarding_done','1');
+  document.getElementById('onboardPage').style.display='none';
+  if(obMode==='online'){
+    // Show auth page directly in form mode (skip mode choice)
+    document.getElementById('authModeChoice').style.display='none';
+    document.getElementById('authForm').style.display='';
+    document.getElementById('authPage').style.display='flex';
+  } else {
+    startLocalMode();
+  }
+}
+
+// ── COLLECTION MODAL (improved) ────────────────────────────────────────────
+let editingColId=null;
+let colModalStatuses=[];
+let colModalFields=[];
+
+function openNewCollectionModal(){
+  editingColId=null;
+  document.getElementById('colModalTitle').textContent='Nouvelle collection';
+  document.getElementById('colIcon').value='📋';
+  document.getElementById('colName').value='';
+  colModalStatuses=[
+    {id:'avoir',label:'À voir',emoji:'🔖'},
+    {id:'encours',label:'En cours',emoji:'▶'},
+    {id:'vu',label:'Vu / Terminé',emoji:'✅'},
+  ];
+  colModalFields=[];
+  renderColStatuses();renderColFields();
+  document.getElementById('collectionModal').classList.add('open');
+}
+function openEditCollectionModal(colId){
+  const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
+  editingColId=colId;
+  document.getElementById('colModalTitle').textContent='Modifier la collection';
+  document.getElementById('colIcon').value=col.icon||'📋';
+  document.getElementById('colName').value=col.name||'';
+  colModalStatuses=(col.statuses||[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}]).map(s=>({...s}));
+  colModalFields=(col.fields||[]).map(f=>({...f}));
+  renderColStatuses();renderColFields();
+  document.getElementById('collectionModal').classList.add('open');
+}
+function renderColStatuses(){
+  const el=document.getElementById('colStatusesList');if(!el)return;
+  el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px;">'+
+    colModalStatuses.map((s,i)=>`
+      <div class="col-status-chip">
+        <span>${s.emoji||''} ${s.label}</span>
+        <button onclick="removeColStatus(${i})">✕</button>
+      </div>`).join('')+
+    '</div>';
+}
+function addColStatus(){
+  const label=document.getElementById('colStatusInput').value.trim();
+  const emoji=document.getElementById('colStatusEmoji').value.trim();
+  if(!label)return;
+  colModalStatuses.push({id:uid(),label,emoji});
+  document.getElementById('colStatusInput').value='';
+  document.getElementById('colStatusEmoji').value='';
+  renderColStatuses();
+}
+function removeColStatus(i){colModalStatuses.splice(i,1);renderColStatuses();}
+function renderColFields(){
+  const el=document.getElementById('colFieldsList');if(!el)return;
+  if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ additionnel</p>';return;}
+  el.innerHTML=colModalFields.map((f,i)=>`
+    <div class="col-field-row">
+      <span class="col-field-name">${f.name}</span>
+      <span class="col-field-type">${f.type==='select'?'Choix':'Texte'}</span>
+      <button class="col-field-del" onclick="removeColField(${i})">✕</button>
+    </div>`).join('');
+}
+function addColField(){
+  const name=document.getElementById('colFieldInput').value.trim();
+  const type=document.getElementById('colFieldType').value;
+  if(!name)return;
+  colModalFields.push({id:uid(),name,type});
+  document.getElementById('colFieldInput').value='';
+  renderColFields();
+}
+function removeColField(i){colModalFields.splice(i,1);renderColFields();}
+function saveCollection(){
+  const icon=document.getElementById('colIcon').value.trim()||'📋';
+  const name=document.getElementById('colName').value.trim();
+  if(!name)return;
+  if(editingColId){
+    const col=S.tracking.collections.find(c=>c.id===editingColId);
+    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];}
+  } else {
+    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields]});
+  }
+  saveLocal();closeModal('collectionModal');renderTrackingCollections();
+}
+const DEFAULT_TRACKING_COLLECTIONS=[
+  {id:'tc_films',name:'Films',icon:'🎬',desc:'Films vus ou à voir'},
+  {id:'tc_series',name:'Séries',icon:'📺',desc:'Séries regardées'},
+  {id:'tc_livres',name:'Livres',icon:'📖',desc:'Livres lus ou à lire'},
+];
+let currentTrackingColId=null;
+let currentTrackingItemId=null;
+let trackingStatusFilter='all';
+let newReviewRating=0;
+
+function initTracking(){
+  if(!S.tracking)S.tracking={collections:[],items:[]};
+  if(!S.tracking.collections||!S.tracking.collections.length){
+    S.tracking.collections=[
+      {id:'tc_films',name:'Films & Séries',icon:'🎬',desc:'',
+       statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]},
+      {id:'tc_series',name:'Séries',icon:'📺',desc:'',
+       statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]},
+      {id:'tc_livres',name:'Livres',icon:'📖',desc:'',
+       statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
+       fields:[]},
+    ];
+    saveLocal();
+  }
+  // Ensure existing collections have fields array
+  S.tracking.collections.forEach(c=>{if(!c.fields)c.fields=[];if(!c.statuses)c.statuses=[];});
+}
+
+function starsHtml(rating,_unused,size){
+  // rating is 0-10, display as 5 stars with halves
+  const sz=size==='big'?18:13;
+  const stars=rating/2; // 10→5
+  let h='';
+  for(let i=1;i<=5;i++){
+    if(stars>=i)h+=`<span style="font-size:${sz}px;color:#F5C518;">★</span>`;
+    else if(stars>=i-0.5)h+=`<span style="font-size:${sz}px;color:#F5C518;">½</span>`;
+    else h+=`<span style="font-size:${sz}px;color:var(--bg3);">★</span>`;
+  }
+  return`<span title="${rating}/10">${h} <span style="font-size:${sz-3}px;color:var(--text3);">${rating}/10</span></span>`;
+}
+
+function renderTrackingCollections(){
+  initTracking();
+  const el=document.getElementById('trackingCollections');if(!el)return;
+  const total=S.tracking.items.length;
+  const cnt=document.getElementById('trackingCount');
+  if(cnt)cnt.textContent=total+' élément'+(total>1?'s':'');
+  let html=S.tracking.collections.map(col=>{
+    const count=S.tracking.items.filter(i=>i.colId===col.id).length;
+    return`<div class="tracking-col-card" style="position:relative;">
+      <div onclick="openTrackingCollection('${col.id}')" style="cursor:pointer;">
+        <div class="tracking-col-icon">${col.icon}</div>
+        <div class="tracking-col-name">${col.name}</div>
+        <div class="tracking-col-count">${count} élément${count>1?'s':''}</div>
+      </div>
+      <div style="position:absolute;top:7px;right:7px;display:flex;gap:3px;">
+        <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;" onclick="openEditCollectionModal('${col.id}')">✏️</button>
+        <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;" onclick="deleteTrackingCollection('${col.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+  html+=`<div class="tracking-col-card tracking-col-new" onclick="openNewCollectionModal()">
+    <div style="font-size:24px;">＋</div>
+    <div style="font-size:12px;font-weight:500;">Nouvelle collection</div>
+  </div>`;
+  el.innerHTML=html;
+}
+function deleteTrackingCollection(colId){
+  const col=S.tracking.collections.find(c=>c.id===colId);
+  const cnt=S.tracking.items.filter(i=>i.colId===colId).length;
+  showConfirm(`Supprimer "${col?.name}" ?`,cnt?`${cnt} élément${cnt>1?'s':''} seront supprimés.`:'',()=>{
+    S.tracking.collections=S.tracking.collections.filter(c=>c.id!==colId);
+    S.tracking.items=S.tracking.items.filter(i=>i.colId!==colId);
+    saveLocal();renderTrackingCollections();
+  });
+}
+
+function getColStatuses(col){
+  return col.statuses||[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}];
+}
+function openTrackingCollection(colId){
+  currentTrackingColId=colId;
+  trackingStatusFilter='all';
+  const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-tracking-col').classList.add('active');
+  document.querySelectorAll('#mainNav .nav-tab').forEach((el,i)=>el.classList.toggle('active',['home','stats','goals','tracking','quotes','settings'][i]==='tracking'));
+  document.getElementById('trackingColIcon').textContent=col.icon;
+  document.getElementById('trackingColTitle').textContent=col.name;
+  // Build status filter from collection statuses
+  const sf=document.getElementById('trackingStatusFilter');
+  if(sf){
+    const statuses=getColStatuses(col);
+    sf.innerHTML=`<button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>`+
+      statuses.map(s=>`<button class="filter-tab" onclick="setTrackingStatusFilter('${s.id}',this)">${s.emoji||''} ${s.label}</button>`).join('');
+  }
+  renderTrackingItems();
+}
+
+function renderTrackingItems(){
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId);if(!col)return;
+  const statuses=getColStatuses(col);
+  let items=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
+  if(trackingStatusFilter!=='all')items=items.filter(i=>i.status===trackingStatusFilter);
+  items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const sub=document.getElementById('trackingColSub');
+  const all=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
+  if(sub)sub.textContent=all.length+' élément'+(all.length>1?'s':'');
+  const grid=document.getElementById('trackingItemsGrid');if(!grid)return;
+  if(!items.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">${col.icon}</div><h3 class="empty-title">Aucun élément</h3><p class="empty-desc">Ajoutez votre premier élément</p></div>`;
+    return;
+  }
+  grid.innerHTML=items.map(item=>{
+    const views=item.reviews?item.reviews.length:0;
+    const lastReview=item.reviews&&item.reviews.length?item.reviews[item.reviews.length-1]:null;
+    const rating=lastReview?lastReview.rating:0;
+    const st=statuses.find(s=>s.id===item.status)||statuses[0]||{label:'–',emoji:''};
+    const statusColors={'avoir':'status-avoir','encours':'status-encours','vu':'status-vu'};
+    const statusClass=statusColors[item.status]||'status-avoir';
+    return`<div class="tracking-item-card" onclick="openTrackingItem('${item.id}')">
+      <div class="tracking-item-title">${item.title||'Sans titre'}</div>
+      ${rating?starsHtml(rating):''}
+      <div style="margin-top:5px;"><span class="tracking-item-status ${statusClass}">${st.emoji} ${st.label}</span></div>
+      ${views>1?`<div class="tracking-item-views">↺ ${views} fois</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function openNewTrackingItem(){
+  const item={id:uid(),colId:currentTrackingColId,title:'',status:'avoir',reviews:[],tags:[],createdAt:new Date().toISOString()};
+  S.tracking.items.push(item);
+  saveLocal();
+  openTrackingItem(item.id);
+}
+
+function openTrackingItem(itemId){
+  currentTrackingItemId=itemId;
+  const item=S.tracking.items.find(i=>i.id===itemId);if(!item)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-tracking-item').classList.add('active');
+  const backBtn=document.getElementById('trackingItemBack');
+  if(backBtn)backBtn.onclick=()=>openTrackingCollection(currentTrackingColId);
+  const delBtn=document.getElementById('trackingItemDelBtn');
+  if(delBtn)delBtn.onclick=()=>deleteTrackingItem(itemId);
+  newReviewRating=0;
+  renderTrackingItemDetail(item);
+}
+
+function renderTrackingItemDetail(item){
+  const col=S.tracking.collections.find(c=>c.id===item.colId)||{name:'',icon:'',statuses:[],fields:[]};
+  const statuses=getColStatuses(col);
+  const customFields=col.fields||[];
+  document.getElementById('trackingItemDetail').innerHTML=`
+    <input type="text" class="entry-title-input" id="tiTitle" value="${(item.title||'').replace(/"/g,'&quot;')}" placeholder="${col.icon} Titre…" oninput="autoSaveTrackingItem()">
+    <!-- Status -->
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem;">
+      ${statuses.map(s=>{
+        const isActive=item.status===s.id;
+        return`<button class="goal-status-btn ${isActive?'active-encours':''}" onclick="setTrackingItemStatus('${s.id}')">${s.emoji||''} ${s.label}</button>`;
+      }).join('')}
+    </div>
+    <!-- Custom fields -->
+    ${customFields.length?`<div class="card" style="margin-bottom:1rem;">
+      <p style="font-size:12px;font-weight:500;margin-bottom:.7rem;color:var(--text2);">Informations</p>
+      ${customFields.map(f=>`
+        <div class="form-group" style="margin-bottom:.6rem;">
+          <label>${f.name}</label>
+          <input type="text" value="${(item.customFields&&item.customFields[f.id])||''}" placeholder="${f.name}…" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
+        </div>`).join('')}
+    </div>`:''}
+    <!-- Tags -->
+    <div style="margin-bottom:1rem;">
+      <div class="tag-input-wrap"><input type="text" id="tiTagInput" placeholder="Genre, plateforme…" onkeydown="addTrackingTagKD(event)" style="font-size:12px;padding:6px 8px;"><button class="btn btn-secondary btn-sm" onclick="addTrackingTag()">+</button></div>
+      <div class="tags-wrap" id="tiTags">${(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('')}</div>
+    </div>
+    <!-- Reviews history -->
+    <div class="card" style="margin-bottom:1rem;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:.8rem;">Historique ${item.reviews&&item.reviews.length?`<span style="font-size:11px;color:var(--text3);">${item.reviews.length} fois</span>`:''}</p>
+      <div id="tiReviews">
+        ${(item.reviews||[]).map((r,i)=>`
+          <div class="tracking-review-item" id="rev_${i}">
+            <div class="tracking-review-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}</div>
+            ${r.rating?starsHtml(r.rating,'','big'):''}
+            ${r.avis?`<div class="tracking-review-avis" id="revtxt_${i}">${r.avis}</div>`:''}
+            <div style="display:flex;gap:4px;margin-top:5px;">
+              <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:2px 5px;border-radius:4px;" onclick="startEditReview(${i})">✏️ Modifier</button>
+              <button class="tracking-review-del" style="position:static;margin-left:auto;" onclick="deleteReview(${i})">✕</button>
+            </div>
+          </div>`).join('')||`<p style="font-size:12px;color:var(--text3);">Aucun avis pour l'instant.</p>`}
+      </div>
+    </div>
+    <!-- Add new review -->
+    <div class="tracking-add-review" id="reviewForm">
+      <p style="font-size:13px;font-weight:500;margin-bottom:.8rem;" id="reviewFormTitle">${item.reviews&&item.reviews.length?'↺ Ajouter un revisionnage':'＋ Ajouter un avis'}</p>
+      <!-- Decimal rating input -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem;">
+        <div class="star-input" id="starInput">
+          ${[1,2,3,4,5].map(i=>`<span class="ts" data-val="${i*2}" onclick="setReviewRating(${i*2})" onmouseover="previewStars(${i*2})" onmouseout="resetStarPreview()">☆</span>`).join('')}
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="${newReviewRating||''}" placeholder="0" style="width:52px;font-size:14px;padding:4px 6px;text-align:center;" oninput="setReviewRatingInput(this.value)">
+          <span style="font-size:12px;color:var(--text3);">/10</span>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:.7rem;">
+        <label>Date</label>
+        <input type="date" id="tiReviewDate" value="${new Date().toISOString().split('T')[0]}" style="font-size:12px;">
+      </div>
+      <div class="form-group" style="margin-bottom:.5rem;">
+        <label>Avis</label>
+        <!-- Mini toolbar -->
+        <div class="review-toolbar">
+          <button class="review-tb-btn" onclick="reviewFmt('bold')" title="Gras"><b>B</b></button>
+          <button class="review-tb-btn" onclick="reviewFmt('italic')" title="Italique"><i style="font-style:italic">I</i></button>
+          <button class="review-tb-btn" onclick="reviewFmt('underline')" title="Souligné"><u>U</u></button>
+          <div class="review-tb-sep"></div>
+          <button class="review-tb-btn" onclick="reviewFmt('insertUnorderedList')">≡</button>
+          <button class="review-tb-btn" onclick="reviewFmt('insertOrderedList')">1.</button>
+        </div>
+        <div id="tiReviewAvis" contenteditable="true" style="min-height:70px;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;line-height:1.6;" placeholder="Votre avis, ressenti…"></div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:.7rem;">
+        <button class="btn btn-primary btn-sm" onclick="addReview()" id="reviewSubmitBtn">Enregistrer</button>
+        <button class="btn btn-secondary btn-sm" id="reviewCancelBtn" style="display:none;" onclick="cancelEditReview()">Annuler</button>
+      </div>
+    </div>
+    <div style="padding-bottom:4rem;"></div>
+  `;
+  // Apply current status button styling
+  const st=statuses.find(s=>s.id===item.status);
+  if(st){
+    document.querySelectorAll('#trackingItemDetail .goal-status-btn').forEach(b=>{
+      if(b.textContent.trim().includes(st.label||''))b.classList.add('active-encours');
+    });
+  }
+}
+
+function saveCustomField(fieldId,value){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFields)item.customFields={};
+  item.customFields[fieldId]=value;saveLocal();
+}
+function setReviewRatingInput(val){
+  const num=parseFloat(val);
+  if(isNaN(num)||num<0||num>10)return;
+  newReviewRating=num;
+  // Update stars display
+  const stars=num/2;
+  document.querySelectorAll('#starInput .ts').forEach((s,i)=>{
+    if(stars>=i+1)s.textContent='★';
+    else if(stars>=i+0.5)s.textContent='½';
+    else s.textContent='☆';
+    s.style.color=(stars>=i+0.5)?'#F5C518':'var(--text3)';
+  });
+}
+function setTrackingItemStatus(status){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  item.status=status;saveLocal();
+  document.querySelectorAll('#trackingItemDetail .goal-status-btn').forEach(b=>{
+    b.className='goal-status-btn';b.style.cssText='';
+  });
+  const btns=document.querySelectorAll('#trackingItemDetail .goal-status-btn');
+  const map={avoir:0,encours:1,vu:2};
+  const idx=map[status];
+  if(btns[idx]){
+    if(status==='avoir'){btns[idx].style.background='#A09D97';btns[idx].style.borderColor='#A09D97';btns[idx].style.color='#fff';}
+    else if(status==='encours')btns[idx].classList.add('active-encours');
+    else btns[idx].classList.add('active-termine');
+  }
+}
+function autoSaveTrackingItem(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const t=document.getElementById('tiTitle');if(t)item.title=t.value;
+  saveLocal();
+}
+function addTrackingTagKD(e){if(e.key==='Enter'){e.preventDefault();addTrackingTag();}}
+function addTrackingTag(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const inp=document.getElementById('tiTagInput');
+  const v=inp.value.trim().toLowerCase().replace(/\s+/g,'-');
+  if(!v||item.tags.includes(v))return;
+  item.tags.push(v);inp.value='';saveLocal();
+  const w=document.getElementById('tiTags');
+  if(w)w.innerHTML=(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
+}
+function removeTrackingTag(tag){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  item.tags=item.tags.filter(t=>t!==tag);saveLocal();
+  const w=document.getElementById('tiTags');
+  if(w)w.innerHTML=(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
+}
+
+function previewStars(val){
+  document.querySelectorAll('#starInput .ts').forEach((s,i)=>{
+    s.textContent=i<val/2?'★':'☆';
+    s.style.color=i<val/2?'#F5C518':'var(--text3)';
+  });
+}
+function resetStarPreview(){
+  document.querySelectorAll('#starInput .ts').forEach((s,i)=>{
+    s.textContent=i<newReviewRating/2?'★':'☆';
+    s.style.color=i<newReviewRating/2?'#F5C518':'var(--text3)';
+  });
+}
+function setReviewRating(val){
+  newReviewRating=val;
+  previewStars(val);
+  const ri=document.getElementById('ratingInput');if(ri)ri.value=val;
+}
+
+function reviewFmt(cmd){document.execCommand(cmd,false,null);}
+
+let editingReviewIdx=null;
+
+function startEditReview(idx){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item||!item.reviews[idx])return;
+  const r=item.reviews[idx];
+  editingReviewIdx=idx;
+  // Pre-fill form
+  newReviewRating=r.rating||0;
+  const ri=document.getElementById('ratingInput');if(ri)ri.value=r.rating||'';
+  const rd=document.getElementById('tiReviewDate');if(rd)rd.value=r.date||'';
+  const ra=document.getElementById('tiReviewAvis');if(ra)ra.innerHTML=r.avis||'';
+  setReviewRating(r.rating||0);
+  const title=document.getElementById('reviewFormTitle');if(title)title.textContent='✏️ Modifier cet avis';
+  const submitBtn=document.getElementById('reviewSubmitBtn');if(submitBtn)submitBtn.textContent='Mettre à jour';
+  const cancelBtn=document.getElementById('reviewCancelBtn');if(cancelBtn)cancelBtn.style.display='';
+  // Scroll to form
+  document.getElementById('reviewForm')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function cancelEditReview(){
+  editingReviewIdx=null;
+  newReviewRating=0;
+  const ri=document.getElementById('ratingInput');if(ri)ri.value='';
+  const rd=document.getElementById('tiReviewDate');if(rd)rd.value=new Date().toISOString().split('T')[0];
+  const ra=document.getElementById('tiReviewAvis');if(ra)ra.innerHTML='';
+  previewStars(0);
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);
+  const title=document.getElementById('reviewFormTitle');
+  if(title)title.textContent=item&&item.reviews&&item.reviews.length?'↺ Ajouter un revisionnage':'＋ Ajouter un avis';
+  const submitBtn=document.getElementById('reviewSubmitBtn');if(submitBtn)submitBtn.textContent='Enregistrer';
+  const cancelBtn=document.getElementById('reviewCancelBtn');if(cancelBtn)cancelBtn.style.display='none';
+}
+
+function addReview(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const avisDom=document.getElementById('tiReviewAvis');
+  const avis=avisDom?avisDom.innerHTML.replace(/<br\s*\/?>/gi,'\n').trim():'';
+  const date=document.getElementById('tiReviewDate')?.value||'';
+  const ratingInputEl=document.getElementById('ratingInput');
+  const rating=ratingInputEl?parseFloat(ratingInputEl.value)||newReviewRating:newReviewRating;
+  if(!avis&&!rating)return;
+  item.reviews=item.reviews||[];
+  if(editingReviewIdx!==null&&item.reviews[editingReviewIdx]){
+    // Update existing
+    item.reviews[editingReviewIdx]={...item.reviews[editingReviewIdx],rating,avis,date};
+  } else {
+    // Add new
+    item.reviews.push({rating,avis,date,createdAt:new Date().toISOString()});
+    // Auto-set to last status if was first status
+    const col=S.tracking.collections.find(c=>c.id===item.colId);
+    const statuses=getColStatuses(col);
+    if(statuses.length>1&&item.status===statuses[0]?.id)item.status=statuses[statuses.length-1].id;
+  }
+  saveLocal();editingReviewIdx=null;newReviewRating=0;renderTrackingItemDetail(item);
+}
+function deleteReview(idx){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  item.reviews.splice(idx,1);saveLocal();renderTrackingItemDetail(item);
+}
+function deleteTrackingItem(id){
+  showConfirm('Supprimer cet élément ?','',()=>{
+    S.tracking.items=S.tracking.items.filter(i=>i.id!==id);
+    saveLocal();openTrackingCollection(currentTrackingColId);
+  });
+}
+
+let goalPeriodFilter='all';
+let currentGoalId=null;
+
+function goalDaysLeft(g){
+  if(!g.dateEnd)return null;
+  const diff=Math.ceil((new Date(g.dateEnd+'T00:00:00')-new Date())/(1000*60*60*24));
+  return diff;
+}
+function goalPeriodMatch(g,period){
+  if(period==='all')return true;
+  if(period==='none')return !g.dateStart&&!g.dateEnd;
+  if(!g.dateEnd)return false;
+  const now=new Date();
+  const end=new Date(g.dateEnd+'T00:00:00');
+  if(period==='week'){const w=new Date(now);w.setDate(w.getDate()+7);return end<=w;}
+  if(period==='month'){return end.getMonth()===now.getMonth()&&end.getFullYear()===now.getFullYear();}
+  if(period==='year'){return end.getFullYear()===now.getFullYear();}
+  return true;
+}
+function goalProgress(g){
+  if(g.checklist&&g.checklist.length>0){
+    const done=g.checklist.filter(c=>c.done).length;
+    return Math.round(done/g.checklist.length*100);
+  }
+  return g.progress||0;
+}
+function goalDaysBadge(g){
+  const d=goalDaysLeft(g);
+  if(d===null)return'';
+  if(g.status==='termine')return`<span class="goal-badge goal-badge-green">✓ Terminé</span>`;
+  if(d<0)return`<span class="goal-badge goal-badge-red">En retard ${Math.abs(d)}j</span>`;
+  if(d===0)return`<span class="goal-badge goal-badge-red">Aujourd'hui</span>`;
+  if(d<=3)return`<span class="goal-badge goal-badge-orange">J-${d}</span>`;
+  if(d<=7)return`<span class="goal-badge goal-badge-orange">J-${d}</span>`;
+  return`<span class="goal-badge goal-badge-grey">J-${d}</span>`;
+}
+
+function setGoalPeriod(p,el){
+  goalPeriodFilter=p;
+  document.querySelectorAll('.goals-period-bar .filter-tab').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderGoals();
+}
+
+function renderGoals(){
+  const goals=(S.goals||[]).filter(g=>goalPeriodMatch(g,goalPeriodFilter));
+  const cols={encours:[],pause:[],termine:[]};
+  goals.forEach(g=>{ const s=g.status||'encours'; if(cols[s])cols[s].push(g); });
+
+  const total=S.goals?S.goals.length:0;
+  const cnt=document.getElementById('goalsCount');
+  if(cnt)cnt.textContent=total+' objectif'+(total>1?'s':'');
+
+  ['encours','pause','termine'].forEach(status=>{
+    const el=document.getElementById('col'+status.charAt(0).toUpperCase()+status.slice(1));
+    const countEl=document.getElementById('colCount'+status.charAt(0).toUpperCase()+status.slice(1));
+    if(!el)return;
+    if(countEl)countEl.textContent=cols[status].length;
+    el.innerHTML=cols[status].map(g=>{
+      const pct=goalProgress(g);
+      const steps=g.checklist?g.checklist.length:0;
+      const doneSteps=g.checklist?g.checklist.filter(c=>c.done).length:0;
+      return`<div class="goal-card" onclick="openGoalDetail('${g.id}')">
+        <div class="goal-card-title">${g.title}</div>
+        ${g.desc?`<div class="goal-card-desc">${g.desc.slice(0,60)}${g.desc.length>60?'…':''}</div>`:''}
+        ${pct>0||steps>0?`<div class="goal-progress-bar"><div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div></div>`:''}
+        <div class="goal-meta">
+          ${goalDaysBadge(g)}
+          ${steps>0?`<span class="goal-badge goal-badge-grey">☑ ${doneSteps}/${steps}</span>`:''}
+          ${pct>0?`<span style="font-size:9px;color:var(--text3);margin-left:auto;">${pct}%</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function openNewGoal(status){
+  currentGoalId=null;
+  const g={id:uid(),title:'',desc:'',status:status||'encours',checklist:[],progress:0,dateStart:'',dateEnd:'',note:'',tags:[],createdAt:new Date().toISOString()};
+  S.goals=S.goals||[];
+  S.goals.unshift(g);
+  saveLocal();
+  openGoalDetail(g.id);
+}
+
+function openGoalDetail(id){
+  currentGoalId=id;
+  const g=S.goals.find(x=>x.id===id);if(!g)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-goal-detail').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach((el,i)=>el.classList.toggle('active',['home','stats','goals','quotes','models','settings'][i]==='goals'));
+  renderGoalDetail(g);
+  const delBtn=document.getElementById('goalDeleteBtn');
+  if(delBtn)delBtn.onclick=()=>deleteGoal(id);
+  hideToolbar();
+}
+
+function renderGoalDetail(g){
+  const pct=goalProgress(g);
+  const hasChecklist=g.checklist&&g.checklist.length>0;
+  document.getElementById('goalDetailContent').innerHTML=`
+    <!-- Title -->
+    <input type="text" class="entry-title-input" id="gdTitle" value="${g.title.replace(/"/g,'&quot;')}" placeholder="Titre de l'objectif…" oninput="autoSaveGoal()">
+    <!-- Status -->
+    <div class="goal-status-select">
+      <button class="goal-status-btn ${g.status==='encours'?'active-encours':''}" onclick="setGoalStatus('encours')">🔵 En cours</button>
+      <button class="goal-status-btn ${g.status==='pause'?'active-pause':''}" onclick="setGoalStatus('pause')">⏸ En pause</button>
+      <button class="goal-status-btn ${g.status==='termine'?'active-termine':''}" onclick="setGoalStatus('termine')">✅ Terminé</button>
+    </div>
+    <!-- Desc -->
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="gdDesc" rows="2" placeholder="Description courte…" oninput="autoSaveGoal()">${g.desc||''}</textarea>
+    </div>
+    <!-- Dates -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1rem;">
+      <div><label>Date de début</label><input type="date" id="gdStart" value="${g.dateStart||''}" onchange="autoSaveGoal()"></div>
+      <div><label>Date limite</label><input type="date" id="gdEnd" value="${g.dateEnd||''}" onchange="autoSaveGoal()"><div style="margin-top:4px;">${goalDaysBadge(g)}</div></div>
+    </div>
+    <!-- Checklist -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;">
+        <p style="font-size:13px;font-weight:500;">Checklist ${hasChecklist?`<span style="font-size:11px;color:var(--text3);">${g.checklist.filter(c=>c.done).length}/${g.checklist.length}</span>`:''}</p>
+        <button class="btn btn-secondary btn-sm" onclick="addChecklistItem()">＋ Étape</button>
+      </div>
+      <div id="gdChecklist">
+        ${(g.checklist||[]).map((c,i)=>`
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" ${c.done?'checked':''} onchange="toggleChecklistItem(${i})">
+            <span class="checklist-label ${c.done?'done':''}" contenteditable="true" onblur="editChecklistLabel(${i},this.textContent)">${c.text}</span>
+            <button class="checklist-del" onclick="removeChecklistItem(${i})">✕</button>
+          </div>`).join('')}
+      </div>
+      <!-- Progress bar -->
+      ${hasChecklist?`
+        <div class="goal-progress-bar" style="margin-top:.7rem;height:6px;">
+          <div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div>
+        </div>
+        <div style="text-align:right;font-size:10px;color:var(--text3);margin-top:3px;">${pct}%</div>
+      `:`
+        <div style="margin-top:.5rem;">
+          <label style="text-transform:none;letter-spacing:0;font-size:11px;color:var(--text2);">Progression manuelle</label>
+          <div class="goal-progress-manual">
+            <input type="range" min="0" max="100" value="${g.progress||0}" id="gdProgress" oninput="updateGoalProgress(this.value)">
+            <span id="gdProgressVal" style="font-size:13px;color:var(--accent2);min-width:34px;">${g.progress||0}%</span>
+          </div>
+        </div>
+      `}
+    </div>
+    <!-- Note -->
+    <div class="card" style="margin-bottom:1rem;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:.6rem;">📝 Notes</p>
+      <div class="rich-content" id="gdNote" contenteditable="true" placeholder="Vos notes sur cet objectif…" style="min-height:100px;">${g.note||''}</div>
+    </div>
+    <!-- Tags -->
+    <div style="margin-bottom:1rem;">
+      <label>Tags</label>
+      <div class="tag-input-wrap"><input type="text" id="gdTagInput" placeholder="Tag…" onkeydown="addGoalTagKD(event)" style="font-size:12px;padding:6px 8px;"><button class="btn btn-secondary btn-sm" onclick="addGoalTag()">+</button></div>
+      <div class="tags-wrap" id="gdTags">${(g.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeGoalTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('')}</div>
+    </div>
+    <div style="padding-bottom:4rem;"></div>
+  `;
+  // Attach note autosave
+  setTimeout(()=>{
+    const note=document.getElementById('gdNote');
+    if(note){note.addEventListener('input',autoSaveGoal);showToolbar();}
+  },50);
+}
+
+function autoSaveGoal(){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  const titleEl=document.getElementById('gdTitle');if(titleEl)g.title=titleEl.value;
+  const descEl=document.getElementById('gdDesc');if(descEl)g.desc=descEl.value;
+  const startEl=document.getElementById('gdStart');if(startEl)g.dateStart=startEl.value;
+  const endEl=document.getElementById('gdEnd');if(endEl)g.dateEnd=endEl.value;
+  const noteEl=document.getElementById('gdNote');if(noteEl)g.note=noteEl.innerHTML;
+  saveLocal();
+}
+function setGoalStatus(status){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.status=status;saveLocal();
+  // Re-render status buttons
+  document.querySelectorAll('.goal-status-btn').forEach(b=>{
+    b.className='goal-status-btn';
+    if(b.textContent.includes('cours')&&status==='encours')b.classList.add('active-encours');
+    if(b.textContent.includes('pause')&&status==='pause')b.classList.add('active-pause');
+    if(b.textContent.includes('erminé')&&status==='termine')b.classList.add('active-termine');
+  });
+}
+function addChecklistItem(){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.checklist=g.checklist||[];
+  g.checklist.push({text:'Nouvelle étape',done:false});
+  saveLocal();renderGoalDetail(g);
+  // Focus last item
+  setTimeout(()=>{
+    const items=document.querySelectorAll('.checklist-label');
+    if(items.length){const last=items[items.length-1];last.focus();const range=document.createRange();range.selectNodeContents(last);window.getSelection().removeAllRanges();window.getSelection().addRange(range);}
+  },50);
+}
+function toggleChecklistItem(i){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g||!g.checklist[i])return;
+  g.checklist[i].done=!g.checklist[i].done;saveLocal();renderGoalDetail(g);
+}
+function editChecklistLabel(i,text){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g||!g.checklist[i])return;
+  g.checklist[i].text=text.trim()||'Étape';saveLocal();
+}
+function removeChecklistItem(i){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.checklist.splice(i,1);saveLocal();renderGoalDetail(g);
+}
+function updateGoalProgress(val){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.progress=parseInt(val);
+  const el=document.getElementById('gdProgressVal');if(el)el.textContent=val+'%';
+  saveLocal();
+}
+function addGoalTagKD(e){if(e.key==='Enter'){e.preventDefault();addGoalTag();}}
+function addGoalTag(){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  const i=document.getElementById('gdTagInput');
+  const v=i.value.trim().toLowerCase().replace(/\s+/g,'-');
+  if(!v||g.tags.includes(v))return;
+  g.tags.push(v);i.value='';saveLocal();
+  const w=document.getElementById('gdTags');
+  if(w)w.innerHTML=(g.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeGoalTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
+}
+function removeGoalTag(tag){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.tags=g.tags.filter(t=>t!==tag);saveLocal();
+  const w=document.getElementById('gdTags');
+  if(w)w.innerHTML=(g.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeGoalTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
+}
+function deleteGoal(id){
+  showConfirm('Supprimer cet objectif ?','',()=>{
+    S.goals=S.goals.filter(g=>g.id!==id);
+    saveLocal();switchTab('goals');
+  });
+}
+const EXAMPLE_QUOTES=[
+  {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',date:'',tags:['vie','philosophie'],createdAt:new Date().toISOString()},
+  {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',date:'',tags:['sagesse','action'],createdAt:new Date().toISOString()},
+  {id:'eq3',text:'Un ami c\'est quelqu\'un qui vous connaît bien et qui vous aime quand même.',author:'Elbert Hubbard',date:'',tags:['amitié'],createdAt:new Date().toISOString()},
+  {id:'eq4',text:'Le bonheur n\'est pas quelque chose de tout fait. Il vient de vos propres actions.',author:'Dalaï Lama',date:'',tags:['bonheur','sagesse'],createdAt:new Date().toISOString()},
+  {id:'eq5',text:'Il n\'y a qu\'une façon d\'éviter les critiques : ne rien faire, ne rien dire et n\'être rien.',author:'Aristote',date:'',tags:['courage','philosophie'],createdAt:new Date().toISOString()},
+];
+
+function initQuotes(){if(!S.quotes||!S.quotes.length)S.quotes=[...EXAMPLE_QUOTES];}
+function addQuoteTagKD(e){if(e.key==='Enter'){e.preventDefault();addQuoteTag();}}
+function addQuoteTag(){const i=document.getElementById('quoteTagInput'),v=i.value.trim().toLowerCase().replace(/\s+/g,'-');if(!v||quoteTags.includes(v))return;quoteTags.push(v);i.value='';renderQuoteSelTags();}
+function removeQuoteTag(t){quoteTags=quoteTags.filter(x=>x!==t);renderQuoteSelTags();}
+function renderQuoteSelTags(){const w=document.getElementById('selectedQuoteTags');if(w)w.innerHTML=quoteTags.map(t=>`<span class="tag active">#${t} <span onclick="removeQuoteTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');}
+function clearQuoteDate(){document.getElementById('quoteDate').value='';}
+function saveQuote(){
+  const text=document.getElementById('quoteText').value.trim();
+  if(!text)return;
+  const q={id:uid(),text,author:document.getElementById('quoteAuthor').value.trim(),date:document.getElementById('quoteDate').value||'',tags:[...quoteTags],createdAt:new Date().toISOString()};
+  S.quotes.unshift(q);
+  document.getElementById('quoteText').value='';
+  document.getElementById('quoteAuthor').value='';
+  document.getElementById('quoteDate').value='';
+  quoteTags=[];renderQuoteSelTags();
+  saveLocal();renderQuotes();
+}
+function deleteQuote(id){showConfirm('Supprimer cette citation ?','',()=>{S.quotes=S.quotes.filter(q=>q.id!==id);saveLocal();renderQuotes();});}
+function setQuoteTagFilter(tag){quoteFilterTag=quoteFilterTag===tag?null:tag;renderQuotes();}
+function renderQuotes(){
+  initQuotes();
+  const allTags={};S.quotes.forEach(q=>(q.tags||[]).forEach(t=>{allTags[t]=(allTags[t]||0)+1;}));
+  const fb=document.getElementById('quoteFilterBar');
+  if(fb)fb.innerHTML=Object.keys(allTags).sort((a,b)=>allTags[b]-allTags[a]).slice(0,10).map(t=>`<span class="tag ${quoteFilterTag===t?'active':''}" onclick="setQuoteTagFilter('${t}')">#${t}</span>`).join('');
+  let quotes=[...S.quotes];
+  if(quoteFilterTag)quotes=quotes.filter(q=>(q.tags||[]).includes(quoteFilterTag));
+  const el=document.getElementById('quotesList');if(!el)return;
+  const cnt=document.getElementById('quotesCount');if(cnt)cnt.textContent=S.quotes.length+' citation'+(S.quotes.length>1?'s':'');
+  if(!quotes.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><h3 class="empty-title">Aucune citation</h3><p class="empty-desc">Ajoutez votre première citation ci-dessus</p></div>`;return;}
+  el.innerHTML=quotes.map(q=>{
+    const d=q.date?formatDate(q.date):null;
+    return`<div class="quote-card">
+      <div class="quote-text">${q.text}</div>
+      ${q.author?`<div class="quote-author">— ${q.author}</div>`:''}
+      <div class="quote-meta">
+        ${d?`<span style="font-size:10px;color:var(--text3);">📅 ${d.day} ${d.month} ${d.year}</span>`:''}
+        ${(q.tags||[]).map(t=>`<span class="tag" style="font-size:10px;">#${t}</span>`).join('')}
+        <button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="deleteQuote('${q.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function updateEntryCount(){
+  const c=S.entries.length;
+  const el=document.getElementById('entryCount');
+  if(el)el.textContent=c===0?'Aucune entrée':c===1?'1 entrée':`${c} entrées`;
+}
 function setTagFilter(tag){S.filterTag=S.filterTag===tag?null:tag;renderEntries();}
+function wordCount(entry){return Object.values(entry.fields||{}).map(v=>(v||'').replace(/<[^>]+>/g,' ')).join(' ').trim().split(/\s+/).filter(Boolean).length;}
 function renderEntries(){
-  const list=document.getElementById('entriesList');
+  const list=document.getElementById('entriesList');if(!list)return;
   const fb=document.getElementById('filterBar');
   const allTags=getAllTags();
-  fb.innerHTML=Object.keys(allTags).sort((a,b)=>allTags[b]-allTags[a]).slice(0,8).map(t=>`<span class="tag ${S.filterTag===t?'active':''}" onclick="setTagFilter('${t}')">#${t}</span>`).join('');
-  let entries=[...S.entries].sort((a,b)=>{const da=a.date?new Date(a.date):new Date(a.createdAt),db=b.date?new Date(b.date):new Date(b.createdAt);return db-da;});
-  if(S.filterType!=='all')entries=entries.filter(e=>e.typeId===S.filterType);
+  if(fb)fb.innerHTML=Object.keys(allTags).sort((a,b)=>allTags[b]-allTags[a]).slice(0,8).map(t=>`<span class="tag ${S.filterTag===t?'active':''}" onclick="setTagFilter('${t}')">#${t}</span>`).join('');
+  let entries=[...S.entries];
+  if(S.filterType&&S.filterType!=='all')entries=entries.filter(e=>e.typeId===S.filterType);
   if(S.filterTag)entries=entries.filter(e=>(e.tags||[]).includes(S.filterTag));
+  if(currentSort==='has-scale')entries=entries.filter(e=>e.scales&&Object.keys(e.scales).length>0);
+  entries.sort((a,b)=>{
+    if(currentSort==='date-desc'){const da=a.date?new Date(a.date):new Date(a.createdAt),db=b.date?new Date(b.date):new Date(b.createdAt);return db-da;}
+    if(currentSort==='date-asc'){const da=a.date?new Date(a.date):new Date(a.createdAt),db=b.date?new Date(b.date):new Date(b.createdAt);return da-db;}
+    if(currentSort==='title-asc'){return(a.title||'').localeCompare(b.title||'','fr');}
+    if(currentSort==='wordcount-desc'){return wordCount(b)-wordCount(a);}
+    const da=a.date?new Date(a.date):new Date(a.createdAt),db=b.date?new Date(b.date):new Date(b.createdAt);return db-da;
+  });
   if(!entries.length){list.innerHTML=`<div class="empty-state"><div class="empty-icon">📖</div><h3 class="empty-title">Aucune entrée</h3><p class="empty-desc">Commencez à écrire</p><button class="btn btn-primary" onclick="showNewEntry()">+ Première entrée</button></div>`;return;}
   list.innerHTML=entries.map(e=>{
     const t=getType(e.typeId),d=e.date?formatDate(e.date):null;
+    const col=typeColor(t);
     const disp=e.title||(d?`${d.weekday} ${d.day} ${d.month} ${d.year}`:t.name);
     const firstScale=S.scales.find(s=>e.scales?.[s.id]!=null);
     const scaleStr=firstScale?`${firstScale.emojiLow||''}${e.scales[firstScale.id]}/${firstScale.max}`:null;
+    const wc=wordCount(e);
     return`<div class="entry-item" onclick="readEntry('${e.id}')">
-      <div class="entry-date-col"><div class="entry-day">${d?d.day:'✦'}</div><div class="entry-month">${d?d.month:''}</div>${d?`<div class="entry-month">${d.year}</div>`:''}</div>
+      <div class="entry-date-col">
+        <div style="width:3px;height:40px;border-radius:2px;background:${col};margin:0 auto 4px;"></div>
+        <div class="entry-day">${d?d.day:'✦'}</div>
+        <div class="entry-month">${d?d.month:''}</div>
+        ${d?`<div class="entry-month">${d.year}</div>`:''}
+      </div>
       <div class="entry-body">
         <div class="entry-title-disp">${t.icon} ${disp}</div>
         <div class="entry-preview">${e.preview||'…'}</div>
         <div class="entry-meta">
           ${scaleStr?`<span class="e-badge" style="background:var(--bg2);color:var(--text2);">${scaleStr} ${firstScale.name}</span>`:''}
+          <span class="e-badge" style="background:var(--bg2);color:var(--text3);font-size:9px;">📝 ${wc}m</span>
           ${(e.tags||[]).map(tg=>`<span class="tag" style="font-size:10px;padding:1px 6px;">#${tg}</span>`).join('')}
         </div>
       </div>
@@ -1436,7 +3113,8 @@ function readEntry(id){
   const sizeBytes=new Blob([JSON.stringify(entry)]).size;
   const sizeStr=sizeBytes>1024?`${(sizeBytes/1024).toFixed(1)} Ko`:`${sizeBytes} o`;
   const createdStr=entry.createdAt?new Date(entry.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'–';
-  const wordCount=Object.values(entry.fields||{}).map(v=>v.replace(/<[^>]+>/g,' ')).join(' ').trim().split(/\s+/).filter(Boolean).length;
+  const updatedStr=entry.updatedAt&&entry.updatedAt!==entry.createdAt?new Date(entry.updatedAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):null;
+  const wordCount2=Object.values(entry.fields||{}).map(v=>v.replace(/<[^>]+>/g,' ')).join(' ').trim().split(/\s+/).filter(Boolean).length;
   document.getElementById('readContent').innerHTML=`
     <div style="margin-bottom:1.1rem;">
       ${d?`<p style="font-size:10px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;">${d.weekday} · ${d.day} ${d.month} ${d.year}</p>`:''}
@@ -1445,14 +3123,29 @@ function readEntry(id){
       <div style="display:flex;gap:5px;margin-bottom:8px;"><button class="btn btn-secondary btn-sm" onclick="editEntry('${id}')">✏️ Modifier</button><button class="btn btn-danger btn-sm" onclick="deleteEntry('${id}')">🗑</button></div>
       <div style="font-size:11px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap;">
         <span>🕐 Créé le ${createdStr}</span>
+        ${updatedStr?`<span>✏️ Modifié le ${updatedStr}</span>`:''}
         <span>💾 ${sizeStr}</span>
-        <span>📝 ${wordCount} mot${wordCount>1?'s':''}</span>
+        <span>📝 ${wordCount2} mot${wordCount2>1?'s':''}</span>
       </div>
     </div>
     <div class="divider"></div>
     ${sectHtml||'<p style="color:var(--text3);font-size:13px;">Entrée vide.</p>'}`;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-read').classList.add('active');
+  hideToolbar();
+}
+function goBackFromRead(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('.nav-tab')[0].classList.add('active');
+  if(currentBookTypeId){
+    document.getElementById('booksView').style.display='none';
+    document.getElementById('bookEntriesView').style.display='';
+  } else {
+    document.getElementById('booksView').style.display='';
+    document.getElementById('bookEntriesView').style.display='none';
+    renderBooksGrid();
+  }
   hideToolbar();
 }
 function renderStorageUsage(){
@@ -1515,7 +3208,7 @@ function editEntry(id){
   }
   showToolbar();
 }
-function deleteEntry(id){showConfirm('Supprimer cette entrée ?','Irréversible.',()=>{S.entries=S.entries.filter(e=>e.id!==id);saveLocal();deleteEntryFromSupabase(id);goHome();renderEntries();renderStats();});}
+function deleteEntry(id){showConfirm('Supprimer cette entrée ?','Irréversible.',()=>{S.entries=S.entries.filter(e=>e.id!==id);saveLocal();deleteEntryFromSupabase(id);goBackFromRead();renderBooksGrid();renderStats();});}
 
 // ── STATS ──────────────────────────────────────────────────────────────────
 function renderStats(){
@@ -1523,21 +3216,67 @@ function renderStats(){
   const thisMonth=entries.filter(e=>{if(!e.date)return false;const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
   const lastWeek=entries.filter(e=>{if(!e.date)return false;const diff=(now-new Date(e.date))/864e5;return diff<=7;});
   const scaleAvgs=S.scales.map(s=>{const used=entries.filter(e=>e.scales?.[s.id]!=null);if(!used.length)return null;return{...s,avg:(used.reduce((a,e)=>a+e.scales[s.id],0)/used.length).toFixed(1),count:used.length};}).filter(Boolean);
+  const streak=calcStreak();
+  const totalWords=entries.reduce((a,e)=>a+wordCount(e),0);
 
-  document.getElementById('statsGridMain').innerHTML=`
-    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">${entries.length}</div><div class="stat-sub">entrées</div></div>
-    <div class="stat-card"><div class="stat-label">🔥 Streak</div><div class="stat-value">${calcStreak()}</div><div class="stat-sub">jours</div></div>
-    <div class="stat-card"><div class="stat-label">Ce mois</div><div class="stat-value">${thisMonth.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Cette semaine</div><div class="stat-value">${lastWeek.length}</div></div>`;
+  // Hero cards
+  document.getElementById('statsHero').innerHTML=`
+    <div class="stat-hero-card"><div class="stat-hero-val">${entries.length}</div><div class="stat-hero-lbl">Total entrées</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${streak}</div><div class="stat-hero-lbl">🔥 Streak</div><div class="stat-hero-sub">${streak>0?streak+' jour'+(streak>1?'s':''):'–'}</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${thisMonth.length}</div><div class="stat-hero-lbl">Ce mois</div></div>
+    <div class="stat-hero-card"><div class="stat-hero-val">${totalWords>999?(totalWords/1000).toFixed(1)+'k':totalWords}</div><div class="stat-hero-lbl">Mots écrits</div></div>`;
 
-  document.getElementById('statsGridTypes').innerHTML=
-    S.entryTypes.map(t=>{const c=entries.filter(e=>e.typeId===t.id).length;
-      return`<div class="stat-card"><div class="stat-label">${t.icon} ${t.name}</div><div class="stat-value">${c}</div></div>`;
-    }).join('');
+  // Scale rows with progress bars
+  const scaleCard=document.getElementById('scaleStatsCard');
+  if(scaleCard){
+    if(!scaleAvgs.length){scaleCard.innerHTML='<p style="font-size:12px;color:var(--text3);">Aucune donnée d\'échelle</p>';}
+    else{
+      document.getElementById('scaleStatRows').innerHTML=scaleAvgs.map(s=>{
+        const pct=Math.round(((s.avg-s.min)/(s.max-s.min))*100);
+        return`<div class="scale-stat-row">
+          <div class="scale-stat-name">${s.emojiLow||''} ${s.name} ${s.emojiHigh||''}</div>
+          <div class="scale-stat-bar"><div class="scale-stat-fill" style="width:${pct}%;"></div></div>
+          <div class="scale-stat-val">${s.avg}<span style="font-size:10px;color:var(--text3);">/${s.max}</span></div>
+        </div>`;
+      }).join('');
+    }
+  }
 
-  document.getElementById('statsGridScales').innerHTML=
-    scaleAvgs.map(s=>`<div class="stat-card"><div class="stat-label">${s.emojiLow||''} ${s.name}</div><div class="stat-value">${s.avg}</div><div class="stat-sub">/ ${s.max} · ${s.count} notes</div></div>`).join('');
+  // Heatmap — 12 weeks
+  const heatEl=document.getElementById('heatmapWrap');
+  if(heatEl){
+    const dayCounts={};
+    entries.filter(e=>e.date).forEach(e=>{dayCounts[e.date]=(dayCounts[e.date]||0)+1;});
+    const cells=[];
+    const start=new Date(now);start.setDate(start.getDate()-83);// 12 weeks back
+    for(let i=0;i<84;i++){
+      const d=new Date(start);d.setDate(start.getDate()+i);
+      const key=d.toISOString().split('T')[0];
+      const c=dayCounts[key]||0;
+      const cls=c===0?'':c===1?'h1':c===2?'h2':c===3?'h3':'h4';
+      const label=`${d.getDate()} ${['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'][d.getMonth()]} : ${c} entrée${c>1?'s':''}`;
+      cells.push(`<div class="heatmap-cell ${cls}" title="${label}"></div>`);
+    }
+    heatEl.innerHTML=cells.join('');
+  }
 
+  // Type distribution
+  const typeCard=document.getElementById('typeDistCard');
+  if(typeCard){
+    const maxCount=Math.max(1,...S.entryTypes.map(t=>entries.filter(e=>e.typeId===t.id).length));
+    typeCard.innerHTML=S.entryTypes.map(t=>{
+      const c=entries.filter(e=>e.typeId===t.id).length;
+      const col=typeColor(t);
+      const pct=Math.round(c/maxCount*100);
+      return`<div class="type-dist-row">
+        <div class="type-dist-lbl">${t.icon} ${t.name}</div>
+        <div class="type-dist-bar"><div class="type-dist-fill" style="width:${pct}%;background:${col};"></div></div>
+        <div class="type-dist-val">${c}</div>
+      </div>`;
+    }).join('')||'<p style="font-size:12px;color:var(--text3);">–</p>';
+  }
+
+  // Chart
   const pick=document.getElementById('chartScalePick');
   if(pick){
     const prev=pick.value;
@@ -1545,10 +3284,71 @@ function renderStats(){
     if(prev&&scaleAvgs.find(s=>s.id===prev))pick.value=prev;
     pick.style.display=scaleAvgs.length?'':'none';
   }
-
   drawMoodChart();
+
+  // Tags
   const tags=getAllTags(),sorted=Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,10);
   document.getElementById('topTags').innerHTML=sorted.length?sorted.map(([t,n])=>`<span class="tag">#${t} <span style="opacity:.5;font-size:9px;">${n}</span></span>`).join(''):'<span style="font-size:11px;color:var(--text3);">Aucun tag</span>';
+
+  // Goals stats
+  const gs=document.getElementById('statsGoalsSection');
+  if(gs){
+    gs.style.display=S.goalsEnabled&&S.goals&&S.goals.length?'':'none';
+    if(S.goalsEnabled&&S.goals&&S.goals.length){
+      const gc=document.getElementById('statsGoalsCard');
+      const total=S.goals.length;
+      const done=S.goals.filter(g=>g.status==='termine').length;
+      const inprog=S.goals.filter(g=>g.status==='encours').length;
+      const paused=S.goals.filter(g=>g.status==='pause').length;
+      const pct=total?Math.round(done/total*100):0;
+      const avgProg=total?Math.round(S.goals.reduce((a,g)=>{const p=goalProgress(g);return a+p;},0)/total):0;
+      gc.innerHTML=`
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:.8rem;">
+          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;">${total}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">Total</div></div>
+          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;color:#2E9E6C;">${done}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">Terminés</div></div>
+          <div style="text-align:center;"><div style="font-family:var(--font-serif);font-size:24px;color:#3B7DD8;">${inprog}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;">En cours</div></div>
+        </div>
+        <div style="margin-bottom:4px;display:flex;justify-content:space-between;font-size:11px;color:var(--text3);">
+          <span>Progression moyenne</span><span>${avgProg}%</span>
+        </div>
+        <div class="goal-progress-bar" style="height:6px;">
+          <div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div>
+        </div>`;
+    }
+  }
+
+  // Tracking stats
+  const ts=document.getElementById('statsTrackingSection');
+  if(ts){
+    const hasData=S.trackingEnabled&&S.tracking&&S.tracking.items&&S.tracking.items.length;
+    ts.style.display=hasData?'':'none';
+    if(hasData){
+      const tc=document.getElementById('statsTrackingCard');
+      const cols=S.tracking.collections||[];
+      let html='';
+      cols.forEach(col=>{
+        const items=S.tracking.items.filter(i=>i.colId===col.id);
+        if(!items.length)return;
+        const statuses=getColStatuses(col);
+        const allReviews=items.flatMap(i=>i.reviews||[]).filter(r=>r.rating);
+        const avgRating=allReviews.length?(allReviews.reduce((a,r)=>a+r.rating,0)/allReviews.length).toFixed(1):null;
+        const totalViews=items.reduce((a,i)=>a+(i.reviews?i.reviews.length:0),0);
+        html+=`<div style="margin-bottom:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:18px;">${col.icon}</span>
+            <span style="font-size:13px;font-weight:500;">${col.name}</span>
+            <span style="font-size:11px;color:var(--text3);margin-left:auto;">${items.length} élément${items.length>1?'s':''}</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            ${statuses.map(s=>{const c=items.filter(i=>i.status===s.id).length;return c?`<span style="font-size:11px;color:var(--text3);">${s.emoji||''} ${s.label} : ${c}</span>`:''}).join('')}
+            ${avgRating?`<span style="font-size:11px;color:var(--accent2);">★ ${avgRating}/10 moy.</span>`:''}
+            ${totalViews>items.length?`<span style="font-size:11px;color:var(--text3);">↺ ${totalViews} fois au total</span>`:''}
+          </div>
+        </div>`;
+      });
+      tc.innerHTML=html||'<p style="font-size:12px;color:var(--text3);">–</p>';
+    }
+  }
 }
 function calcStreak(){if(!S.entries.length)return 0;const dates=[...new Set(S.entries.filter(e=>e.date).map(e=>e.date))].sort().reverse();let streak=0,cur=new Date();cur.setHours(0,0,0,0);for(const d of dates){const dd=new Date(d+'T00:00:00'),diff=Math.round((cur-dd)/864e5);if(diff===0||diff===1){streak++;cur=dd;}else break;}return streak;}
 let chartPeriodDays=7;
@@ -1625,8 +3425,47 @@ function insertImageAtCursor(src,alt){
   const editor=document.querySelector('.rich-content:focus')||document.querySelector('.rich-content');
   if(!editor)return;
   editor.focus();
-  document.execCommand('insertHTML',false,`<img src="${src}" alt="${alt||'image'}" style="max-width:100%;border-radius:8px;margin:6px 0;">`);
+  // Insert with a reasonable default width (50% of content area, max 480px)
+  document.execCommand('insertHTML',false,`<img src="${src}" alt="${alt||'image'}" class="entry-img" style="width:50%;max-width:480px;min-width:60px;border-radius:8px;margin:6px 0;cursor:pointer;display:block;" onclick="selectEntryImg(this)" title="Cliquez pour modifier la taille">`);
 }
+function selectEntryImg(img){
+  // Toggle a size picker popup
+  const existing=document.getElementById('imgSizePicker');
+  if(existing){existing.remove();if(existing._img===img)return;}
+  const picker=document.createElement('div');
+  picker.id='imgSizePicker';
+  picker._img=img;
+  picker.style.cssText='position:fixed;z-index:500;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 12px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:7px;min-width:200px;';
+  const rect=img.getBoundingClientRect();
+  picker.style.left=Math.min(rect.left,window.innerWidth-220)+'px';
+  picker.style.top=(rect.bottom+6)+'px';
+  picker.innerHTML=`
+    <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:2px;">Taille de l'image</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+      <button class="btn btn-secondary btn-sm" onclick="setImgSize(document.getElementById('imgSizePicker')._img,'25%')">XS 25%</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgSize(document.getElementById('imgSizePicker')._img,'40%')">S 40%</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgSize(document.getElementById('imgSizePicker')._img,'60%')">M 60%</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgSize(document.getElementById('imgSizePicker')._img,'80%')">L 80%</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgSize(document.getElementById('imgSizePicker')._img,'100%')">XL 100%</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-size:11px;color:var(--text3);">Précis :</span>
+      <input type="range" min="15" max="100" value="${parseInt(img.style.width)||50}" oninput="setImgSizeRaw(document.getElementById('imgSizePicker')._img,this.value)" style="flex:1;height:4px;">
+      <span style="font-size:11px;color:var(--text2);min-width:32px;" id="imgSizeVal">${parseInt(img.style.width)||50}%</span>
+    </div>
+    <div style="display:flex;gap:5px;">
+      <button class="btn btn-secondary btn-sm" onclick="setImgAlign(document.getElementById('imgSizePicker')._img,'left')">◀ Gauche</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgAlign(document.getElementById('imgSizePicker')._img,'center')">— Centre</button>
+      <button class="btn btn-secondary btn-sm" onclick="setImgAlign(document.getElementById('imgSizePicker')._img,'right')">Droite ▶</button>
+    </div>
+    <button class="btn btn-danger btn-sm" onclick="document.getElementById('imgSizePicker')._img.remove();document.getElementById('imgSizePicker').remove();">🗑 Supprimer</button>
+  `;
+  document.body.appendChild(picker);
+  setTimeout(()=>document.addEventListener('click',function closeP(e){if(!picker.contains(e.target)&&e.target!==img){picker.remove();document.removeEventListener('click',closeP);}},true),50);
+}
+function setImgSize(img,pct){img.style.width=pct;const v=document.getElementById('imgSizeVal');if(v)v.textContent=pct;}
+function setImgSizeRaw(img,val){img.style.width=val+'%';const v=document.getElementById('imgSizeVal');if(v)v.textContent=val+'%';}
+function setImgAlign(img,align){img.style.display='block';if(align==='center'){img.style.marginLeft='auto';img.style.marginRight='auto';}else if(align==='right'){img.style.marginLeft='auto';img.style.marginRight='0';}else{img.style.marginLeft='0';img.style.marginRight='auto';}}
 document.addEventListener('dragover',e=>{if(e.target.classList.contains('rich-content'))e.preventDefault();});
 document.addEventListener('drop',e=>{
   if(!e.target.classList.contains('rich-content'))return;
@@ -1636,22 +3475,52 @@ document.addEventListener('drop',e=>{
 
 // ── PDF ────────────────────────────────────────────────────────────────────
 function stripHTML(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent||'';}
-function exportCurrentPDF(){if(!currentReadId)return;generatePDF([S.entries.find(e=>e.id===currentReadId)].filter(Boolean));}
-function exportAllPDF(){if(!S.entries.length){alert('Aucune entrée.');return;}generatePDF([...S.entries].sort((a,b)=>new Date(a.date||a.createdAt)-new Date(b.date||b.createdAt)));}
+// exportCurrentPDF and exportAllPDF defined above with lazy jsPDF loading
 function generatePDF(entries){
   const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
   const W=210,m=20,lH=6.5,mW=W-m*2;let y=m;
-  const add=(txt,sz,bold,col)=>{doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');doc.setTextColor(col||'#1A1814');doc.splitTextToSize(txt,mW).forEach(l=>{if(y>285){doc.addPage();y=m;}doc.text(l,m,y);y+=lH;});};
+  const pageH=297;
+  const add=(txt,sz,bold,col)=>{
+    doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');
+    doc.setTextColor(col||'#1A1814');
+    doc.splitTextToSize(String(txt),mW).forEach(l=>{
+      if(y>pageH-25){addFooter();doc.addPage();y=m;}
+      doc.text(l,m,y);y+=lH;
+    });
+  };
+  const exportDateStr=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const addFooter=()=>{
+    const pg=doc.getCurrentPageInfo().pageNumber;
+    doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor('#A09D99');
+    doc.text(`Journal — Exporté le ${exportDateStr}`,m,pageH-10);
+    doc.text(`Page ${pg}`,W-m,pageH-10,{align:'right'});
+    doc.setDrawColor('#E5E2DC');doc.setLineWidth(0.2);doc.line(m,pageH-14,W-m,pageH-14);
+  };
   entries.forEach((entry,ei)=>{
-    if(ei>0){doc.addPage();y=m;}
+    if(ei>0){addFooter();doc.addPage();y=m;}
     const t=getType(entry.typeId),d=entry.date?formatDate(entry.date):null;
+    // Entry date header
+    if(d){add(`${d.weekday} ${d.day} ${d.month} ${d.year}`,9,false,'#A09D99');y+=1;}
     add(entry.title||(d?`${t.icon} ${d.weekday} ${d.day} ${d.month} ${d.year}`:`${t.icon} ${t.name}`),15,true);y+=2;
-    const sc=S.scales.filter(s=>entry.scales?.[s.id]!=null).map(s=>`${s.name}: ${entry.scales[s.id]}/${s.max}`).join(' · ');
-    if(sc)add(sc,9,false,'#8B7355');
-    if((entry.tags||[]).length)add('Tags: '+(entry.tags.map(t=>'#'+t).join(' ')),9,false,'#A09D99');
+    // Scales block
+    const scalesData=S.scales.filter(s=>entry.scales?.[s.id]!=null);
+    if(scalesData.length){
+      const scLine=scalesData.map(s=>`${s.emojiLow||''}${s.name} : ${entry.scales[s.id]}/${s.max}${s.emojiHigh?' '+s.emojiHigh:''}`).join('   ·   ');
+      add(scLine,9,false,'#8B7355');y+=1;
+    }
+    if((entry.tags||[]).length)add('Tags : '+(entry.tags.map(tg=>'#'+tg).join(' ')),9,false,'#A09D99');
     y+=2;doc.setDrawColor('#E5E2DC');doc.setLineWidth(0.3);doc.line(m,y,W-m,y);y+=5;
-    Object.entries(entry.fields||{}).forEach(([sec,html])=>{const txt=stripHTML(html).trim();if(!txt)return;add(sec,9,true,'#8B7355');y+=1;add(txt,11);y+=3;});
+    Object.entries(entry.fields||{}).forEach(([sec,html])=>{
+      const txt=stripHTML(html).trim();if(!txt)return;
+      add(sec,9,true,'#8B7355');y+=1;add(txt,11);y+=4;
+    });
+    // Created / modified dates at bottom of entry
+    y+=2;
+    const createdStr=entry.createdAt?new Date(entry.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    const updatedStr=entry.updatedAt&&entry.updatedAt!==entry.createdAt?new Date(entry.updatedAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):null;
+    if(createdStr)add(`Créé le ${createdStr}${updatedStr?'   ·   Modifié le '+updatedStr:''}`,8,false,'#C0BDB9');
   });
+  addFooter();
   doc.save(entries.length===1?(entries[0].date||'entree')+'.pdf':'journal.pdf');
 }
 
@@ -1659,7 +3528,7 @@ function generatePDF(entries){
 function exportJSON(){const b=new Blob([JSON.stringify({entries:S.entries},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`journal_${new Date().toISOString().split('T')[0]}.json`;a.click();}
 function importJSON(){document.getElementById('importFile').click();}
 function handleImport(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const d=JSON.parse(ev.target.result);if(d.entries){S.entries=d.entries;saveLocal();for(const entry of d.entries){await saveEntryToSupabase(entry);}renderEntries();renderStats();alert(d.entries.length+' entrées importées et synchronisées !');}}catch(err){alert('Fichier invalide.');}};r.readAsText(f);e.target.value='';}
-function clearAllData(){showConfirm('Effacer toutes les données ?','Irréversible — supprime aussi de Supabase.',async()=>{for(const e of S.entries){await deleteEntryFromSupabase(e.id);}S.entries=[];saveLocal();renderEntries();renderStats();});}
+function clearAllData(){showConfirm('Effacer toutes les données ?','Irréversible — supprime aussi de Supabase.',async()=>{for(const e of S.entries){await deleteEntryFromSupabase(e.id);}S.entries=[];saveLocal();renderBooksGrid();renderStats();});}
 
 // ── MODALS ─────────────────────────────────────────────────────────────────
 let confirmCb=null;
@@ -1668,6 +3537,10 @@ function showConfirm(title,msg,cb){document.getElementById('confirmTitle').textC
 document.getElementById('confirmOk').onclick=()=>{if(confirmCb)confirmCb();closeModal('confirmModal');};
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 
+// Mark app as ready and drain queue
+window._rdy = true;
+(window._q||[]).forEach(function(item){ if(typeof window[item[0]]==='function') window[item[0]].apply(null,item[1]); });
+window._q = [];
 init();
 </script>
 </body>
