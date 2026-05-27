@@ -451,6 +451,13 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .goal-progress-manual{display:flex;align-items:center;gap:10px;}
 .goal-progress-manual input[type=range]{flex:1;}
 
+/* COLLECTION TEMPLATE PICKER */
+.col-template-card{background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius);padding:.85rem .7rem;cursor:pointer;text-align:center;transition:all .18s;}
+.col-template-card:hover{border-color:var(--accent2);background:var(--surface);transform:translateY(-2px);}
+.col-template-icon{font-size:26px;margin-bottom:5px;}
+.col-template-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.col-template-desc{font-size:10px;color:var(--text3);line-height:1.3;}
+
 /* SECTION CONTROLS in entry editor */
 .section-controls{display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .15s;flex-shrink:0;}
 .journal-section:hover .section-controls,.journal-section:focus-within .section-controls{opacity:1;}
@@ -463,6 +470,24 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .mini-period-btns{display:flex;gap:3px;}
 .mini-period-btn{padding:1px 7px;border-radius:10px;font-size:10px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;font-family:var(--font-ui);}
 .mini-period-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+/* GOAL PRIORITY */
+.priority-high{background:rgba(200,89,58,.12);color:#C8593A;border:1px solid rgba(200,89,58,.25);border-radius:10px;font-size:10px;padding:1px 7px;font-weight:500;}
+.priority-medium{background:rgba(212,136,42,.12);color:#D4882A;border:1px solid rgba(212,136,42,.25);border-radius:10px;font-size:10px;padding:1px 7px;font-weight:500;}
+.priority-low{background:rgba(46,158,108,.12);color:#2E9E6C;border:1px solid rgba(46,158,108,.25);border-radius:10px;font-size:10px;padding:1px 7px;font-weight:500;}
+.priority-btn{padding:5px 10px;border-radius:20px;font-size:11px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font-ui);transition:all .15s;}
+.priority-btn:hover{background:var(--bg2);}
+.priority-btn.active-high{background:rgba(200,89,58,.12);color:#C8593A;border-color:rgba(200,89,58,.4);}
+.priority-btn.active-medium{background:rgba(212,136,42,.12);color:#D4882A;border-color:rgba(212,136,42,.4);}
+.priority-btn.active-low{background:rgba(46,158,108,.12);color:#2E9E6C;border-color:rgba(46,158,108,.4);}
+/* GOAL SECTIONS */
+.goal-section{margin-bottom:.7rem;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.goal-section-header{display:flex;align-items:center;gap:5px;padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.goal-section-name{flex:1;background:transparent;border:none;outline:none;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;font-family:var(--font-ui);}
+.goal-section-ctrl{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:1px 5px;border-radius:3px;line-height:1;}
+.goal-section-ctrl:hover{background:var(--bg3);color:var(--text);}
+.goal-section-body{padding:.6rem .75rem;min-height:60px;outline:none;font-size:13px;color:var(--text);line-height:1.7;}
+.goal-section-body[placeholder]:empty::before{content:attr(placeholder);color:var(--text3);}
 
 /* TRACKING */
 .tracking-collections{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem;}
@@ -571,34 +596,35 @@ window._c = function(fn, args) {
     <!-- Step 2: storage -->
     <div class="onboard-step" id="ostep1">
       <p class="onboard-q">Comment stocker tes données ?</p>
-      <p class="onboard-hint">Tu pourras changer d'avis à tout moment.</p>
-      <div class="auth-mode-grid">
+      <p class="onboard-hint">Tu pourras changer d'avis à tout moment dans les Réglages.</p>
+      <div class="auth-mode-grid" style="margin-bottom:.8rem;">
         <div class="auth-mode-card selected" id="ob_modeLocalCard" onclick="obSelectMode('local')">
           <div class="auth-mode-icon">📱</div>
-          <div class="auth-mode-name">Mode local</div>
-          <div class="auth-mode-desc">Données sur cet appareil, sans compte</div>
+          <div class="auth-mode-name">Sur cet appareil</div>
+          <div class="auth-mode-desc">Mode local, sans compte requis</div>
         </div>
         <div class="auth-mode-card" id="ob_modeOnlineCard" onclick="obSelectMode('online')">
           <div class="auth-mode-icon">☁️</div>
-          <div class="auth-mode-name">Mode en ligne</div>
-          <div class="auth-mode-desc">Synchronisé entre appareils, 50 Mo gratuits</div>
+          <div class="auth-mode-name">Synchronisé</div>
+          <div class="auth-mode-desc">Entre appareils, 50 Mo gratuits</div>
         </div>
       </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:.5rem;" onclick="onboardFinish()">C'est parti ! →</button>
-      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;cursor:pointer;" onclick="onboardNext()">← Retour</p>
-    </div>
-    <!-- Auth form for online mode -->
-    <div id="ob_authForm" style="display:none;margin-top:1rem;">
-      <div class="auth-form">
-        <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchAuthTab('login')">Se connecter</button>
-          <button class="auth-tab" onclick="switchAuthTab('signup')">Créer un compte</button>
+      <!-- Auth form shown only when online chosen -->
+      <div id="ob_authForm" style="display:none;margin-bottom:.6rem;">
+        <div class="auth-form">
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="ob_loginTab" onclick="obSwitchAuthTab('login')">Se connecter</button>
+            <button class="auth-tab" id="ob_signupTab" onclick="obSwitchAuthTab('signup')">Créer un compte</button>
+          </div>
+          <div id="ob_authError" class="auth-error"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="ob_authEmail" placeholder="votre@email.com" autocomplete="email"></div>
+          <div class="form-group"><label>Mot de passe</label><input type="password" id="ob_authPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')obSubmitAuth()"></div>
+          <div class="form-group" id="ob_confirmGroup" style="display:none;"><label>Confirmer</label><input type="password" id="ob_authPasswordConfirm" placeholder="••••••••"></div>
+          <button class="btn btn-primary" style="width:100%;" id="ob_authBtn" onclick="obSubmitAuth()">Se connecter</button>
         </div>
-        <div id="ob_authError" class="auth-error"></div>
-        <div class="form-group"><label>Email</label><input type="email" id="ob_authEmail" placeholder="votre@email.com" autocomplete="email"></div>
-        <div class="form-group"><label>Mot de passe</label><input type="password" id="ob_authPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitAuth()"></div>
-        <button class="btn btn-primary" style="width:100%;" onclick="submitAuth()">Connexion →</button>
       </div>
+      <button class="btn btn-primary" style="width:100%;" id="ob_continueBtn" onclick="onboardFinish()">C'est parti !</button>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;cursor:pointer;" onclick="onboardBack()">← Retour</p>
     </div>
   </div>
 </div>
@@ -1259,50 +1285,69 @@ window._c = function(fn, args) {
 </div>
 
 <div class="modal-overlay" id="collectionModal">
-  <div class="modal">
+  <div class="modal" style="max-width:540px;">
     <h3 class="modal-title" id="colModalTitle">Nouvelle collection</h3>
-    <div style="display:grid;grid-template-columns:64px 1fr;gap:9px;margin-bottom:1rem;">
-      <div><label>Icône</label><input type="text" id="colIcon" maxlength="4" placeholder="🎬" style="text-align:center;font-size:22px;"></div>
-      <div><label>Nom</label><input type="text" id="colName" placeholder="Films vus"></div>
+
+    <!-- STEP 1: Template picker (new only) -->
+    <div id="colTemplateStep">
+      <p style="font-size:12px;color:var(--text2);margin-bottom:.9rem;">Partir d'un modèle prédéfini ou créer depuis zéro :</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:1rem;" id="colTemplateGrid"></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('collectionModal')">Annuler</button>
     </div>
-    <!-- Statuts personnalisables -->
-    <div class="form-group">
-      <label>Statuts <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(glissez pour réordonner)</span></label>
-      <div id="colStatusesList" style="margin-bottom:7px;"></div>
-      <div style="display:flex;gap:6px;">
-        <input type="text" id="colStatusInput" placeholder="Nouveau statut…" style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColStatus();}">
-        <input type="text" id="colStatusEmoji" placeholder="📌" maxlength="4" style="width:50px;font-size:12px;text-align:center;">
-        <button class="btn btn-secondary btn-sm" onclick="addColStatus()">+</button>
+
+    <!-- STEP 2: Edit form -->
+    <div id="colEditStep" style="display:none;">
+      <div style="display:grid;grid-template-columns:64px 1fr;gap:9px;margin-bottom:1rem;">
+        <div><label>Icône</label><input type="text" id="colIcon" maxlength="4" placeholder="🎬" style="text-align:center;font-size:22px;"></div>
+        <div><label>Nom</label><input type="text" id="colName" placeholder="Ma collection"></div>
       </div>
-    </div>
-    <!-- Champs personnalisables -->
-    <div class="form-group">
-      <label>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
-      <div id="colFieldsList" style="margin-bottom:7px;"></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <input type="text" id="colFieldInput" placeholder="Nom du champ…" style="flex:1;min-width:100px;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
-        <select id="colFieldType" style="width:110px;font-size:12px;padding:6px 4px;" onchange="onFieldTypeChange()">
-          <option value="text">Texte</option>
-          <option value="date">Date 📅</option>
-          <option value="progress">Progression %</option>
-          <option value="select">Choix</option>
-        </select>
-        <button class="btn btn-secondary btn-sm" onclick="addColField()">+</button>
-      </div>
-      <!-- Min/max config — shown only for progress type -->
-      <div id="colProgressConfig" style="display:none;margin-top:6px;display:none;">
-        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-          <span style="font-size:11px;color:var(--text3);">De</span>
-          <input type="number" id="colFieldMin" value="0" min="0" style="width:60px;font-size:12px;padding:4px 6px;">
-          <span style="font-size:11px;color:var(--text3);">à</span>
-          <input type="number" id="colFieldMax" value="100" min="1" style="width:60px;font-size:12px;padding:4px 6px;">
-          <span style="font-size:11px;color:var(--text3);">(ex: pages, km…)</span>
+      <!-- Statuts -->
+      <div class="form-group">
+        <label>Statuts</label>
+        <div id="colStatusesList" style="margin-bottom:7px;"></div>
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="colStatusInput" placeholder="Nouveau statut…" style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColStatus();}">
+          <input type="text" id="colStatusEmoji" placeholder="📌" maxlength="4" style="width:50px;font-size:12px;text-align:center;">
+          <button class="btn btn-secondary btn-sm" onclick="addColStatus()">+</button>
         </div>
       </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('collectionModal')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveCollection()">Créer</button>
+      <!-- Reviews toggle — placed prominently before fields -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:1rem;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;color:var(--text);">⭐ Avis & Notes</div>
+          <div style="font-size:11px;color:var(--text3);">Activer les notes, avis et historique de visionnage</div>
+        </div>
+        <button class="scale-toggle" id="colReviewsToggle" onclick="toggleColReviews()"></button>
+      </div>
+      <!-- Champs -->
+      <div class="form-group">
+        <label>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
+        <div id="colFieldsList" style="margin-bottom:7px;"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <input type="text" id="colFieldInput" placeholder="Nom du champ…" style="flex:1;min-width:100px;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
+          <select id="colFieldType" style="width:110px;font-size:12px;padding:6px 4px;" onchange="onFieldTypeChange()">
+            <option value="text">Texte</option>
+            <option value="date">Date 📅</option>
+            <option value="progress">Progression %</option>
+            <option value="number">Nombre</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="addColField()">+</button>
+        </div>
+        <div id="colProgressConfig" style="display:none;margin-top:6px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <span style="font-size:11px;color:var(--text3);">De</span>
+            <input type="number" id="colFieldMin" value="0" min="0" style="width:60px;font-size:12px;padding:4px 6px;">
+            <span style="font-size:11px;color:var(--text3);">à</span>
+            <input type="number" id="colFieldMax" value="100" min="1" style="width:60px;font-size:12px;padding:4px 6px;">
+            <span style="font-size:11px;color:var(--text3);">(ex: pages, km…)</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="colBackBtn" onclick="colGoBack()" style="margin-right:auto;">← Retour</button>
+        <button class="btn btn-secondary" onclick="closeModal('collectionModal')">Annuler</button>
+        <button class="btn btn-primary" onclick="saveCollection()" id="colSaveBtn">Créer</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1751,6 +1796,7 @@ function switchToOnline(){
 function renderAll(){
   applyTheme();applyFont();applyColor();
   initQuotes();
+  if(S.goalsEnabled)initGoals();
   applyFeatureSettings();
   renderBooksGrid();updateEntryCount();
   renderModelsPage();renderFontGrid();renderColorGrid();
@@ -1896,17 +1942,13 @@ function renderColorGrid(){
 function buildSectionHTML(sec,content='',isCustom=false){
   const id='sec_'+uid();
   const minH=sec.toLowerCase().includes('rêve')||sec.toLowerCase().includes('pensée')||sec.toLowerCase().includes('réflexion')||sec.toLowerCase().includes('description')?'140px':'85px';
-  const nameHtml=isCustom
-    ?`<input class="section-name-input" type="text" value="${sec}" placeholder="Nom de la section…">`
-    :`<span>${sec}</span>`;
-  return`<div class="journal-section" id="${id}" style="margin-bottom:.8rem;">
+  return`<div class="journal-section" id="${id}" style="margin-bottom:.8rem;" data-secname="${sec.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">
     <div class="journal-section-label" style="display:flex;align-items:center;gap:6px;">
-      ${nameHtml}
-      <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
+      <input class="section-name-input" type="text" value="${sec.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" placeholder="Nom de la section…" style="flex:1;">
       <div class="section-controls">
         <button class="section-ctrl-btn" title="Monter" onclick="moveSectionUp('${id}')">↑</button>
         <button class="section-ctrl-btn" title="Descendre" onclick="moveSectionDown('${id}')">↓</button>
-        <button class="section-ctrl-btn" title="Supprimer cette section" onclick="removeSection('${id}')">✕</button>
+        <button class="section-ctrl-btn" title="Supprimer" onclick="removeSection('${id}')">✕</button>
       </div>
     </div>
     <div class="rich-content" contenteditable="true" placeholder="${sec.replace(/"/g,'&quot;')}…" style="min-height:${minH};">${content}</div>
@@ -2211,8 +2253,8 @@ function saveEntry(){
   const fields={};let preview='';
   document.querySelectorAll('#entryFields .journal-section').forEach(sec=>{
     const nameEl=sec.querySelector('.section-name-input');
+    const name=(nameEl?.value||'').trim()||sec.getAttribute('data-secname')||'Section';
     const contentEl=sec.querySelector('.rich-content');
-    const name=nameEl?nameEl.value.trim()||'Section':sec.querySelector('.journal-section-label')?.childNodes[0]?.textContent?.trim()||'Section';
     const content=contentEl?.innerHTML||'';
     fields[name]=content;
     if(!preview)preview=contentEl?.textContent?.slice(0,120)||'';
@@ -2448,27 +2490,88 @@ function toggleOnboard(id){
   document.getElementById('ocard_'+id)?.classList.toggle('selected',onboardSelected.has(id));
 }
 function onboardNext(){
-  if(currentOnboardStep===0){
-    currentOnboardStep=1;
-    document.getElementById('ostep0').classList.remove('active');
-    document.getElementById('ostep1').classList.add('active');
-    document.getElementById('odot0').classList.remove('active');
-    document.getElementById('odot1').classList.add('active');
-  } else {
-    // Back
-    currentOnboardStep=0;
-    document.getElementById('ostep1').classList.remove('active');
-    document.getElementById('ostep0').classList.add('active');
-    document.getElementById('odot1').classList.remove('active');
-    document.getElementById('odot0').classList.add('active');
-    document.getElementById('ob_authForm').style.display='none';
-  }
+  currentOnboardStep=1;
+  document.getElementById('ostep0').classList.remove('active');
+  document.getElementById('ostep1').classList.add('active');
+  document.getElementById('odot0').classList.remove('active');
+  document.getElementById('odot1').classList.add('active');
+}
+function onboardBack(){
+  currentOnboardStep=0;
+  document.getElementById('ostep1').classList.remove('active');
+  document.getElementById('ostep0').classList.add('active');
+  document.getElementById('odot1').classList.remove('active');
+  document.getElementById('odot0').classList.add('active');
+  const af=document.getElementById('ob_authForm');if(af)af.style.display='none';
+  const cb=document.getElementById('ob_continueBtn');if(cb)cb.style.display='';
 }
 function obSelectMode(mode){
   obMode=mode;
   document.getElementById('ob_modeLocalCard').classList.toggle('selected',mode==='local');
   document.getElementById('ob_modeOnlineCard').classList.toggle('selected',mode==='online');
-  document.getElementById('ob_authForm').style.display=mode==='online'?'':'none';
+  const authForm=document.getElementById('ob_authForm');
+  const continueBtn=document.getElementById('ob_continueBtn');
+  if(mode==='online'){if(authForm)authForm.style.display='';if(continueBtn)continueBtn.style.display='none';}
+  else{if(authForm)authForm.style.display='none';if(continueBtn)continueBtn.style.display='';}
+}
+function obSwitchAuthTab(tab){
+  document.getElementById('ob_loginTab')?.classList.toggle('active',tab==='login');
+  document.getElementById('ob_signupTab')?.classList.toggle('active',tab==='signup');
+  const cg=document.getElementById('ob_confirmGroup');if(cg)cg.style.display=tab==='signup'?'':'none';
+  const btn=document.getElementById('ob_authBtn');
+  if(btn)btn.textContent=tab==='signup'?'Créer mon compte':'Se connecter';
+}
+async function obSubmitAuth(){
+  const email=document.getElementById('ob_authEmail')?.value.trim();
+  const pass=document.getElementById('ob_authPassword')?.value;
+  const errEl=document.getElementById('ob_authError');
+  if(!email||!pass){if(errEl){errEl.textContent='Email et mot de passe requis.';errEl.classList.add('show');}return;}
+  const isSignup=document.getElementById('ob_signupTab')?.classList.contains('active');
+  if(isSignup){
+    const conf=document.getElementById('ob_authPasswordConfirm')?.value;
+    if(pass!==conf){if(errEl){errEl.textContent='Mots de passe différents.';errEl.classList.add('show');}return;}
+    if(pass.length<6){if(errEl){errEl.textContent='Minimum 6 caractères.';errEl.classList.add('show');}return;}
+  }
+  const btn=document.getElementById('ob_authBtn');
+  if(btn){btn.disabled=true;btn.textContent='…';}
+  if(errEl)errEl.classList.remove('show');
+  try{
+    let data;
+    if(!isSignup){
+      const res=await fetch(SB_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+      data=await res.json();
+    } else {
+      const res=await fetch(SB_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+      data=await res.json();
+      if(data.id&&!data.access_token){
+        const af=document.getElementById('ob_authForm');
+        if(af)af.innerHTML='<div style="background:var(--bg2);border-radius:var(--radius);padding:.8rem;text-align:center;font-size:13px;color:var(--text2);">📧 Email envoyé à <strong>'+email+'</strong>.<br>Confirmez puis revenez vous connecter.</div>';
+        const cb=document.getElementById('ob_continueBtn');
+        if(cb){cb.style.display='';cb.textContent='Continuer en local';cb.onclick=()=>{applyOnboardSelections();localStorage.setItem('journal_onboarding_done','1');document.getElementById('onboardPage').style.display='none';startLocalMode();};}
+        return;
+      }
+    }
+    if(data.error||data.error_description){
+      const raw=data.error_description||data.error||'Erreur';
+      const msg=raw==='Invalid login credentials'?'Email ou mot de passe incorrect.':raw==='User already registered'?'Email déjà utilisé. Connectez-vous.':raw;
+      if(errEl){errEl.textContent=msg;errEl.classList.add('show');}
+      if(btn){btn.disabled=false;btn.textContent=isSignup?'Créer mon compte':'Se connecter';}
+      return;
+    }
+    if(data.access_token){
+      applyOnboardSelections();
+      localStorage.setItem('journal_onboarding_done','1');
+      localStorage.setItem('sb_access_token',data.access_token);
+      localStorage.setItem('sb_refresh_token',data.refresh_token||'');
+      localStorage.setItem('sb_user_id',data.user?.id||'');
+      localStorage.setItem('sb_user_email',email);
+      document.getElementById('onboardPage').style.display='none';
+      await startOnlineMode(data.access_token,data.user?.id||'');
+    }
+  }catch(e){
+    if(errEl){errEl.textContent='Erreur réseau. Vérifiez votre connexion.';errEl.classList.add('show');}
+    if(btn){btn.disabled=false;btn.textContent=isSignup?'Créer mon compte':'Se connecter';}
+  }
 }
 function applyOnboardSelections(){
   S.goalsEnabled=onboardSelected.has('objectifs');
@@ -2476,67 +2579,127 @@ function applyOnboardSelections(){
   S.quotesEnabled=onboardSelected.has('citations');
   if(S.trackingEnabled){
     initTracking();
-    // Films collection with default fields
     if(onboardSelected.has('films')&&!S.tracking.collections.find(c=>c.id==='tc_films')){
-      S.tracking.collections.push({
-        id:'tc_films',name:'Films',icon:'🎬',desc:'',
-        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-        fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]
-      });
+      S.tracking.collections.push({id:'tc_films',name:'Films',icon:'🎬',desc:'',statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]});
     }
     if(onboardSelected.has('livreslu')&&!S.tracking.collections.find(c=>c.id==='tc_livres')){
-      S.tracking.collections.push({
-        id:'tc_livres',name:'Livres',icon:'📖',desc:'',
-        statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-        fields:[]
-      });
+      S.tracking.collections.push({id:'tc_livres',name:'Livres',icon:'📖',desc:'',statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],fields:[]});
     }
   }
   saveLocal();
 }
 async function onboardFinish(){
+  // Called only for local mode — online uses obSubmitAuth
   applyOnboardSelections();
-  selectedAuthMode=obMode;
   localStorage.setItem('journal_onboarding_done','1');
   document.getElementById('onboardPage').style.display='none';
-  if(obMode==='online'){
-    // Show auth page directly in form mode (skip mode choice)
-    document.getElementById('authModeChoice').style.display='none';
-    document.getElementById('authForm').style.display='';
-    document.getElementById('authPage').style.display='flex';
-  } else {
-    startLocalMode();
-  }
+  startLocalMode();
 }
 
-// ── COLLECTION MODAL (improved) ────────────────────────────────────────────
+// ── COLLECTION MODAL ───────────────────────────────────────────────────────
 let editingColId=null;
 let colModalStatuses=[];
 let colModalFields=[];
+let colModalReviews=true; // default: reviews enabled
+
+// Predefined templates
+const COL_TEMPLATES=[
+  {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+   fields:[{id:uid(),name:'Réalisateur',type:'text'},{id:uid(),name:'Lieu',type:'text'},{id:uid(),name:'Avec qui',type:'text'},{id:uid(),name:'Date de visionnage',type:'date'}]},
+  {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+   fields:[{id:uid(),name:'Saisons',type:'number'},{id:uid(),name:'Plateforme',type:'text'},{id:uid(),name:'Avec qui',type:'text'},{id:uid(),name:'Date de visionnage',type:'date'}]},
+  {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
+   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Nombre de pages',type:'progress',min:0,max:100},{id:uid(),name:'Date début lecture',type:'date'},{id:uid(),name:'Date fin lecture',type:'date'}]},
+  {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À jouer',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'fini',label:'Terminé',emoji:'🏆'}],
+   fields:[{id:uid(),name:'Plateforme',type:'text'},{id:uid(),name:'Genre',type:'text'},{id:uid(),name:'Progression',type:'progress',min:0,max:100}]},
+  {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,
+   statuses:[{id:'avoir',label:'À écouter',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
+   fields:[{id:uid(),name:'Animateur',type:'text'},{id:uid(),name:'Date d\'écoute',type:'date'}]},
+  {id:'musique',icon:'🎵',name:'Musique',desc:'Albums, artistes…',reviewsEnabled:true,
+   statuses:[{id:'decouvrir',label:'À découvrir',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
+   fields:[{id:uid(),name:'Artiste',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Genre',type:'text'}]},
+  {id:'vide',icon:'✨',name:'Personnalisé',desc:'Partir de zéro',reviewsEnabled:false,
+   statuses:[{id:'todo',label:'À faire',emoji:'🔖'},{id:'done',label:'Terminé',emoji:'✅'}],
+   fields:[]},
+];
 
 function openNewCollectionModal(){
   editingColId=null;
   document.getElementById('colModalTitle').textContent='Nouvelle collection';
-  document.getElementById('colIcon').value='📋';
-  document.getElementById('colName').value='';
-  colModalStatuses=[
-    {id:'avoir',label:'À voir',emoji:'🔖'},
-    {id:'encours',label:'En cours',emoji:'▶'},
-    {id:'vu',label:'Vu / Terminé',emoji:'✅'},
-  ];
-  colModalFields=[];
-  renderColStatuses();renderColFields();
+  document.getElementById('colTemplateStep').style.display='';
+  document.getElementById('colEditStep').style.display='none';
+  document.getElementById('colBackBtn').style.display='';
+  document.getElementById('colSaveBtn').textContent='Créer';
+  // Render template grid
+  const grid=document.getElementById('colTemplateGrid');
+  if(grid){
+    grid.innerHTML=COL_TEMPLATES.map(t=>`
+      <div class="col-template-card" onclick="applyColTemplate('${t.id}')">
+        <div class="col-template-icon">${t.icon}</div>
+        <div class="col-template-name">${t.name}</div>
+        <div class="col-template-desc">${t.desc}</div>
+      </div>`).join('');
+  }
   document.getElementById('collectionModal').classList.add('open');
 }
+
+function applyColTemplate(templateId){
+  const tpl=COL_TEMPLATES.find(t=>t.id===templateId)||COL_TEMPLATES[COL_TEMPLATES.length-1];
+  document.getElementById('colIcon').value=tpl.icon;
+  document.getElementById('colName').value=tpl.id==='vide'?'':tpl.name;
+  colModalStatuses=tpl.statuses.map(s=>({...s,id:uid()}));
+  colModalFields=tpl.fields.map(f=>({...f,id:uid()}));
+  colModalReviews=tpl.reviewsEnabled!==false; // default true unless explicitly false
+  colGoToEdit();
+}
+
+function colGoToEdit(){
+  document.getElementById('colTemplateStep').style.display='none';
+  document.getElementById('colEditStep').style.display='';
+  renderColStatuses();renderColFields();
+  setColReviewsToggle(colModalReviews);
+  const nameEl=document.getElementById('colName');
+  if(nameEl&&!nameEl.value)setTimeout(()=>nameEl.focus(),50);
+}
+
+function toggleColReviews(){
+  colModalReviews=!colModalReviews;
+  const t=document.getElementById('colReviewsToggle');
+  if(t)t.classList.toggle('on',colModalReviews);
+}
+function setColReviewsToggle(val){
+  colModalReviews=val;
+  const t=document.getElementById('colReviewsToggle');
+  if(t)t.classList.toggle('on',val);
+}
+function colGoBack(){
+  if(editingColId){
+    closeModal('collectionModal');
+  } else {
+    document.getElementById('colEditStep').style.display='none';
+    document.getElementById('colTemplateStep').style.display='';
+  }
+}
+
 function openEditCollectionModal(colId){
   const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
   editingColId=colId;
-  document.getElementById('colModalTitle').textContent='Modifier la collection';
+  document.getElementById('colModalTitle').textContent='Modifier · '+col.name;
   document.getElementById('colIcon').value=col.icon||'📋';
   document.getElementById('colName').value=col.name||'';
-  colModalStatuses=(col.statuses||[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}]).map(s=>({...s}));
+  colModalStatuses=(col.statuses||[]).map(s=>({...s}));
   colModalFields=(col.fields||[]).map(f=>({...f}));
+  colModalReviews=col.reviewsEnabled!==false; // default true if not set
+  document.getElementById('colTemplateStep').style.display='none';
+  document.getElementById('colEditStep').style.display='';
+  document.getElementById('colBackBtn').style.display='none';
+  document.getElementById('colSaveBtn').textContent='Enregistrer';
   renderColStatuses();renderColFields();
+  setColReviewsToggle(colModalReviews);
   document.getElementById('collectionModal').classList.add('open');
 }
 function renderColStatuses(){
@@ -2566,8 +2729,8 @@ function onFieldTypeChange(){
 }
 function renderColFields(){
   const el=document.getElementById('colFieldsList');if(!el)return;
-  if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ additionnel</p>';return;}
-  const typeLabels={text:'Texte',date:'Date 📅',select:'Choix',progress:'Progression %'};
+  if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ — ajoutez-en ci-dessous</p>';return;}
+  const typeLabels={text:'Texte',date:'Date 📅',progress:'Progression %',number:'Nombre',select:'Choix'};
   el.innerHTML=colModalFields.map((f,i)=>{
     const label=typeLabels[f.type]||f.type;
     const extra=f.type==='progress'?` (${f.min||0}→${f.max||100})`:'';
@@ -2589,7 +2752,6 @@ function addColField(){
   }
   colModalFields.push(field);
   document.getElementById('colFieldInput').value='';
-  // Reset config
   const cfg=document.getElementById('colProgressConfig');if(cfg)cfg.style.display='none';
   document.getElementById('colFieldType').value='text';
   document.getElementById('colFieldMin').value='0';
@@ -2603,9 +2765,9 @@ function saveCollection(){
   if(!name)return;
   if(editingColId){
     const col=S.tracking.collections.find(c=>c.id===editingColId);
-    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];}
+    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];col.reviewsEnabled=colModalReviews;}
   } else {
-    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields]});
+    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields],reviewsEnabled:colModalReviews});
   }
   saveLocal();closeModal('collectionModal');renderTrackingCollections();
 }
@@ -2678,20 +2840,22 @@ function renderTrackingCollections(){
   let html=S.tracking.collections.map(col=>{
     const count=S.tracking.items.filter(i=>i.colId===col.id).length;
     return`<div class="tracking-col-card" style="position:relative;">
-      <div onclick="openTrackingCollection('${col.id}')" style="cursor:pointer;">
+      <div onclick="openTrackingCollection('${col.id}')" style="cursor:pointer;padding-bottom:2px;">
         <div class="tracking-col-icon">${col.icon}</div>
         <div class="tracking-col-name">${col.name}</div>
         <div class="tracking-col-count">${count} élément${count>1?'s':''}</div>
       </div>
-      <div style="position:absolute;top:7px;right:7px;display:flex;gap:3px;">
-        <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;" onclick="openEditCollectionModal('${col.id}')">✏️</button>
-        <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;" onclick="deleteTrackingCollection('${col.id}')">🗑</button>
+      <!-- Always visible action bar -->
+      <div style="display:flex;gap:4px;margin-top:8px;padding-top:7px;border-top:1px solid var(--border);">
+        <button class="btn btn-secondary btn-sm" style="flex:1;font-size:11px;" onclick="openEditCollectionModal('${col.id}')">✏️ Modifier</button>
+        <button class="btn btn-danger btn-sm" style="font-size:11px;" onclick="deleteTrackingCollection('${col.id}')">🗑</button>
       </div>
     </div>`;
   }).join('');
   html+=`<div class="tracking-col-card tracking-col-new" onclick="openNewCollectionModal()">
-    <div style="font-size:24px;">＋</div>
+    <div style="font-size:28px;">＋</div>
     <div style="font-size:12px;font-weight:500;">Nouvelle collection</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:2px;">Choisir un modèle</div>
   </div>`;
   el.innerHTML=html;
 }
@@ -2751,9 +2915,10 @@ function renderTrackingItems(){
     const progField=col.fields?.find(f=>f.type==='progress');
     const progVal=progField&&item.customFields?parseFloat(item.customFields[progField.id])||0:null;
     const progPct=progField&&progVal!==null?Math.min(100,Math.round((progVal-(progField.min||0))/((progField.max||100)-(progField.min||0))*100)):null;
+    const showRating=col.reviewsEnabled!==false;
     return`<div class="tracking-item-card" onclick="openTrackingItem('${item.id}')">
       <div class="tracking-item-title">${item.title||'Sans titre'}</div>
-      ${rating?starsHtml(rating):''}
+      ${showRating&&rating?starsHtml(rating):''}
       ${progPct!==null?`<div style="margin:5px 0 3px;">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:2px;">
           <span>${progField.name}</span><span style="color:var(--accent2);font-weight:600;">${progPct}%</span>
@@ -2812,6 +2977,12 @@ function renderTrackingItemDetail(item){
             <input type="date" value="${val}" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
           </div>`;
         }
+        if(f.type==='number'){
+          return`<div class="form-group" style="margin-bottom:.6rem;">
+            <label>${f.name}</label>
+            <input type="number" value="${val}" placeholder="0" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;width:120px;">
+          </div>`;
+        }
         if(f.type==='progress'){
           const min=f.min||0,max=f.max||100;
           const cur=parseFloat(val)||0;
@@ -2841,7 +3012,8 @@ function renderTrackingItemDetail(item){
       <div class="tag-input-wrap"><input type="text" id="tiTagInput" placeholder="Genre, plateforme…" onkeydown="addTrackingTagKD(event)" style="font-size:12px;padding:6px 8px;"><button class="btn btn-secondary btn-sm" onclick="addTrackingTag()">+</button></div>
       <div class="tags-wrap" id="tiTags">${(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('')}</div>
     </div>
-    <!-- Reviews history -->
+    <!-- Reviews history (only if collection has reviews enabled) -->
+    ${col.reviewsEnabled!==false?`
     <div class="card" style="margin-bottom:1rem;">
       <p style="font-size:13px;font-weight:500;margin-bottom:.8rem;">Historique ${item.reviews&&item.reviews.length?`<span style="font-size:11px;color:var(--text3);">${item.reviews.length} fois</span>`:''}</p>
       <div id="tiReviews">
@@ -2876,7 +3048,6 @@ function renderTrackingItemDetail(item){
       </div>
       <div class="form-group" style="margin-bottom:.5rem;">
         <label>Avis</label>
-        <!-- Mini toolbar -->
         <div class="review-toolbar">
           <button class="review-tb-btn" onclick="reviewFmt('bold')" title="Gras"><b>B</b></button>
           <button class="review-tb-btn" onclick="reviewFmt('italic')" title="Italique"><i style="font-style:italic">I</i></button>
@@ -2891,7 +3062,7 @@ function renderTrackingItemDetail(item){
         <button class="btn btn-primary btn-sm" onclick="addReview()" id="reviewSubmitBtn">Enregistrer</button>
         <button class="btn btn-secondary btn-sm" id="reviewCancelBtn" style="display:none;" onclick="cancelEditReview()">Annuler</button>
       </div>
-    </div>
+    </div>`:''}
     <div style="padding-bottom:4rem;"></div>
   `;
   // Apply current status button styling
@@ -3132,6 +3303,7 @@ function drawTrackingChart(){
   drawMiniBarChart('trackingChart',data,'#C44B7A');
 }
 let currentGoalId=null;
+let goalPeriodFilter='all';
 
 function goalDaysLeft(g){
   if(!g.dateEnd)return null;
@@ -3174,10 +3346,27 @@ function setGoalPeriod(p,el){
   renderGoals();
 }
 
+function priorityBadge(p){
+  if(p==='high')return'<span class="priority-high">🔴 Haute</span>';
+  if(p==='medium')return'<span class="priority-medium">🟡 Moyenne</span>';
+  if(p==='low')return'<span class="priority-low">🟢 Basse</span>';
+  return'';
+}
+function priorityBorderColor(p){
+  if(p==='high')return'#C8593A';
+  if(p==='medium')return'#D4882A';
+  if(p==='low')return'#2E9E6C';
+  return'';
+}
+
 function renderGoals(){
+  initGoals();
   const goals=(S.goals||[]).filter(g=>goalPeriodMatch(g,goalPeriodFilter));
   const cols={encours:[],pause:[],termine:[]};
   goals.forEach(g=>{ const s=g.status||'encours'; if(cols[s])cols[s].push(g); });
+  // Sort by priority within each column
+  const PORDER={high:0,medium:1,low:2,undefined:3};
+  Object.keys(cols).forEach(s=>cols[s].sort((a,b)=>(PORDER[a.priority]||3)-(PORDER[b.priority]||3)));
   const total=S.goals?S.goals.length:0;
   const cnt=document.getElementById('goalsCount');
   if(cnt)cnt.textContent=total+' objectif'+(total>1?'s':'');
@@ -3191,21 +3380,18 @@ function renderGoals(){
       const steps=g.checklist?g.checklist.length:0;
       const doneSteps=g.checklist?g.checklist.filter(c=>c.done).length:0;
       const dl=goalDaysLeft(g);
-      const col=typeColor({id:g.id,bookColor:g.color||null});
+      const statusColor=status==='termine'?'#2E9E6C':status==='pause'?'#D4882A':'#3B7DD8';
+      const priBorder=priorityBorderColor(g.priority);
+      const borderStyle=priBorder?`border-left:3px solid ${priBorder};`:`border-left:3px solid ${statusColor};`;
       // Date display
       let dateStr='';
-      if(g.dateStart&&g.dateEnd){
-        const s=formatDate(g.dateStart),e=formatDate(g.dateEnd);
-        dateStr=`${s.day} ${s.month} → ${e.day} ${e.month} ${e.year}`;
-      } else if(g.dateEnd){
-        const e=formatDate(g.dateEnd);
-        dateStr=`Échéance : ${e.day} ${e.month} ${e.year}`;
-      } else if(g.dateStart){
-        const s=formatDate(g.dateStart);
-        dateStr=`Début : ${s.day} ${s.month} ${s.year}`;
-      }
-      return`<div class="goal-card" onclick="openGoalDetail('${g.id}')" style="border-left:3px solid ${status==='termine'?'#2E9E6C':status==='pause'?'#D4882A':'#3B7DD8'};">
-        <div class="goal-card-title">${g.title||'Sans titre'}</div>
+      if(g.dateStart&&g.dateEnd){const s=formatDate(g.dateStart),e=formatDate(g.dateEnd);dateStr=`${s.day} ${s.month} → ${e.day} ${e.month} ${e.year}`;}
+      else if(g.dateEnd){const e=formatDate(g.dateEnd);dateStr=`Échéance : ${e.day} ${e.month} ${e.year}`;}
+      return`<div class="goal-card" onclick="openGoalDetail('${g.id}')" style="${borderStyle}">
+        <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;">
+          <div class="goal-card-title" style="flex:1;">${g.title||'Sans titre'}</div>
+          ${g.priority?priorityBadge(g.priority):''}
+        </div>
         ${g.desc?`<div class="goal-card-desc">${g.desc.slice(0,70)}${g.desc.length>70?'…':''}</div>`:''}
         ${dateStr?`<div style="font-size:10px;color:var(--text3);margin-bottom:5px;">📅 ${dateStr}</div>`:''}
         ${pct>0||steps>0?`
@@ -3225,7 +3411,10 @@ function renderGoals(){
 
 function openNewGoal(status){
   currentGoalId=null;
-  const g={id:uid(),title:'',desc:'',status:status||'encours',checklist:[],progress:0,dateStart:'',dateEnd:'',note:'',tags:[],createdAt:new Date().toISOString()};
+  const g={id:uid(),title:'',desc:'',status:status||'encours',priority:null,checklist:[],progress:0,
+    dateStart:'',dateEnd:'',tags:[],
+    sections:[{id:uid(),name:'Plan d\'action',content:''},{id:uid(),name:'Notes',content:''}],
+    createdAt:new Date().toISOString()};
   S.goals=S.goals||[];
   S.goals.unshift(g);
   saveLocal();
@@ -3247,19 +3436,29 @@ function openGoalDetail(id){
 function renderGoalDetail(g){
   const pct=goalProgress(g);
   const hasChecklist=g.checklist&&g.checklist.length>0;
+  const sections=g.sections||[];
   document.getElementById('goalDetailContent').innerHTML=`
     <!-- Title -->
-    <input type="text" class="entry-title-input" id="gdTitle" value="${g.title.replace(/"/g,'&quot;')}" placeholder="Titre de l'objectif…" oninput="autoSaveGoal()">
-    <!-- Status -->
-    <div class="goal-status-select">
-      <button class="goal-status-btn ${g.status==='encours'?'active-encours':''}" onclick="setGoalStatus('encours')">🔵 En cours</button>
-      <button class="goal-status-btn ${g.status==='pause'?'active-pause':''}" onclick="setGoalStatus('pause')">⏸ En pause</button>
-      <button class="goal-status-btn ${g.status==='termine'?'active-termine':''}" onclick="setGoalStatus('termine')">✅ Terminé</button>
+    <input type="text" class="entry-title-input" id="gdTitle" value="${(g.title||'').replace(/"/g,'&quot;')}" placeholder="Titre de l'objectif…" oninput="autoSaveGoal()">
+    <!-- Row: Status + Priority -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+      <div class="goal-status-select" style="margin:0;">
+        <button class="goal-status-btn ${g.status==='encours'?'active-encours':''}" onclick="setGoalStatus('encours')">🔵 En cours</button>
+        <button class="goal-status-btn ${g.status==='pause'?'active-pause':''}" onclick="setGoalStatus('pause')">⏸ En pause</button>
+        <button class="goal-status-btn ${g.status==='termine'?'active-termine':''}" onclick="setGoalStatus('termine')">✅ Terminé</button>
+      </div>
+      <div style="display:flex;gap:4px;align-items:center;margin-left:auto;">
+        <span style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;">Priorité</span>
+        <button class="priority-btn ${g.priority==='high'?'active-high':''}" onclick="setGoalPriority('high')">🔴</button>
+        <button class="priority-btn ${g.priority==='medium'?'active-medium':''}" onclick="setGoalPriority('medium')">🟡</button>
+        <button class="priority-btn ${g.priority==='low'?'active-low':''}" onclick="setGoalPriority('low')">🟢</button>
+        ${g.priority?`<button class="priority-btn" onclick="setGoalPriority('')" title="Retirer">✕</button>`:''}
+      </div>
     </div>
     <!-- Desc -->
     <div class="form-group">
-      <label>Description</label>
-      <textarea id="gdDesc" rows="2" placeholder="Description courte…" oninput="autoSaveGoal()">${g.desc||''}</textarea>
+      <label>Description courte</label>
+      <textarea id="gdDesc" rows="2" placeholder="En une phrase…" oninput="autoSaveGoal()">${g.desc||''}</textarea>
     </div>
     <!-- Dates -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1rem;">
@@ -3280,7 +3479,6 @@ function renderGoalDetail(g){
             <button class="checklist-del" onclick="removeChecklistItem(${i})">✕</button>
           </div>`).join('')}
       </div>
-      <!-- Progress bar -->
       ${hasChecklist?`
         <div class="goal-progress-bar" style="margin-top:.7rem;height:6px;">
           <div class="goal-progress-fill ${pct>=100?'done':''}" style="width:${pct}%;"></div>
@@ -3296,33 +3494,105 @@ function renderGoalDetail(g){
         </div>
       `}
     </div>
-    <!-- Note -->
-    <div class="card" style="margin-bottom:1rem;">
-      <p style="font-size:13px;font-weight:500;margin-bottom:.6rem;">📝 Notes</p>
-      <div class="rich-content" id="gdNote" contenteditable="true" placeholder="Vos notes sur cet objectif…" style="min-height:100px;">${g.note||''}</div>
+    <!-- Free sections -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+      <p style="font-size:12px;font-weight:500;color:var(--text2);">Sections</p>
+      <button class="btn btn-secondary btn-sm" onclick="addGoalSection()">＋ Section</button>
     </div>
+    <div id="gdSections">
+      ${sections.map((s,i)=>`
+        <div class="goal-section" id="gsec_${s.id}">
+          <div class="goal-section-header">
+            <input class="goal-section-name" type="text" value="${(s.name||'').replace(/"/g,'&quot;')}" placeholder="Nom…" onblur="saveGoalSectionName('${s.id}',this.value)">
+            <button class="goal-section-ctrl" title="Monter" onclick="moveGoalSection('${s.id}',-1)">↑</button>
+            <button class="goal-section-ctrl" title="Descendre" onclick="moveGoalSection('${s.id}',1)">↓</button>
+            <button class="goal-section-ctrl" title="Supprimer" onclick="removeGoalSection('${s.id}')">✕</button>
+          </div>
+          <div class="goal-section-body rich-content" contenteditable="true" placeholder="Contenu de la section…" id="gsecbody_${s.id}">${s.content||''}</div>
+        </div>`).join('')}
+    </div>
+    ${sections.length===0?`<p style="font-size:12px;color:var(--text3);margin-bottom:1rem;">Ajoutez des sections pour structurer votre objectif : Plan d'action, Ressources, Obstacles…</p>`:''}
     <!-- Tags -->
-    <div style="margin-bottom:1rem;">
+    <div style="margin-bottom:1rem;margin-top:.5rem;">
       <label>Tags</label>
       <div class="tag-input-wrap"><input type="text" id="gdTagInput" placeholder="Tag…" onkeydown="addGoalTagKD(event)" style="font-size:12px;padding:6px 8px;"><button class="btn btn-secondary btn-sm" onclick="addGoalTag()">+</button></div>
       <div class="tags-wrap" id="gdTags">${(g.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeGoalTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('')}</div>
     </div>
     <div style="padding-bottom:4rem;"></div>
   `;
-  // Attach note autosave
+  // Autosave sections on input
   setTimeout(()=>{
-    const note=document.getElementById('gdNote');
-    if(note){note.addEventListener('input',autoSaveGoal);showToolbar();}
+    sections.forEach(s=>{
+      const body=document.getElementById('gsecbody_'+s.id);
+      if(body)body.addEventListener('input',()=>saveGoalSectionContent(s.id,body.innerHTML));
+    });
+    showToolbar();
   },50);
 }
-
+function setGoalPriority(p){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.priority=p||null;saveLocal();
+  // Re-render priority buttons inline
+  const btns=document.querySelectorAll('.priority-btn');
+  btns.forEach(b=>{
+    b.className='priority-btn';
+    if(p==='high'&&b.textContent.includes('🔴'))b.classList.add('active-high');
+    else if(p==='medium'&&b.textContent.includes('🟡'))b.classList.add('active-medium');
+    else if(p==='low'&&b.textContent.includes('🟢'))b.classList.add('active-low');
+  });
+}
+function addGoalSection(){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  if(!g.sections)g.sections=[];
+  const sec={id:uid(),name:'Nouvelle section',content:''};
+  g.sections.push(sec);saveLocal();
+  // Append new section to DOM without full re-render
+  const container=document.getElementById('gdSections');if(!container)return;
+  const div=document.createElement('div');
+  div.className='goal-section';div.id='gsec_'+sec.id;
+  div.innerHTML=`<div class="goal-section-header">
+    <input class="goal-section-name" type="text" value="Nouvelle section" placeholder="Nom…" onblur="saveGoalSectionName('${sec.id}',this.value)">
+    <button class="goal-section-ctrl" title="Monter" onclick="moveGoalSection('${sec.id}',-1)">↑</button>
+    <button class="goal-section-ctrl" title="Descendre" onclick="moveGoalSection('${sec.id}',1)">↓</button>
+    <button class="goal-section-ctrl" title="Supprimer" onclick="removeGoalSection('${sec.id}')">✕</button>
+  </div>
+  <div class="goal-section-body rich-content" contenteditable="true" placeholder="Contenu…" id="gsecbody_${sec.id}"></div>`;
+  container.appendChild(div);
+  const body=div.querySelector('.goal-section-body');
+  if(body){body.addEventListener('input',()=>saveGoalSectionContent(sec.id,body.innerHTML));body.focus();}
+  div.querySelector('.goal-section-name')?.select();
+}
+function saveGoalSectionName(secId,name){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g||!g.sections)return;
+  const s=g.sections.find(x=>x.id===secId);if(s){s.name=name.trim()||'Section';saveLocal();}
+}
+function saveGoalSectionContent(secId,content){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g||!g.sections)return;
+  const s=g.sections.find(x=>x.id===secId);if(s){s.content=content;saveLocal();}
+}
+function moveGoalSection(secId,dir){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g||!g.sections)return;
+  const i=g.sections.findIndex(x=>x.id===secId);
+  const ni=i+dir;
+  if(ni<0||ni>=g.sections.length)return;
+  [g.sections[i],g.sections[ni]]=[g.sections[ni],g.sections[i]];saveLocal();
+  // Move DOM elements
+  const el=document.getElementById('gsec_'+secId);
+  const container=el?.parentNode;if(!container)return;
+  if(dir===-1&&el.previousElementSibling)container.insertBefore(el,el.previousElementSibling);
+  else if(dir===1&&el.nextElementSibling)container.insertBefore(el.nextElementSibling,el);
+}
+function removeGoalSection(secId){
+  const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
+  g.sections=(g.sections||[]).filter(s=>s.id!==secId);saveLocal();
+  document.getElementById('gsec_'+secId)?.remove();
+}
 function autoSaveGoal(){
   const g=S.goals.find(x=>x.id===currentGoalId);if(!g)return;
-  const titleEl=document.getElementById('gdTitle');if(titleEl)g.title=titleEl.value;
-  const descEl=document.getElementById('gdDesc');if(descEl)g.desc=descEl.value;
-  const startEl=document.getElementById('gdStart');if(startEl)g.dateStart=startEl.value;
-  const endEl=document.getElementById('gdEnd');if(endEl)g.dateEnd=endEl.value;
-  const noteEl=document.getElementById('gdNote');if(noteEl)g.note=noteEl.innerHTML;
+  const t=document.getElementById('gdTitle');if(t)g.title=t.value;
+  const d=document.getElementById('gdDesc');if(d)g.desc=d.value;
+  const s=document.getElementById('gdStart');if(s)g.dateStart=s.value;
+  const e=document.getElementById('gdEnd');if(e)g.dateEnd=e.value;
   saveLocal();
 }
 function setGoalStatus(status){
@@ -3387,6 +3657,25 @@ function deleteGoal(id){
     saveLocal();switchTab('goals');
   });
 }
+const EXAMPLE_GOALS=[
+  {id:'eg1',title:'Lire 12 livres cette année',desc:'Un livre par mois, des genres variés.',status:'encours',priority:'medium',
+   checklist:[{text:'Choisir ma liste de livres',done:true},{text:'Lire le 1er livre',done:true},{text:'Lire le 2ème livre',done:false},{text:'Tenir un journal de lecture',done:false}],
+   progress:0,dateStart:'',dateEnd:new Date().getFullYear()+'-12-31',note:'',tags:['lecture','culture'],
+   sections:[{id:'s1',name:'Pourquoi',content:'Élargir mes horizons et me détendre.'},{id:'s2',name:'Liste de livres',content:''}],
+   createdAt:new Date().toISOString()},
+  {id:'eg2',title:'Courir un 10km',desc:'Progresser et participer à une course.',status:'encours',priority:'high',
+   checklist:[{text:'S\'inscrire à une course',done:false},{text:'Courir 3x/semaine',done:false},{text:'Atteindre 5km sans s\'arrêter',done:false},{text:'Compléter les 10km',done:false}],
+   progress:0,dateStart:'',dateEnd:'',note:'',tags:['sport','santé'],
+   sections:[{id:'s1',name:'Programme',content:''},{id:'s2',name:'Suivi hebdo',content:''}],
+   createdAt:new Date().toISOString()},
+  {id:'eg3',title:'Apprendre l\'espagnol',desc:'Niveau conversationnel d\'ici 6 mois.',status:'pause',priority:'low',
+   checklist:[{text:'30 min de pratique par jour',done:false},{text:'Finir le niveau A2',done:false},{text:'Regarder une série en espagnol',done:false}],
+   progress:15,dateStart:'',dateEnd:'',note:'',tags:['apprentissage','langue'],
+   sections:[{id:'s1',name:'Ressources',content:'Duolingo, Netflix, podcasts espagnols.'},{id:'s2',name:'Notes',content:''}],
+   createdAt:new Date().toISOString()},
+];
+function initGoals(){if(!S.goals||!S.goals.length)S.goals=[...EXAMPLE_GOALS];}
+
 const EXAMPLE_QUOTES=[
   {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',date:'',tags:['vie','philosophie'],createdAt:new Date().toISOString()},
   {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',date:'',tags:['sagesse','action'],createdAt:new Date().toISOString()},
