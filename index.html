@@ -691,6 +691,11 @@ window._c = function(fn, args) {
   <div class="topbar-right">
     <div class="sync-bar"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">Sync</span></div>
     <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <!-- Announcements bell -->
+    <button class="btn-icon" onclick="openAnnouncements()" id="bellBtn" style="position:relative;" title="Nouveautés">
+      🔔
+      <span id="bellBadge" style="display:none;position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#E24B4A;border:2px solid var(--bg);"></span>
+    </button>
     <button class="btn btn-primary btn-sm" onclick="showNewEntry()">+ Entrée</button>
   </div>
 </div>
@@ -1206,7 +1211,9 @@ window._c = function(fn, args) {
       </div>
     </div>
 
-    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v6.0</p></div>
+    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v6.0</p>
+      <button style="background:none;border:none;font-size:10px;color:var(--text3);cursor:pointer;margin-top:6px;padding:0;" onclick="openModal('adminModal')">⚙ Admin</button>
+    </div>
     <div id="scalesList" style="display:none;"></div>
   </div>
 </div>
@@ -1347,6 +1354,71 @@ window._c = function(fn, args) {
         <button class="btn btn-secondary" id="colBackBtn" onclick="colGoBack()" style="margin-right:auto;">← Retour</button>
         <button class="btn btn-secondary" onclick="closeModal('collectionModal')">Annuler</button>
         <button class="btn btn-primary" onclick="saveCollection()" id="colSaveBtn">Créer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENTS MODAL -->
+<div class="modal-overlay" id="announcementsModal">
+  <div class="modal" style="max-width:500px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h3 class="modal-title" style="margin:0;">🔔 Nouveautés</h3>
+      <button onclick="closeModal('announcementsModal')" style="background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;">✕</button>
+    </div>
+    <div id="announcementsList">
+      <div style="text-align:center;padding:2rem;color:var(--text3);font-size:13px;">Chargement…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal" style="max-width:520px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h3 class="modal-title" style="margin:0;">⚙️ Administration</h3>
+      <button onclick="closeModal('adminModal')" style="background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;">✕</button>
+    </div>
+    <!-- Password gate -->
+    <div id="adminGate">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:.8rem;">Entrez le mot de passe admin :</p>
+      <div style="display:flex;gap:8px;">
+        <input type="password" id="adminPwInput" placeholder="••••••••" style="flex:1;" onkeydown="if(event.key==='Enter')checkAdminPw()">
+        <button class="btn btn-primary" onclick="checkAdminPw()">Entrer</button>
+      </div>
+      <p id="adminPwError" style="font-size:11px;color:#E24B4A;margin-top:6px;display:none;">Mot de passe incorrect.</p>
+    </div>
+    <!-- Admin panel (shown after auth) -->
+    <div id="adminPanel" style="display:none;">
+      <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:1rem;font-size:11px;color:var(--text3);">
+        ✓ Connecté en tant qu'admin
+      </div>
+      <!-- List existing announcements -->
+      <div style="margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+          <p style="font-size:13px;font-weight:500;">Annonces publiées</p>
+          <button class="btn btn-secondary btn-sm" onclick="loadAdminAnnouncements()">↺ Rafraîchir</button>
+        </div>
+        <div id="adminAnnouncementsList" style="max-height:180px;overflow-y:auto;"></div>
+      </div>
+      <div class="divider"></div>
+      <!-- New announcement form -->
+      <p style="font-size:13px;font-weight:500;margin-bottom:.7rem;margin-top:.8rem;">Nouvelle annonce</p>
+      <div class="form-group">
+        <label>Titre</label>
+        <input type="text" id="adminAnnTitle" placeholder="Ex: Version 6.1 — Nouvelles fonctionnalités">
+      </div>
+      <div class="form-group">
+        <label>Contenu</label>
+        <textarea id="adminAnnContent" rows="4" placeholder="Décrivez les nouveautés, corrections…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Version <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
+        <input type="text" id="adminAnnVersion" placeholder="Ex: v6.1">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('adminModal')">Fermer</button>
+        <button class="btn btn-primary" onclick="publishAnnouncement()">📢 Publier</button>
       </div>
     </div>
   </div>
@@ -4485,7 +4557,127 @@ function generatePDF(entries){
   doc.save(entries.length===1?(entries[0].date||'entree')+'.pdf':'journal.pdf');
 }
 
-// ── EXPORT / IMPORT ────────────────────────────────────────────────────────
+// ── ANNOUNCEMENTS ─────────────────────────────────────────────────────────
+const ADMIN_SECRET='journal_admin_2025'; // Change this secret
+const ANN_TABLE='journal_announcements';
+let announcementsCache=[];
+let readAnnouncements=JSON.parse(localStorage.getItem('journal_read_ann')||'[]');
+
+function openModal(id){document.getElementById(id)?.classList.add('open');}
+
+async function fetchAnnouncements(){
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/${ANN_TABLE}?select=*&order=created_at.desc&limit=20`,{
+      headers:{'apikey':SB_KEY,'Content-Type':'application/json'}
+    });
+    if(!res.ok)return[];
+    return await res.json();
+  }catch(e){return[];}
+}
+
+async function openAnnouncements(){
+  document.getElementById('announcementsModal').classList.add('open');
+  const listEl=document.getElementById('announcementsList');
+  listEl.innerHTML='<div style="text-align:center;padding:2rem;color:var(--text3);font-size:13px;">Chargement…</div>';
+  const anns=await fetchAnnouncements();
+  announcementsCache=anns;
+  // Mark all as read
+  anns.forEach(a=>{if(!readAnnouncements.includes(a.id))readAnnouncements.push(a.id);});
+  localStorage.setItem('journal_read_ann',JSON.stringify(readAnnouncements));
+  updateBellBadge();
+  if(!anns.length){
+    listEl.innerHTML='<div style="text-align:center;padding:2rem;color:var(--text3);font-size:13px;">Aucune annonce pour l\'instant.</div>';
+    return;
+  }
+  listEl.innerHTML=anns.map(a=>{
+    const d=new Date(a.created_at);
+    const dateStr=d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    return`<div style="padding:.85rem 0;border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap;">
+        ${a.version?`<span style="font-size:10px;background:var(--accent2);color:#fff;padding:1px 8px;border-radius:10px;font-weight:500;">${a.version}</span>`:''}
+        <span style="font-size:13px;font-weight:600;color:var(--text);">${a.title||'Mise à jour'}</span>
+        <span style="font-size:10px;color:var(--text3);margin-left:auto;">${dateStr}</span>
+      </div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-line;">${a.content||''}</p>
+    </div>`;
+  }).join('');
+}
+
+async function checkBellOnLoad(){
+  const anns=await fetchAnnouncements();
+  announcementsCache=anns;
+  updateBellBadge();
+}
+function updateBellBadge(){
+  const unread=announcementsCache.filter(a=>!readAnnouncements.includes(a.id));
+  const badge=document.getElementById('bellBadge');
+  if(badge)badge.style.display=unread.length?'block':'none';
+}
+
+// ── ADMIN ──────────────────────────────────────────────────────────────────
+let adminAuthed=false;
+function checkAdminPw(){
+  const val=document.getElementById('adminPwInput')?.value;
+  const errEl=document.getElementById('adminPwError');
+  if(val===ADMIN_SECRET){
+    adminAuthed=true;
+    document.getElementById('adminGate').style.display='none';
+    document.getElementById('adminPanel').style.display='';
+    loadAdminAnnouncements();
+  } else {
+    if(errEl)errEl.style.display='';
+    document.getElementById('adminPwInput').value='';
+  }
+}
+async function loadAdminAnnouncements(){
+  const el=document.getElementById('adminAnnouncementsList');if(!el)return;
+  el.innerHTML='<p style="font-size:11px;color:var(--text3);">Chargement…</p>';
+  const anns=await fetchAnnouncements();
+  if(!anns.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucune annonce.</p>';return;}
+  el.innerHTML=anns.map(a=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:500;color:var(--text);">${a.version?`[${a.version}] `:''}${a.title}</div>
+        <div style="font-size:10px;color:var(--text3);">${new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
+      </div>
+      <button style="background:none;border:none;color:#E24B4A;cursor:pointer;font-size:12px;" onclick="deleteAnnouncement('${a.id}')">🗑</button>
+    </div>`).join('');
+}
+async function publishAnnouncement(){
+  if(!adminAuthed)return;
+  const title=document.getElementById('adminAnnTitle')?.value.trim();
+  const content=document.getElementById('adminAnnContent')?.value.trim();
+  const version=document.getElementById('adminAnnVersion')?.value.trim();
+  if(!title||!content){alert('Titre et contenu requis.');return;}
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/${ANN_TABLE}`,{
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({title,content,version:version||null})
+    });
+    if(res.ok||res.status===201){
+      document.getElementById('adminAnnTitle').value='';
+      document.getElementById('adminAnnContent').value='';
+      document.getElementById('adminAnnVersion').value='';
+      alert('✓ Annonce publiée !');
+      loadAdminAnnouncements();
+    } else {
+      const err=await res.text();
+      alert('Erreur: '+err);
+    }
+  }catch(e){alert('Erreur réseau: '+e.message);}
+}
+async function deleteAnnouncement(id){
+  if(!adminAuthed)return;
+  if(!confirm('Supprimer cette annonce ?'))return;
+  try{
+    await fetch(`${SB_URL}/rest/v1/${ANN_TABLE}?id=eq.${id}`,{
+      method:'DELETE',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':''}
+    });
+    loadAdminAnnouncements();
+  }catch(e){alert('Erreur: '+e.message);}
+}
 function exportJSON(){exportEntriesJSON();}
 function exportEntriesJSON(){
   const b=new Blob([JSON.stringify({entries:S.entries,scales:S.scales,entryTypes:S.entryTypes},null,2)],{type:'application/json'});
@@ -4601,6 +4793,8 @@ window._rdy = true;
 (window._q||[]).forEach(function(item){ if(typeof window[item[0]]==='function') window[item[0]].apply(null,item[1]); });
 window._q = [];
 init();
+// Check announcements in background
+setTimeout(checkBellOnLoad, 2000);
 </script>
 </body>
 </html>
