@@ -514,6 +514,9 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .review-avis-wrap.collapsed .tracking-review-avis{max-height:80px;overflow:hidden;}
 .review-avis-wrap.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(transparent,var(--bg2));pointer-events:none;border-radius:0 0 4px 4px;}
 .review-voir-plus{background:none;border:none;font-size:11px;color:var(--accent2);cursor:pointer;padding:3px 0 0;font-family:var(--font-ui);display:block;}
+.ti-notes-editor{min-height:120px;padding:10px 12px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;line-height:1.7;}
+.ti-notes-editor:focus{border-color:var(--accent2);}
+.ti-notes-editor[placeholder]:empty::before{content:attr(placeholder);color:var(--text3);pointer-events:none;}
 .review-voir-plus:hover{text-decoration:underline;}
 .tracking-review-del{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;}
 .tracking-review-del:hover{color:#A32D2D;}
@@ -1055,11 +1058,20 @@ window._c = function(fn, args) {
       <button class="btn btn-primary btn-sm" onclick="openNewTrackingItem()">+ Ajouter</button>
     </div>
     <!-- Filter by status -->
-    <div style="display:flex;gap:5px;margin-bottom:.8rem;flex-wrap:wrap;" id="trackingStatusFilter">
+    <div style="display:flex;gap:5px;margin-bottom:.5rem;flex-wrap:wrap;" id="trackingStatusFilter">
       <button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>
-      <button class="filter-tab" onclick="setTrackingStatusFilter('vu',this)">✅ Vu/Lu</button>
-      <button class="filter-tab" onclick="setTrackingStatusFilter('encours',this)">▶ En cours</button>
-      <button class="filter-tab" onclick="setTrackingStatusFilter('avoir',this)">🔖 À voir/lire</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:.8rem;flex-wrap:wrap;">
+      <select id="trackingSortSelect" onchange="renderTrackingItems()" style="font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);color:var(--text);flex:1;max-width:200px;">
+        <option value="createdAt_desc">⬇ Date d'ajout (récent)</option>
+        <option value="createdAt_asc">⬆ Date d'ajout (ancien)</option>
+        <option value="title_asc">A→Z Titre</option>
+        <option value="title_desc">Z→A Titre</option>
+        <option value="rating_desc">⭐ Note (haute)</option>
+      </select>
+      <select id="trackingTagFilter" onchange="renderTrackingItems()" style="font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);color:var(--text);flex:1;max-width:180px;display:none;">
+        <option value="">🏷️ Toutes étiquettes</option>
+      </select>
     </div>
     <div class="tracking-items-grid" id="trackingItemsGrid"></div>
   </div>
@@ -1222,7 +1234,7 @@ window._c = function(fn, args) {
       </div>
     </div>
 
-    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v6.0</p>
+    <div class="card"><p style="font-size:13px;font-weight:500;margin-bottom:3px;">À propos</p><p style="font-size:11px;color:var(--text2);">Journal intime PWA · v7.0</p>
       <button style="background:none;border:none;font-size:10px;color:var(--text3);cursor:pointer;margin-top:6px;padding:0;" onclick="openModal('adminModal')">⚙ Admin</button>
     </div>
     <div id="scalesList" style="display:none;"></div>
@@ -1293,7 +1305,7 @@ window._c = function(fn, args) {
 
 <!-- Export reminder modal -->
   <div class="modal-overlay" id="exportReminderModal">
-    <div class="modal-box" style="max-width:360px;">
+    <div class="modal" style="max-width:360px;">
       <div style="font-size:22px;text-align:center;margin-bottom:.5rem;">💾</div>
       <h3 style="text-align:center;margin-bottom:.4rem;font-size:16px;">Sauvegardez vos données</h3>
       <p style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:1.2rem;line-height:1.5;">Vos données risquent de ne plus être accessibles après cette action. Exportez-les maintenant pour ne rien perdre.</p>
@@ -1345,16 +1357,25 @@ window._c = function(fn, args) {
           <button class="btn btn-secondary btn-sm" onclick="addColStatus()">+</button>
         </div>
       </div>
-      <!-- Reviews toggle + champs d'avis groupés ensemble -->
-      <div style="background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:1rem;overflow:hidden;">
+      <!-- Reviews toggle -->
+      <div style="background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:.6rem;overflow:hidden;">
         <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;">
           <div style="flex:1;">
             <div style="font-size:13px;font-weight:500;color:var(--text);">⭐ Avis & Notes</div>
-            <div style="font-size:11px;color:var(--text3);">Activer les notes, avis et historique de visionnage</div>
+            <div style="font-size:11px;color:var(--text3);">Notes de visionnage, historique et étoiles</div>
           </div>
           <button class="scale-toggle" id="colReviewsToggle" onclick="toggleColReviews()"></button>
         </div>
-
+      </div>
+      <!-- Notes toggle -->
+      <div style="background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:1rem;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;">
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:500;color:var(--text);">📝 Notes</div>
+            <div style="font-size:11px;color:var(--text3);">Un bloc-notes libre attaché à chaque élément</div>
+          </div>
+          <button class="scale-toggle" id="colNotesToggle" onclick="toggleColNotes()"></button>
+        </div>
       </div>
       <!-- Champs infos -->
       <div class="form-group">
@@ -1364,6 +1385,7 @@ window._c = function(fn, args) {
           <input type="text" id="colFieldInput" placeholder="Nom du champ…" style="flex:1;min-width:100px;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
           <select id="colFieldType" style="width:110px;font-size:12px;padding:6px 4px;" onchange="onFieldTypeChange()">
             <option value="text">Texte</option>
+            <option value="tags">Étiquettes 🏷️</option>
             <option value="date">Date 📅</option>
             <option value="progress">Progression %</option>
             <option value="number">Nombre</option>
@@ -1378,6 +1400,9 @@ window._c = function(fn, args) {
             <input type="number" id="colFieldMax" value="100" min="1" style="width:60px;font-size:12px;padding:4px 6px;">
             <span style="font-size:11px;color:var(--text3);">(ex: pages, km…)</span>
           </div>
+        </div>
+        <div id="colTagsConfig" style="display:none;margin-top:6px;">
+          <div style="font-size:11px;color:var(--text3);padding:4px 0;">Les options s'ajoutent directement depuis la fiche de chaque élément.</div>
         </div>
       </div>
       <div class="modal-actions">
@@ -2717,10 +2742,10 @@ function applyOnboardSelections(){
   if(S.trackingEnabled){
     initTracking();
     if(onboardSelected.has('films')&&!S.tracking.collections.find(c=>c.id==='tc_films')){
-      S.tracking.collections.push({id:'tc_films',name:'Films',icon:'🎬',desc:'',statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],fields:[{id:'f_real',name:'Réalisateur',type:'text'}],reviewFields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]});
+      S.tracking.collections.push({id:'tc_films',name:'Films',icon:'🎬',desc:'',reviewsEnabled:true,notesEnabled:true,statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],fields:[{id:'f_real',name:'Réalisateur',type:'text'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','Cinéma','DVD']}],reviewFields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'}]});
     }
     if(onboardSelected.has('livreslu')&&!S.tracking.collections.find(c=>c.id==='tc_livres')){
-      S.tracking.collections.push({id:'tc_livres',name:'Livres',icon:'📖',desc:'',statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],fields:[]});
+      S.tracking.collections.push({id:'tc_livres',name:'Livres',icon:'📖',desc:'',reviewsEnabled:true,notesEnabled:true,statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],fields:[{id:'f_auteur',name:'Auteur',type:'text'},{id:uid(),name:'Pages',type:'progress',min:0,max:300},{id:uid(),name:'Genre',type:'tags',options:['Roman','BD','Manga','Essai','Policier','Fantasy','SF','Biographie','Développement perso','Histoire','Philosophie']}],reviewFields:[]});
     }
   }
   saveLocal();
@@ -2738,36 +2763,35 @@ let editingColId=null;
 let colModalStatuses=[];
 let colModalFields=[];
 let colModalReviewFields=[];
-let colModalReviews=true; // default: reviews enabled
+let colModalReviews=true;let colModalNotes=false; // default: reviews enabled
 
 // Predefined templates
 const COL_TEMPLATES=[
-  {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,
+  {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Réalisateur',type:'text'}],
+   fields:[{id:uid(),name:'Réalisateur',type:'text'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire','Aventure','Biopic']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','Cinéma','DVD','Blu-ray']}],
    reviewFields:[{id:uid(),name:'Lieu',type:'text'},{id:uid(),name:'Avec qui',type:'text'}]},
-  {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,
+  {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Saisons',type:'number'}],
-   reviewFields:[{id:uid(),name:'Plateforme',type:'text'}]},
-  {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,
-   statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Nombre de pages',type:'progress',min:0,max:100},{id:uid(),name:'Date début lecture',type:'date'},{id:uid(),name:'Date fin lecture',type:'date'}],
+   fields:[{id:uid(),name:'Saisons',type:'number'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','HBO','Max','Paramount+']}],
    reviewFields:[]},
-  {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,
+  {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,notesEnabled:true,
+   statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
+   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Pages',type:'progress',min:0,max:300},{id:uid(),name:'Début',type:'date'},{id:uid(),name:'Fin',type:'date'},{id:uid(),name:'Genre',type:'tags',options:['Roman','Essai','Biographie','Thriller','Sci-fi','Fantasy','Développement perso','BD','Manga','Policier','Histoire','Philosophie']}],
+   reviewFields:[]},
+  {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À jouer',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'fini',label:'Terminé',emoji:'🏆'}],
-   fields:[{id:uid(),name:'Genre',type:'text'},{id:uid(),name:'Progression',type:'progress',min:0,max:100}],
-   reviewFields:[{id:uid(),name:'Plateforme',type:'text'}]},
-  {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,
+   fields:[{id:uid(),name:'Progression',type:'progress',min:0,max:100},{id:uid(),name:'Genre',type:'tags',options:['Action','RPG','FPS','Aventure','Stratégie','Sport','Simulation','Puzzle','Horreur','Plateforme']},{id:uid(),name:'Plateforme',type:'tags',options:['PC','PS5','PS4','Xbox Series','Xbox One','Switch','Mobile','Game Pass','Steam']}],
+   reviewFields:[]},
+  {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,notesEnabled:true,
    statuses:[{id:'avoir',label:'À écouter',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
-   fields:[{id:uid(),name:'Animateur',type:'text'},{id:uid(),name:'Date d\'écoute',type:'date'}]},
-  {id:'musique',icon:'🎵',name:'Musique',desc:'Albums, artistes…',reviewsEnabled:true,
+   fields:[{id:uid(),name:'Animateur',type:'text'},{id:uid(),name:'Date d\'écoute',type:'date'},{id:uid(),name:'Thème',type:'tags',options:['Culture','Tech','Société','Sport','True Crime','Comédie','Science','Histoire','Business','Développement perso','Finance','Politique']}]},
+  {id:'musique',icon:'🎵',name:'Musique',desc:'Albums, artistes…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'decouvrir',label:'À découvrir',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
-   fields:[{id:uid(),name:'Artiste',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Genre',type:'text'}]},
-  {id:'vide',icon:'✨',name:'Personnalisé',desc:'Partir de zéro',reviewsEnabled:false,
+   fields:[{id:uid(),name:'Artiste',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Genre',type:'tags',options:['Pop','Rock','Rap','Jazz','Classique','Electronic','R&B','Indie','Soul','Reggae','Metal','Folk','Hip-hop']}]},
+  {id:'vide',icon:'✨',name:'Personnalisé',desc:'Partir de zéro',reviewsEnabled:false,notesEnabled:true,
    statuses:[{id:'todo',label:'À faire',emoji:'🔖'},{id:'done',label:'Terminé',emoji:'✅'}],
-   fields:[]},
-];
+   fields:[]}];
 
 function openNewCollectionModal(){
   editingColId=null;
@@ -2796,7 +2820,7 @@ function applyColTemplate(templateId){
   colModalStatuses=tpl.statuses.map(s=>({...s,id:uid()}));
   colModalFields=tpl.fields.map(f=>({...f,id:uid()}));
   colModalReviewFields=(tpl.reviewFields||[]).map(f=>({...f,id:uid()}));
-  colModalReviews=tpl.reviewsEnabled!==false;
+  colModalReviews=tpl.reviewsEnabled!==false;colModalNotes=tpl.notesEnabled===true;
   colGoToEdit();
 }
 
@@ -2810,10 +2834,17 @@ function colGoToEdit(){
   if(nameEl&&!nameEl.value)setTimeout(()=>nameEl.focus(),50);
 }
 
+function toggleColNotes(){
+  colModalNotes=!colModalNotes;
+  const t=document.getElementById('colNotesToggle');
+  if(t)t.classList.toggle('on',colModalNotes);
+}
 function toggleColReviews(){
   colModalReviews=!colModalReviews;
   const t=document.getElementById('colReviewsToggle');
   if(t)t.classList.toggle('on',colModalReviews);
+  const tn=document.getElementById('colNotesToggle');
+  if(tn)tn.classList.toggle('on',colModalNotes);
 }
 function setColReviewsToggle(val){
   colModalReviews=val;
@@ -2848,7 +2879,7 @@ function openEditCollectionModal(colId){
       colModalFields=colModalFields.filter(f=>!toMove.find(m=>m.id===f.id));
     }
   }
-  colModalReviews=col.reviewsEnabled!==false;
+  colModalReviews=col.reviewsEnabled!==false;colModalNotes=col.notesEnabled===true;
   document.getElementById('colTemplateStep').style.display='none';
   document.getElementById('colEditStep').style.display='';
   document.getElementById('colBackBtn').style.display='none';
@@ -2881,14 +2912,27 @@ function onFieldTypeChange(){
   const type=document.getElementById('colFieldType').value;
   const cfg=document.getElementById('colProgressConfig');
   if(cfg)cfg.style.display=type==='progress'?'block':'none';
+  const tcfg=document.getElementById('colTagsConfig');
+  if(tcfg){tcfg.style.display=type==='tags'?'block':'none';if(type==='tags')renderColTagsOptions();}
+}
+let _colTagOptions=[];
+function renderColTagsOptions(){
+  const el=document.getElementById('colTagsOptions');if(!el)return;
+  el.innerHTML=_colTagOptions.map((t,i)=>`<span style="display:inline-flex;align-items:center;gap:3px;background:var(--accent2);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;">${t}<button onclick="_colTagOptions.splice(${i},1);renderColTagsOptions();" style="background:none;border:none;color:#fff;cursor:pointer;padding:0;font-size:11px;line-height:1;">✕</button></span>`).join('');
+}
+function addColTagOption(){
+  const inp=document.getElementById('colTagOptionInput');
+  const val=inp.value.trim();if(!val)return;
+  val.split(',').map(v=>v.trim()).filter(Boolean).forEach(v=>{if(!_colTagOptions.includes(v))_colTagOptions.push(v);});
+  inp.value='';renderColTagsOptions();
 }
 function renderColFields(){
   const el=document.getElementById('colFieldsList');if(!el)return;
   if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ — ajoutez-en ci-dessous</p>';return;}
-  const typeLabels={text:'Texte',date:'Date 📅',progress:'Progression %',number:'Nombre',select:'Choix'};
+  const typeLabels={text:'Texte',date:'Date 📅',progress:'Progression %',number:'Nombre',select:'Choix',tags:'Étiquettes 🏷️'};
   el.innerHTML=colModalFields.map((f,i)=>{
     const label=typeLabels[f.type]||f.type;
-    const extra=f.type==='progress'?` (${f.min||0}→${f.max||100})`:'';
+    const extra=f.type==='progress'?` (${f.min||0}→${f.max||100})`:f.type==='tags'&&f.options?.length?` (${f.options.length})`:'';
     return`<div class="col-field-row">
       <span class="col-field-name">${f.name}</span>
       <span class="col-field-type">${label}${extra}</span>
@@ -2925,9 +2969,11 @@ function addColField(){
     field.min=parseInt(document.getElementById('colFieldMin').value)||0;
     field.max=parseInt(document.getElementById('colFieldMax').value)||100;
   }
+  if(type==='tags'){field.options=[..._colTagOptions];_colTagOptions=[];}
   colModalFields.push(field);
   document.getElementById('colFieldInput').value='';
   const cfg=document.getElementById('colProgressConfig');if(cfg)cfg.style.display='none';
+  const tcfg=document.getElementById('colTagsConfig');if(tcfg)tcfg.style.display='none';
   document.getElementById('colFieldType').value='text';
   document.getElementById('colFieldMin').value='0';
   document.getElementById('colFieldMax').value='100';
@@ -2940,9 +2986,9 @@ function saveCollection(){
   if(!name)return;
   if(editingColId){
     const col=S.tracking.collections.find(c=>c.id===editingColId);
-    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];col.reviewFields=[...colModalReviewFields];col.reviewsEnabled=colModalReviews;}
+    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];col.reviewFields=[...colModalReviewFields];col.reviewsEnabled=colModalReviews;col.notesEnabled=colModalNotes;}
   } else {
-    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields],reviewFields:[...colModalReviewFields],reviewsEnabled:colModalReviews});
+    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields],reviewFields:[...colModalReviewFields],reviewsEnabled:colModalReviews,notesEnabled:colModalNotes});
   }
   saveLocal();closeModal('collectionModal');renderTrackingCollections();
 }
@@ -3075,6 +3121,24 @@ function openTrackingCollection(colId){
     sf.innerHTML=`<button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>`+
       statuses.map(s=>`<button class="filter-tab" onclick="setTrackingStatusFilter('${s.id}',this)">${s.emoji||''} ${s.label}</button>`).join('');
   }
+  // Date sort: add date fields as sort options
+  const sortSel=document.getElementById('trackingSortSelect');
+  if(sortSel){
+    const dateFields=(col.fields||[]).filter(f=>f.type==='date');
+    const baseOpts='<option value="createdAt_desc">&#11015; Date ajout (récent)</option><option value="createdAt_asc">&#11014; Date ajout (ancien)</option><option value="title_asc">A&#8594;Z Titre</option><option value="title_desc">Z&#8594;A Titre</option><option value="rating_desc">&#11088; Note (haute)</option>';
+    const dateOpts=dateFields.map(f=>`<option value="date_${f.id}_desc">⬇ ${f.name} (récent)</option><option value="date_${f.id}_asc">⬆ ${f.name} (ancien)</option>`).join('');
+    sortSel.innerHTML=baseOpts+dateOpts;
+  }
+  // Tag filter: populate from all tag fields of this collection
+  const tagSel=document.getElementById('trackingTagFilter');
+  if(tagSel){
+    const tagFields=(col.fields||[]).filter(f=>f.type==='tags');
+    const allOpts=[...new Set(tagFields.flatMap(f=>f.options||[]))];
+    if(allOpts.length){
+      tagSel.innerHTML='<option value="">🏷️ Toutes étiquettes</option>'+allOpts.map(o=>`<option value="${o}">${o}</option>`).join('');
+      tagSel.style.display='';
+    } else tagSel.style.display='none';
+  }
   renderTrackingItems();
 }
 
@@ -3083,7 +3147,17 @@ function renderTrackingItems(){
   const statuses=getColStatuses(col);
   let items=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
   if(trackingStatusFilter!=='all')items=items.filter(i=>i.status===trackingStatusFilter);
-  items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  // Tag filter
+  const tagF=document.getElementById('trackingTagFilter')?.value||'';
+  if(tagF)items=items.filter(i=>Object.values(i.customFields||{}).some(v=>Array.isArray(v)&&v.includes(tagF)));
+  // Sort
+  const sortV=document.getElementById('trackingSortSelect')?.value||'createdAt_desc';
+  if(sortV==='createdAt_asc')items.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  else if(sortV==='title_asc')items.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  else if(sortV==='title_desc')items.sort((a,b)=>(b.title||'').localeCompare(a.title||''));
+  else if(sortV==='rating_desc')items.sort((a,b)=>{const ra=a.reviews?.length?a.reviews[a.reviews.length-1].rating||0:0;const rb=b.reviews?.length?b.reviews[b.reviews.length-1].rating||0:0;return rb-ra;});
+  else if(sortV.startsWith('date_')){const [,fid,dir]=sortV.split('_');items.sort((a,b)=>{const va=a.customFields?.[fid]||'';const vb=b.customFields?.[fid]||'';return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);});}
+  else items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const sub=document.getElementById('trackingColSub');
   const all=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
   if(sub)sub.textContent=all.length+' élément'+(all.length>1?'s':'');
@@ -3103,8 +3177,15 @@ function renderTrackingItems(){
     const progVal=progField&&item.customFields?parseFloat(item.customFields[progField.id])||0:null;
     const progPct=progField&&progVal!==null?Math.min(100,Math.round((progVal-(progField.min||0))/((progField.max||100)-(progField.min||0))*100)):null;
     const showRating=col.reviewsEnabled!==false;
+    const dateFields=col.fields?.filter(f=>f.type==='date')||[];
+    const firstDateField=dateFields[0];
+    const itemDate=firstDateField&&item.customFields?.[firstDateField.id]?item.customFields[firstDateField.id]:null;
+    const reviewDate=lastReview?.date||null;
+    const displayDate=itemDate||reviewDate||(item.createdAt?item.createdAt.slice(0,10):null);
+    const fmtDate=displayDate?new Date(displayDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):null;
     return`<div class="tracking-item-card" onclick="openTrackingItem('${item.id}')">
       <div class="tracking-item-title">${item.title||'Sans titre'}</div>
+      ${fmtDate?`<div style="font-size:10px;color:var(--text3);margin-bottom:3px;">${firstDateField?firstDateField.name+' · ':''} ${fmtDate}</div>`:''}
       ${showRating&&rating?starsHtml(rating):''}
       ${progPct!==null?`<div style="margin:5px 0 3px;">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:2px;">
@@ -3114,7 +3195,10 @@ function renderTrackingItems(){
           <div style="height:100%;width:${progPct}%;background:var(--accent2);border-radius:2px;"></div>
         </div>
       </div>`:''}
-      <div style="margin-top:5px;"><span class="tracking-item-status ${statusClass}">${st.emoji} ${st.label}</span></div>
+      <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+        <span class="tracking-item-status ${statusClass}">${st.emoji} ${st.label}</span>
+        ${(()=>{const tagFields=(col.fields||[]).filter(f=>f.type==='tags');const tags=tagFields.flatMap(f=>Array.isArray(item.customFields&&item.customFields[f.id])?item.customFields[f.id]:[]);return tags.slice(0,3).map(t=>`<span style="font-size:10px;background:var(--bg3);color:var(--text3);padding:1px 7px;border-radius:10px;">${t}</span>`).join('');})()}
+      </div>
       ${views>1?`<div class="tracking-item-views">↺ ${views} fois</div>`:''}
     </div>`;
   }).join('');
@@ -3151,9 +3235,28 @@ function renderTrackingItemDetail(item){
   const col=S.tracking.collections.find(c=>c.id===item.colId)||{name:'',icon:'',statuses:[],fields:[]};
   const statuses=getColStatuses(col);
   const customFields=col.fields||[];
-  const infoFields=customFields.filter(f=>!getReviewFields(col).find(rf=>rf.id===f.id));
+  const tagFields=customFields.filter(f=>f.type==='tags');
+  const infoFields=customFields.filter(f=>f.type!=='tags'&&!getReviewFields(col).find(rf=>rf.id===f.id));
   document.getElementById('trackingItemDetail').innerHTML=`
     <input type="text" class="entry-title-input" id="tiTitle" value="${(item.title||'').replace(/"/g,'&quot;')}" placeholder="${col.icon} Titre…" oninput="autoSaveTrackingItem()">
+    <!-- Tags en haut, style Notion -->
+    ${tagFields.length?`<div style="margin-bottom:.9rem;">
+      ${tagFields.map(f=>{
+        const selTags=Array.isArray(item.customFields?.[f.id])?item.customFields[f.id]:[];
+        return`<div class="tag-field-group" id="taggroup_${f.id}" style="display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-bottom:5px;">
+          <span style="font-size:11px;color:var(--text3);min-width:60px;">${f.name}</span>
+          <div class="tag-input-box" onclick="focusTagInput('${f.id}')" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;flex:1;min-height:30px;padding:4px 8px;border:1px solid var(--border2);border-radius:20px;background:var(--bg);cursor:text;">
+            ${selTags.map(t=>`<span class="tag-chip" style="display:inline-flex;align-items:center;gap:4px;background:var(--accent2);color:#fff;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:500;">${t}<span onclick="event.stopPropagation();removeTagFromField('${f.id}','${t.replace(/'/g,"\\'")}');" style="cursor:pointer;opacity:.75;font-size:10px;margin-left:2px;">✕</span></span>`).join('')}
+            <input id="taginput_${f.id}" type="text" placeholder="${selTags.length?'':'＋ Ajouter…'}" autocomplete="off"
+              oninput="showTagSuggestions('${f.id}',this.value)"
+              onkeydown="tagInputKeydown(event,'${f.id}')"
+              onfocus="showTagSuggestions('${f.id}',this.value)"
+              style="border:none;outline:none;background:transparent;font-size:12px;flex:1;min-width:70px;padding:0;color:var(--text2);">
+          </div>
+          <div id="tagsugg_${f.id}" style="display:none;position:fixed;z-index:300;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);box-shadow:var(--shadow);max-height:200px;overflow-y:auto;min-width:180px;"></div>
+        </div>`;
+      }).join('')}
+    </div>`:''}
     <!-- Status -->
     <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem;">
       ${statuses.map(s=>{
@@ -3161,7 +3264,7 @@ function renderTrackingItemDetail(item){
         return`<button class="goal-status-btn ${isActive?'active-encours':''}" onclick="setTrackingItemStatus('${s.id}')">${s.emoji||''} ${s.label}</button>`;
       }).join('')}
     </div>
-    <!-- Custom fields (text, date, progress types) — review fields excluded here -->
+    <!-- Custom fields (text, date, progress types) — tags & review fields excluded here -->
     ${infoFields.length?`<div class="card" style="margin-bottom:1rem;">
       <p style="font-size:12px;font-weight:500;margin-bottom:.7rem;color:var(--text2);">Informations</p>
       ${infoFields.map(f=>{
@@ -3179,17 +3282,19 @@ function renderTrackingItemDetail(item){
           </div>`;
         }
         if(f.type==='progress'){
-          const min=f.min||0,max=f.max||100;
+          const min=f.min||0;
+          const itemMax=(item.customFieldsMax&&item.customFieldsMax[f.id]!=null)?item.customFieldsMax[f.id]:(f.max||100);
           const cur=parseFloat(val)||0;
-          const pct=max>min?Math.min(100,Math.round((cur-min)/(max-min)*100)):0;
+          const pct=itemMax>min?Math.min(100,Math.round((cur-min)/(itemMax-min)*100)):0;
           return`<div class="form-group" style="margin-bottom:.8rem;">
             <label style="display:flex;align-items:center;justify-content:space-between;">
               <span>${f.name}</span>
-              <span style="font-size:12px;color:var(--accent2);font-weight:600;">${pct}%</span>
+              <span id="pfpct_${f.id}" style="font-size:12px;color:var(--accent2);font-weight:600;">${pct}%</span>
             </label>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
-              <input type="number" id="pf_${f.id}" value="${cur||''}" min="${min}" max="${max}" placeholder="${min}" oninput="saveProgressField('${f.id}',this.value,${min},${max})" style="width:80px;font-size:14px;padding:5px 8px;text-align:center;">
-              <span style="font-size:11px;color:var(--text3);">/ ${max}</span>
+              <input type="number" id="pf_${f.id}" value="${cur||''}" min="${min}" placeholder="${min}" oninput="saveProgressField('${f.id}',this.value,${min})" style="width:80px;font-size:14px;padding:5px 8px;text-align:center;">
+              <span style="font-size:11px;color:var(--text3);">/</span>
+              <input type="number" id="pfmax_${f.id}" value="${itemMax}" min="${min+1}" placeholder="100" oninput="saveProgressMax('${f.id}',this.value,${min})" style="width:70px;font-size:14px;padding:5px 8px;text-align:center;" title="Total (ex: nombre de pages)">
               <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;">
                 <div id="pfbar_${f.id}" style="height:100%;width:${pct}%;background:var(--accent2);border-radius:3px;transition:width .3s;"></div>
               </div>
@@ -3201,6 +3306,19 @@ function renderTrackingItemDetail(item){
           <input type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="${f.name}…" oninput="saveCustomField('${f.id}',this.value)" style="font-size:13px;">
         </div>`;
       }).join('')}
+    </div>`:''}
+
+    <!-- Notes multi-sections (si activé pour la collection) -->
+    ${col.notesEnabled?`
+    <div class="card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;">📝</span>
+          <p style="font-size:13px;font-weight:500;margin:0;">Notes</p>
+        </div>
+      </div>
+      <div id="tiNotesSections"></div>
+      <button class="add-section-btn" onclick="addNotesSection()" style="font-size:12px;margin-top:.3rem;">＋ Ajouter une section</button>
     </div>`:''}
 
     <!-- Reviews history (only if collection has reviews enabled) -->
@@ -3266,7 +3384,7 @@ function renderTrackingItemDetail(item){
     <div style="padding-bottom:4rem;"></div>
   `;
   // Init voir plus/moins pour les avis longs
-  setTimeout(()=>{initVoirPlus();initReviewContextFields();},50);
+  setTimeout(()=>{initVoirPlus();initReviewContextFields();if(col.notesEnabled)renderNotesSections();},50);
   // Apply current status button styling
   const st=statuses.find(s=>s.id===item.status);
   if(st){
@@ -3280,27 +3398,212 @@ function saveTrackingDate(field,value){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   item[field]=value;saveLocal();
 }
-function saveProgressField(fieldId,value,min,max){
+function saveProgressField(fieldId,value,min){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   if(!item.customFields)item.customFields={};
   const cur=parseFloat(value)||0;
   item.customFields[fieldId]=String(cur);saveLocal();debouncedSaveTracking();
-  // Live update bar and % label without full re-render
+  const maxInp=document.getElementById('pfmax_'+fieldId);
+  const max=parseFloat(maxInp?.value)||100;
   const pct=max>min?Math.min(100,Math.round((cur-min)/(max-min)*100)):0;
   const bar=document.getElementById('pfbar_'+fieldId);
   if(bar)bar.style.width=pct+'%';
-  // Update % label (parent label's last span)
-  const inp=document.getElementById('pf_'+fieldId);
-  if(inp){
-    const lbl=inp.closest('.form-group')?.querySelector('label span:last-child');
-    if(lbl)lbl.textContent=pct+'%';
-  }
+  const pctEl=document.getElementById('pfpct_'+fieldId);
+  if(pctEl)pctEl.textContent=pct+'%';
 }
+function saveProgressMax(fieldId,value,min){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFieldsMax)item.customFieldsMax={};
+  const max=parseFloat(value)||100;
+  item.customFieldsMax[fieldId]=max;saveLocal();debouncedSaveTracking();
+  const curInp=document.getElementById('pf_'+fieldId);
+  const cur=parseFloat(curInp?.value)||0;
+  const pct=max>min?Math.min(100,Math.round((cur-min)/(max-min)*100)):0;
+  const bar=document.getElementById('pfbar_'+fieldId);
+  if(bar)bar.style.width=pct+'%';
+  const pctEl=document.getElementById('pfpct_'+fieldId);
+  if(pctEl)pctEl.textContent=pct+'%';
+}
+// ── NOTES MULTI-SECTIONS ──────────────────────────────────────────────────
+let _notesSaveTimer=null;
+function renderNotesSections(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const wrap=document.getElementById('tiNotesSections');if(!wrap)return;
+  if(!item.notesSections||!item.notesSections.length){
+    item.notesSections=[{id:'ns_'+Date.now(),name:'Notes',content:''}];
+  }
+  wrap.innerHTML=item.notesSections.map((sec,i)=>`
+    <div class="ti-notes-sec" id="tins_${sec.id}" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">
+        <input class="section-name-input" type="text" value="${(sec.name||'').replace(/"/g,'&quot;')}"
+          placeholder="Titre de la section…"
+          oninput="renameNotesSection('${sec.id}',this.value)"
+          style="flex:1;font-size:11px;font-weight:500;">
+        <div class="section-controls" style="opacity:0.5;">
+          <button class="section-ctrl-btn" onclick="moveNotesSection('${sec.id}',-1)" title="Monter">↑</button>
+          <button class="section-ctrl-btn" onclick="moveNotesSection('${sec.id}',1)" title="Descendre">↓</button>
+          <button class="section-ctrl-btn" onclick="deleteNotesSection('${sec.id}')" title="Supprimer">✕</button>
+        </div>
+      </div>
+      <div class="review-toolbar" style="margin-bottom:4px;">
+        <button class="review-tb-btn" onclick="notesFmt('bold','${sec.id}')" title="Gras"><b>B</b></button>
+        <button class="review-tb-btn" onclick="notesFmt('italic','${sec.id}')" title="Italique"><i style="font-style:italic">I</i></button>
+        <button class="review-tb-btn" onclick="notesFmt('underline','${sec.id}')" title="Souligné"><u>U</u></button>
+        <div class="review-tb-sep"></div>
+        <button class="review-tb-btn" onclick="notesFmt('insertUnorderedList','${sec.id}')">≡</button>
+        <button class="review-tb-btn" onclick="notesFmt('insertOrderedList','${sec.id}')">1.</button>
+      </div>
+      <div class="ti-notes-editor" id="tine_${sec.id}" contenteditable="true"
+        placeholder="Écrire ici…"
+        oninput="saveNotesSection('${sec.id}',this)">${sec.content||''}</div>
+    </div>
+  `).join('');
+}
+function notesFmt(cmd,secId){
+  const el=secId?document.getElementById('tine_'+secId):document.querySelector('.ti-notes-editor');
+  if(el)el.focus();
+  document.execCommand(cmd,false,null);
+}
+function saveNotesSection(secId,el){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const sec=(item.notesSections||[]).find(s=>s.id===secId);if(!sec)return;
+  sec.content=el.innerHTML;
+  saveLocal();
+  clearTimeout(_notesSaveTimer);
+  _notesSaveTimer=setTimeout(()=>debouncedSaveTracking(),1200);
+}
+function renameNotesSection(secId,name){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const sec=(item.notesSections||[]).find(s=>s.id===secId);if(sec)sec.name=name;
+  saveLocal();
+}
+function addNotesSection(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.notesSections)item.notesSections=[];
+  item.notesSections.push({id:'ns_'+Date.now(),name:'Nouvelle section',content:''});
+  saveLocal();renderNotesSections();
+  // Focus le nouveau titre
+  const inputs=document.querySelectorAll('#tiNotesSections .section-name-input');
+  if(inputs.length)inputs[inputs.length-1].focus();
+}
+function deleteNotesSection(secId){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if((item.notesSections||[]).length<=1){alert('Gardez au moins une section.');return;}
+  item.notesSections=(item.notesSections||[]).filter(s=>s.id!==secId);
+  saveLocal();debouncedSaveTracking();renderNotesSections();
+}
+function moveNotesSection(secId,dir){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item||!item.notesSections)return;
+  const idx=item.notesSections.findIndex(s=>s.id===secId);
+  const ni=idx+dir;
+  if(ni<0||ni>=item.notesSections.length)return;
+  [item.notesSections[idx],item.notesSections[ni]]=[item.notesSections[ni],item.notesSections[idx]];
+  saveLocal();renderNotesSections();
+}
+function saveItemNotes(){} // legacy compat
 function saveCustomField(fieldId,value){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   if(!item.customFields)item.customFields={};
   item.customFields[fieldId]=value;saveLocal();debouncedSaveTracking();
 }
+function toggleTagField(fieldId,tag,btn){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFields)item.customFields={};
+  let sel=Array.isArray(item.customFields[fieldId])?[...item.customFields[fieldId]]:[];
+  if(sel.includes(tag))sel=sel.filter(t=>t!==tag);else sel.push(tag);
+  item.customFields[fieldId]=sel;saveLocal();debouncedSaveTracking();
+  const active=sel.includes(tag);
+  btn.style.background=active?'var(--accent2)':'transparent';
+  btn.style.color=active?'#fff':'var(--text2)';
+  btn.style.borderColor=active?'var(--accent2)':'var(--border2)';
+}
+function focusTagInput(fieldId){
+  document.getElementById('taginput_'+fieldId)?.focus();
+}
+function addTagToField(fieldId,tag){
+  tag=tag.trim();if(!tag)return;
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFields)item.customFields={};
+  let sel=Array.isArray(item.customFields[fieldId])?[...item.customFields[fieldId]]:[];
+  if(!sel.includes(tag))sel.push(tag);
+  item.customFields[fieldId]=sel;saveLocal();debouncedSaveTracking();
+  // Also save to field options if new
+  const col=S.tracking.collections.find(c=>c.id===item.colId);
+  const field=col?.fields?.find(f=>f.id===fieldId);
+  if(field&&field.options&&!field.options.includes(tag)){field.options.push(tag);saveLocal();debouncedSaveTracking();}
+  refreshTagBox(fieldId);
+  const inp=document.getElementById('taginput_'+fieldId);
+  if(inp){inp.value='';inp.focus();}
+  hideTagSuggestions(fieldId);
+}
+function removeTagFromField(fieldId,tag){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  if(!item.customFields)item.customFields={};
+  let sel=Array.isArray(item.customFields[fieldId])?[...item.customFields[fieldId]]:[];
+  sel=sel.filter(t=>t!==tag);
+  item.customFields[fieldId]=sel;saveLocal();debouncedSaveTracking();
+  refreshTagBox(fieldId);
+}
+function refreshTagBox(fieldId){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const sel=Array.isArray(item.customFields?.[fieldId])?item.customFields[fieldId]:[];
+  const box=document.querySelector(`#taggroup_${fieldId} .tag-input-box`);if(!box)return;
+  // Remove old chips, keep the input
+  box.querySelectorAll('.tag-chip').forEach(c=>c.remove());
+  const inp=box.querySelector('input');
+  sel.forEach(t=>{
+    const chip=document.createElement('span');
+    chip.className='tag-chip';
+    chip.style.cssText='display:inline-flex;align-items:center;gap:4px;background:var(--accent2);color:#fff;border-radius:10px;padding:2px 8px;font-size:12px;font-weight:500;';
+    chip.innerHTML=`${t}<span onclick="event.stopPropagation();removeTagFromField('${fieldId}','${t.replace(/'/g,"\\'")}');" style="cursor:pointer;opacity:.8;font-size:11px;">✕</span>`;
+    box.insertBefore(chip,inp);
+  });
+  if(inp)inp.placeholder=sel.length?'':'Ajouter…';
+}
+function showTagSuggestions(fieldId,query){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const col=S.tracking.collections.find(c=>c.id===item.colId);
+  const field=col?.fields?.find(f=>f.id===fieldId);
+  const opts=field?.options||[];
+  const sel=Array.isArray(item.customFields?.[fieldId])?item.customFields[fieldId]:[];
+  const q=(query||'').toLowerCase().trim();
+  let matches=opts.filter(o=>!sel.includes(o)&&(!q||o.toLowerCase().includes(q)));
+  const sugg=document.getElementById('tagsugg_'+fieldId);if(!sugg)return;
+  if(!matches.length&&!q){sugg.style.display='none';return;}
+  const showCreate=q&&!opts.find(o=>o.toLowerCase()===q)&&!sel.includes(query.trim());
+  sugg.style.display='block';
+  // Position below the input box
+  const box=document.querySelector(`#taggroup_${fieldId} .tag-input-box`);
+  if(box){const r=box.getBoundingClientRect();sugg.style.top=(r.bottom+window.scrollY+2)+'px';sugg.style.left=r.left+'px';sugg.style.width=r.width+'px';sugg.style.position='fixed';sugg.style.top=(r.bottom+2)+'px';sugg.style.left=r.left+'px';}
+  sugg.innerHTML=matches.map(t=>`<div onclick="addTagToField('${fieldId}','${t.replace(/'/g,"\\'")}');hideTagSuggestions('${fieldId}')" style="padding:8px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''"><span style="background:var(--accent2);color:#fff;border-radius:8px;padding:1px 8px;font-size:12px;">${t}</span></div>`).join('')
+    +(showCreate?`<div onclick="addTagToField('${fieldId}','${query.trim().replace(/'/g,"\\'")}');hideTagSuggestions('${fieldId}')" style="padding:8px 12px;cursor:pointer;font-size:13px;color:var(--accent2);border-top:1px solid var(--border2);" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''">＋ Créer « ${query.trim()} »</div>`:'');
+}
+function hideTagSuggestions(fieldId){
+  const sugg=document.getElementById('tagsugg_'+fieldId);
+  if(sugg)sugg.style.display='none';
+}
+function tagInputKeydown(e,fieldId){
+  const inp=e.target;
+  const sugg=document.getElementById('tagsugg_'+fieldId);
+  if(e.key==='Enter'||e.key===','){
+    e.preventDefault();
+    const val=inp.value.trim();
+    if(val)addTagToField(fieldId,val);
+  } else if(e.key==='Escape'){
+    hideTagSuggestions(fieldId);
+  } else if(e.key==='Backspace'&&!inp.value){
+    // Remove last tag
+    const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+    const sel=Array.isArray(item.customFields?.[fieldId])?[...item.customFields[fieldId]]:[];
+    if(sel.length){removeTagFromField(fieldId,sel[sel.length-1]);}
+  }
+}
+// Close suggestions on outside click
+document.addEventListener('click',function(e){
+  document.querySelectorAll('[id^="tagsugg_"]').forEach(el=>{
+    if(!el.contains(e.target)&&!e.target.closest('.tag-input-box'))el.style.display='none';
+  });
+},true);
 function setReviewRatingInput(val){
   const num=parseFloat(val);
   if(isNaN(num)||num<0||num>10)return;
@@ -4757,51 +5060,54 @@ document.addEventListener('drop',e=>{
 function stripHTML(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent||'';}
 // exportCurrentPDF and exportAllPDF defined above with lazy jsPDF loading
 function generatePDF(entries){
-  const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210,m=20,lH=6.5,mW=W-m*2;let y=m;
-  const pageH=297;
-  const add=(txt,sz,bold,col)=>{
-    doc.setFontSize(sz||11);doc.setFont('helvetica',bold?'bold':'normal');
-    doc.setTextColor(col||'#1A1814');
-    doc.splitTextToSize(String(txt),mW).forEach(l=>{
-      if(y>pageH-25){addFooter();doc.addPage();y=m;}
-      doc.text(l,m,y);y+=lH;
-    });
-  };
-  const exportDateStr=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  const addFooter=()=>{
-    const pg=doc.getCurrentPageInfo().pageNumber;
-    doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor('#A09D99');
-    doc.text(`Journal — Exporté le ${exportDateStr}`,m,pageH-10);
-    doc.text(`Page ${pg}`,W-m,pageH-10,{align:'right'});
-    doc.setDrawColor('#E5E2DC');doc.setLineWidth(0.2);doc.line(m,pageH-14,W-m,pageH-14);
-  };
-  entries.forEach((entry,ei)=>{
-    if(ei>0){addFooter();doc.addPage();y=m;}
-    const t=getType(entry.typeId),d=entry.date?formatDate(entry.date):null;
-    // Entry date header
-    if(d){add(`${d.weekday} ${d.day} ${d.month} ${d.year}`,9,false,'#A09D99');y+=1;}
-    add(entry.title||(d?`${t.icon} ${d.weekday} ${d.day} ${d.month} ${d.year}`:`${t.icon} ${t.name}`),15,true);y+=2;
-    // Scales block
+  // Fenêtre d'impression native — supporte tous les caractères et emojis
+  const exportDate=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const entriesHtml=entries.map(entry=>{
+    const t=getType(entry.typeId);
+    const d=entry.date?formatDate(entry.date):null;
+    const dateLabel=d?`${d.weekday} ${d.day} ${d.month} ${d.year}`:'';
+    const title=entry.title||(d?`${t.icon} ${dateLabel}`:`${t.icon} ${t.name}`);
     const scalesData=S.scales.filter(s=>entry.scales?.[s.id]!=null);
-    if(scalesData.length){
-      const scLine=scalesData.map(s=>`${s.emojiLow||''}${s.name} : ${entry.scales[s.id]}/${s.max}${s.emojiHigh?' '+s.emojiHigh:''}`).join('   ·   ');
-      add(scLine,9,false,'#8B7355');y+=1;
-    }
-    if((entry.tags||[]).length)add('Tags : '+(entry.tags.map(tg=>'#'+tg).join(' ')),9,false,'#A09D99');
-    y+=2;doc.setDrawColor('#E5E2DC');doc.setLineWidth(0.3);doc.line(m,y,W-m,y);y+=5;
-    Object.entries(entry.fields||{}).forEach(([sec,html])=>{
-      const txt=stripHTML(html).trim();if(!txt)return;
-      add(sec,9,true,'#8B7355');y+=1;add(txt,11);y+=4;
-    });
-    // Created / modified dates at bottom of entry
-    y+=2;
+    const scalesHtml=scalesData.length?`<div style="font-size:11px;color:#8B7355;margin-bottom:6px;">${scalesData.map(s=>`${s.emojiLow||''} ${s.name} : <strong>${entry.scales[s.id]}/${s.max}</strong> ${s.emojiHigh||''}`).join(' &nbsp;·&nbsp; ')}</div>`:'';
+    const tagsHtml=(entry.tags||[]).length?`<div style="font-size:10px;color:#A09D99;margin-bottom:6px;">${entry.tags.map(tg=>'#'+tg).join(' ')}</div>`:'';
+    const order=entry.sectionOrder&&entry.sectionOrder.length?entry.sectionOrder:Object.keys(entry.fields||{});
+    const fieldsHtml=order.map(sec=>{
+      const html=(entry.fields||{})[sec]||'';
+      const txt=html.replace(/<[^>]+>/g,' ').trim();if(!txt)return'';
+      return`<div style="margin-bottom:14px;"><div style="font-size:10px;font-weight:600;color:#8B7355;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;">${sec}</div><div style="font-size:13px;line-height:1.7;color:#1A1814;">${html}</div></div>`;
+    }).join('');
     const createdStr=entry.createdAt?new Date(entry.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
     const updatedStr=entry.updatedAt&&entry.updatedAt!==entry.createdAt?new Date(entry.updatedAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):null;
-    if(createdStr)add(`Créé le ${createdStr}${updatedStr?'   ·   Modifié le '+updatedStr:''}`,8,false,'#C0BDB9');
-  });
-  addFooter();
-  doc.save(entries.length===1?(entries[0].date||'entree')+'.pdf':'journal.pdf');
+    const metaHtml=createdStr?`<div style="font-size:10px;color:#C0BDB9;margin-top:14px;">Créé le ${createdStr}${updatedStr?' · Modifié le '+updatedStr:''}</div>`:'';
+    return`<div class="entry-block">
+      ${dateLabel?`<div style="font-size:10px;color:#A09D99;margin-bottom:4px;">${dateLabel}</div>`:''}
+      <h2 style="font-size:18px;margin:0 0 8px;color:#1A1814;">${title}</h2>
+      ${scalesHtml}${tagsHtml}
+      <hr style="border:none;border-top:1px solid #E5E2DC;margin:10px 0 14px;">
+      ${fieldsHtml}
+      ${metaHtml}
+    </div>`;
+  }).join('<div style="page-break-after:always;"></div>');
+
+  const win=window.open('','_blank','width=860,height=1000');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${entries.length===1?entries[0].title||'Entrée':'Journal'}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Georgia,serif;background:#fff;color:#1A1814;padding:40px;max-width:760px;margin:0 auto;}
+    .entry-block{padding-bottom:20px;}
+    h2{font-family:Georgia,serif;}
+    @media print{
+      body{padding:20mm;}
+      .entry-block{page-break-inside:avoid;}
+      @page{margin:20mm;}
+    }
+    footer{margin-top:30px;padding-top:10px;border-top:1px solid #E5E2DC;font-size:10px;color:#A09D99;display:flex;justify-content:space-between;}
+  </style></head><body>
+  ${entriesHtml}
+  <footer><span>Journal — Exporté le ${exportDate}</span><span>${entries.length} entrée${entries.length>1?'s':''}</span></footer>
+  <script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script>
+  </body></html>`);
+  win.document.close();
 }
 
 // ── ANNOUNCEMENTS ─────────────────────────────────────────────────────────
@@ -4997,7 +5303,7 @@ function exportTrackingItemPDF(){
   const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim()||'#8B7355';
 
   // Construire le HTML d'impression
-  const reviewsHtml=(item.reviews||[]).map((r,i)=>{
+  const notesHtml=col.notesEnabled&&item.notesSections&&item.notesSections.length?`<div style='margin-bottom:16px;'><h2 style='color:#8B7355;font-size:15px;border-bottom:2px solid #C8A882;padding-bottom:6px;margin-bottom:10px;'>📝 Notes</h2>${(item.notesSections||[]).map(s=>`<div style='margin-bottom:12px;'><h3 style='font-size:12px;color:#8B7355;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;'>${s.name}</h3><div style='font-size:13px;line-height:1.7;'>${s.content||''}</div></div>`).join('')}</div>`:'';const reviewsHtml=(item.reviews||[]).map((r,i)=>{
     const dateStr=r.date?new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
     const stars=r.rating?Array.from({length:5},(_,k)=>{const v=r.rating/2;return v>=k+1?'★':v>=k+0.5?'½':'☆';}).map((s,k)=>`<span style="color:${r.rating/2>k?'#F5C518':'#ccc'}">${s}</span>`).join(''):'';
     let ctxHtml='';if(r.context){if(Array.isArray(r.context)){ctxHtml=r.context.filter(x=>x&&x.value).map(x=>`<span style="margin-right:12px;"><b>${x.label}</b> ${x.value}</span>`).join('');}else if(rFields.length){ctxHtml=rFields.filter(f=>r.context[f.id]).map(f=>`<span style="margin-right:12px;"><b>${f.name}</b> ${r.context[f.id]}</span>`).join('');}};
@@ -5034,7 +5340,7 @@ function exportTrackingItemPDF(){
   <div class="status">${st.emoji} ${st.label}</div>
   ${tagsHtml}
   ${infoHtml?`<div class="section-label">Informations</div><div style="margin-bottom:16px;">${infoHtml}</div>`:''}
-  ${reviewsHtml?`<div class="section-label">Avis & Notes — ${(item.reviews||[]).length} fois</div>${reviewsHtml}`:'<div style="color:#aaa;font-size:13px;">Aucun avis enregistré.</div>'}
+  ${reviewsHtml?`<div class="section-label">Avis & Notes — ${(item.reviews||[]).length} fois</div>${notesHtml}${reviewsHtml}`:'<div style="color:#aaa;font-size:13px;">Aucun avis enregistré.</div>'}
   <div class="footer">Exporté le ${new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})} · Mon Journal</div>
   <script>window.onload=()=>{window.print();}<\/script>
   </body></html>`);
