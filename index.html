@@ -218,12 +218,21 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .onboard-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:background .2s;}
 .onboard-dot.active{background:var(--accent2);}
 /* COLLECTION MODAL FIELDS */
-.col-field-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
+.col-field-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);}
 .col-field-row:last-child{border-bottom:none;}
 .col-field-name{flex:1;font-size:13px;color:var(--text);}
-.col-field-type{font-size:11px;color:var(--text3);}
+.col-field-name-input{flex:1;font-size:13px;padding:2px 6px;border:1px solid var(--accent2);border-radius:4px;background:var(--surface);color:var(--text);outline:none;}
+.col-field-type{font-size:11px;color:var(--text3);white-space:nowrap;}
+.col-field-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;line-height:1;border-radius:3px;}
+.col-field-btn:hover{background:var(--bg2);color:var(--text);}
 .col-field-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;line-height:1;}
 .col-field-del:hover{color:#A32D2D;}
+/* SPOILER */
+.spoiler{background:var(--text);color:var(--text);border-radius:3px;cursor:pointer;padding:0 2px;transition:all .2s;user-select:none;}
+.spoiler.revealed,.spoiler:hover{background:rgba(26,24,20,0.12);color:inherit;}
+/* REVIEW */
+.tracking-review-avis{white-space:pre-wrap;line-height:1.65;transition:max-height .3s ease;}
+.review-voir-plus{background:none;border:none;color:var(--accent2);cursor:pointer;font-size:12px;padding:2px 0;margin-top:2px;display:block;}
 .col-status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text2);}
 .col-status-chip button{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:0 2px;line-height:1;}
 .col-status-chip button:hover{color:#A32D2D;}
@@ -518,6 +527,8 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .star-input .ts:hover{transform:scale(1.15);}
 /* Review mini toolbar */
 .review-toolbar{display:flex;gap:3px;padding:5px 8px;background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:.5rem;flex-wrap:wrap;}
+.ann-body ul,.ann-body ol{padding-left:1.4em;margin:4px 0;}
+.ann-body li{margin-bottom:2px;}
 .review-tb-btn{height:26px;min-width:26px;padding:0 5px;border:none;background:transparent;color:var(--text2);cursor:pointer;border-radius:4px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:var(--font-ui);}
 .review-tb-btn:hover{background:var(--bg3);color:var(--text);}
 .review-tb-sep{width:1px;height:16px;background:var(--border2);margin:0 2px;align-self:center;}
@@ -1061,6 +1072,7 @@ window._c = function(fn, args) {
     <div style="display:flex;gap:7px;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap;">
       <button class="back-btn" style="margin:0;" id="trackingItemBack">← Retour</button>
       <div style="flex:1;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="exportTrackingItemPDF()">📄 PDF</button>
       <button class="btn btn-danger btn-sm" id="trackingItemDelBtn">🗑</button>
     </div>
     <div id="trackingItemDetail"></div>
@@ -1410,7 +1422,18 @@ window._c = function(fn, args) {
       </div>
       <div class="form-group">
         <label>Contenu</label>
-        <textarea id="adminAnnContent" rows="4" placeholder="Décrivez les nouveautés, corrections…"></textarea>
+        <div class="review-toolbar" style="margin-bottom:0;border-bottom:none;border-radius:var(--radius-sm) var(--radius-sm) 0 0;">
+          <button class="review-tb-btn" onclick="annFmt('bold')" title="Gras"><b>B</b></button>
+          <button class="review-tb-btn" onclick="annFmt('italic')" title="Italique"><i style="font-style:italic">I</i></button>
+          <button class="review-tb-btn" onclick="annFmt('underline')" title="Souligné"><u>U</u></button>
+          <div class="review-tb-sep"></div>
+          <button class="review-tb-btn" onclick="annFmt('insertUnorderedList')" title="Liste">≡</button>
+          <button class="review-tb-btn" onclick="annFmt('insertOrderedList')" title="Liste numérotée">1.</button>
+          <div class="review-tb-sep"></div>
+          <button class="review-tb-btn" onclick="annFmtColor('#8B7355')" title="Couleur accentuée" style="font-size:16px;line-height:1;">●</button>
+          <button class="review-tb-btn" onclick="annFmtColor('')" title="Couleur normale" style="font-size:11px;">A</button>
+        </div>
+        <div id="adminAnnContent" contenteditable="true" style="min-height:90px;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-top:1px solid var(--accent2);border-radius:0 0 var(--radius-sm) var(--radius-sm);font-size:13px;color:var(--text);outline:none;line-height:1.65;white-space:pre-wrap;" placeholder="Décrivez les nouveautés, corrections…"></div>
       </div>
       <div class="form-group">
         <label>Version <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
@@ -1418,7 +1441,8 @@ window._c = function(fn, args) {
       </div>
       <div class="modal-actions">
         <button class="btn btn-secondary" onclick="closeModal('adminModal')">Fermer</button>
-        <button class="btn btn-primary" onclick="publishAnnouncement()">📢 Publier</button>
+        <button class="btn btn-secondary" id="annCancelEdit" onclick="cancelAnnEdit()" style="display:none;">✕ Annuler</button>
+        <button class="btn btn-primary" id="annSubmitBtn" onclick="publishAnnouncement()">📢 Publier</button>
       </div>
     </div>
   </div>
@@ -1492,6 +1516,83 @@ const DEFAULT_SCALES=[
   {id:'s2',system:true,name:'Énergie',min:1,max:10,emojiLow:'😴',emojiHigh:'⚡',enabled:false},
   {id:'s3',system:true,name:'Anxiété',min:1,max:10,emojiLow:'😌',emojiHigh:'😰',enabled:false},
 ];
+const BOOK_COLORS=['#7B5EA7','#3B7DD8','#2E9E6C','#C8593A','#D4882A','#8B5E3C','#C44B7A','#2C7B8C','#4A5568','#2D3748'];
+const SORT_LABELS={'date-desc':'Récent','date-asc':'Ancien','title-asc':'A→Z','wordcount-desc':'Plus long','has-scale':'Avec échelle'};
+const ONBOARD_OPTIONS=[
+  {id:'journal',icon:'📅',name:'Journal quotidien',desc:'Écrire chaque jour',enablesType:'journal',feature:null},
+  {id:'reflexion',icon:'💭',name:'Réflexions & idées',desc:'Capturer mes pensées',enablesType:'reflexion',feature:null},
+  {id:'reve',icon:'🌙',name:'Journal des rêves',desc:'Mes rêves et songes',enablesType:'reve',feature:null},
+  {id:'objectifs',icon:'🎯',name:'Mes objectifs',desc:'Suivre ma progression',enablesType:null,feature:'goals'},
+  {id:'films',icon:'🎬',name:'Films & séries',desc:'Ce que j\'ai regardé',enablesType:null,feature:'tracking'},
+  {id:'livreslu',icon:'📖',name:'Livres lus',desc:'Ma liste de lecture',enablesType:null,feature:'tracking'},
+  {id:'citations',icon:'💬',name:'Citations',desc:'Mes phrases inspirantes',enablesType:null,feature:'quotes'},
+  {id:'libre',icon:'✏️',name:'Écriture libre',desc:'Sans structure imposée',enablesType:'reflexion',feature:null},
+];
+const DEFAULT_TRACKING_COLLECTIONS=[
+  {id:'tc_films',name:'Films',icon:'🎬',desc:'Films vus ou à voir'},
+  {id:'tc_series',name:'Séries',icon:'📺',desc:'Séries regardées'},
+  {id:'tc_livres',name:'Livres',icon:'📖',desc:'Livres lus ou à lire'},
+];
+const EXAMPLE_GOALS=[
+  {id:'eg1',title:'Lire 12 livres cette année',desc:'Un livre par mois, des genres variés.',status:'encours',priority:'medium',
+   checklist:[{text:'Choisir ma liste de livres',done:true},{text:'Lire le 1er livre',done:true},{text:'Lire le 2ème livre',done:false},{text:'Tenir un journal de lecture',done:false}],
+   progress:0,dateStart:'',dateEnd:new Date().getFullYear()+'-12-31',note:'',tags:['lecture','culture'],
+   sections:[{id:'s1',name:'Pourquoi',content:'Élargir mes horizons et me détendre.'},{id:'s2',name:'Liste de livres',content:''}],
+   createdAt:new Date().toISOString()},
+  {id:'eg2',title:'Courir un 10km',desc:'Progresser et participer à une course.',status:'encours',priority:'high',
+   checklist:[{text:'S\'inscrire à une course',done:false},{text:'Courir 3x/semaine',done:false},{text:'Atteindre 5km sans s\'arrêter',done:false},{text:'Compléter les 10km',done:false}],
+   progress:0,dateStart:'',dateEnd:'',note:'',tags:['sport','santé'],
+   sections:[{id:'s1',name:'Programme',content:''},{id:'s2',name:'Suivi hebdo',content:''}],
+   createdAt:new Date().toISOString()},
+  {id:'eg3',title:'Apprendre l\'espagnol',desc:'Niveau conversationnel d\'ici 6 mois.',status:'pause',priority:'low',
+   checklist:[{text:'30 min de pratique par jour',done:false},{text:'Finir le niveau A2',done:false},{text:'Regarder une série en espagnol',done:false}],
+   progress:15,dateStart:'',dateEnd:'',note:'',tags:['apprentissage','langue'],
+   sections:[{id:'s1',name:'Ressources',content:'Duolingo, Netflix, podcasts espagnols.'},{id:'s2',name:'Notes',content:''}],
+   createdAt:new Date().toISOString()},
+];
+const EXAMPLE_QUOTES=[
+  {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',date:'',tags:['vie','philosophie'],createdAt:new Date().toISOString()},
+  {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',date:'',tags:['sagesse','action'],createdAt:new Date().toISOString()},
+  {id:'eq3',text:'Un ami c\'est quelqu\'un qui vous connaît bien et qui vous aime quand même.',author:'Elbert Hubbard',date:'',tags:['amitié'],createdAt:new Date().toISOString()},
+  {id:'eq4',text:'Le bonheur n\'est pas quelque chose de tout fait. Il vient de vos propres actions.',author:'Dalaï Lama',date:'',tags:['bonheur','sagesse'],createdAt:new Date().toISOString()},
+  {id:'eq5',text:'Il n\'y a qu\'une façon d\'éviter les critiques : ne rien faire, ne rien dire et n\'être rien.',author:'Aristote',date:'',tags:['courage','philosophie'],createdAt:new Date().toISOString()},
+];
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function setTodayDate(){const t=new Date().toISOString().split('T')[0];document.querySelectorAll('input[type=date]').forEach(i=>i.value=t);}
+function formatDate(ds){
+  if(!ds)return{day:'–',month:'',weekday:'',year:''};
+  const d=new Date(ds+'T00:00:00');
+  return{day:d.getDate(),month:['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'][d.getMonth()],weekday:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()],year:d.getFullYear()};
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function getType(id){return S.entryTypes.find(t=>t.id===id)||S.entryTypes[0];}
+function getAllTags(){const a={};S.entries.forEach(e=>(e.tags||[]).forEach(t=>{a[t]=(a[t]||0)+1;}));return a;}
+
+// ── COLLECTION TEMPLATES ───────────────────────────────────────────────────
+const COL_TEMPLATES=[
+  {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+   fields:[]},
+  {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
+   fields:[]},
+  {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
+   fields:[]},
+  {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,
+   statuses:[{id:'avoir',label:'À jouer',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'fini',label:'Terminé',emoji:'🏆'}],
+   fields:[]},
+  {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,
+   statuses:[{id:'avoir',label:'À écouter',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
+   fields:[]},
+  {id:'musique',icon:'🎵',name:'Musique',desc:'Albums, artistes…',reviewsEnabled:true,
+   statuses:[{id:'decouvrir',label:'À découvrir',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
+   fields:[]},
+  {id:'vide',icon:'✨',name:'Personnalisé',desc:'Partir de zéro',reviewsEnabled:false,
+   statuses:[{id:'todo',label:'À faire',emoji:'🔖'},{id:'done',label:'Terminé',emoji:'✅'}],
+   fields:[]},
+];
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let S={
@@ -1503,18 +1604,48 @@ let S={
   theme:'light',font:'dm-sans',color:'beige',filterTag:null,filterType:'all',
   quotesEnabled:true,goalsEnabled:true,trackingEnabled:true,
 };
+// UI state — édition
 let editingModelId=null,editingTypeId=null,editingScaleId=null;
+let editingColId=null;
+let editingReviewIdx=null;
+let editingQuoteId=null;
+// UI state — navigation
 let currentEntryId=null,currentReadId=null;
+let currentBookTypeId=null; // null=all books, string=inside a book
+let currentTrackingColId=null;
+let currentTrackingItemId=null;
+let currentGoalId=null;
+let currentStatTab='global';
+let currentStatTrackingColId=null;
+// UI state — sélection
 let selectedTypeId='journal',selectedModelId='m1';
+let selectedAuthMode='local';
+let selectedBookColor='#7B5EA7';
+// UI state — filtres & tri
+let currentSort='date-desc';
+let filterTag=null;
+let quoteFilterTag=null;
+let goalPeriodFilter='all';
+let trackingStatusFilter='all';
+let quoteSort='recent';
+// UI state — données temporaires
 let entryTags=[],scaleValues={};
+let quoteTags=[];
+let colModalStatuses=[];
+let colModalFields=[];
+let colModalReviews=true; // reviews activées par défaut
+let newReviewRating=0;
+// UI state — onboarding
+let onboardSelected=new Set();
+let obMode='local';
+let currentOnboardStep=0;
+// UI state — graphiques
+let goalsChartDays=30;
+let trackingChartDays=30;
+let chartPeriodDays=7;
+// UI state — auth & stockage
 let storageMode='';
 let currentUser=null;
-let selectedAuthMode='local';
-let currentSort='date-desc';
-let currentBookTypeId=null; // null=all books shown, string=inside a book
-let selectedBookColor='#7B5EA7';
-let quoteFilterTag=null;
-let quoteTags=[];
 
 // ── AUTH UI ────────────────────────────────────────────────────────────────
 function selectStorageMode(mode){
@@ -1713,7 +1844,11 @@ async function loadFromSupabase(){
       }
       if(s.key==='scales'){S.scales=[...DEFAULT_SCALES.map(ds=>{const ps=s.value.find(x=>x.id===ds.id);return ps?{...ds,...ps}:ds;}),...(s.value.filter(x=>!DEFAULT_SCALES.find(d=>d.id===x.id)))];}
       if(s.key==='prefs'){S.theme=s.value.theme||'light';S.font=s.value.font||'dm-sans';S.color=s.value.color||'beige';}
+      if(s.key==='tracking'&&s.value){S.tracking=s.value;if(!S.tracking.collections)S.tracking.collections=[];if(!S.tracking.items)S.tracking.items=[];}
+      if(s.key==='quotes'&&Array.isArray(s.value))S.quotes=s.value;
+      if(s.key==='goals'&&Array.isArray(s.value))S.goals=s.value;
     });
+    migrateTrackingFields();
     saveLocal();
     setSyncStatus('ok','Synchronisé ✓');
   }catch(e){
@@ -1772,6 +1907,9 @@ async function saveSettingsToSupabase(){
       {key:'models',value:{editedSystem:es,custom:S.models.filter(m=>!m.system)}},
       {key:'scales',value:S.scales},
       {key:'prefs',value:{theme:S.theme,font:S.font,color:S.color||'beige'}},
+      {key:'tracking',value:S.tracking||{collections:[],items:[]}},
+      {key:'quotes',value:S.quotes||[]},
+      {key:'goals',value:S.goals||[]},
     ];
     for(const s of toSave){
       await sbFetch('journal_settings',{
@@ -1787,6 +1925,7 @@ async function saveSettingsToSupabase(){
 async function forceSync(){await loadFromSupabase();renderAll();}
 
 // ── LOCAL CACHE ────────────────────────────────────────────────────────────
+let _syncDebounceTimer=null;
 function saveLocal(){
   localStorage.setItem('journal_pwa',JSON.stringify({
     entries:S.entries,quotes:S.quotes||[],goals:S.goals||[],
@@ -1800,6 +1939,18 @@ function saveLocal(){
     customModels:S.models.filter(m=>!m.system),
     bookColors:S.entryTypes.reduce((a,t)=>{a[t.id]=t.bookColor;return a;},{}),
   }));
+  // Sync vers le cloud en mode online (debounce 2s pour éviter les appels répétés)
+  if(storageMode==='online'){
+    clearTimeout(_syncDebounceTimer);
+    _syncDebounceTimer=setTimeout(saveSettingsToSupabase,2000);
+  }
+}
+function migrateTrackingFields(){
+  // Migration : vider tous les champs prédéfinis des collections existantes
+  if(!S.tracking||!S.tracking.collections)return;
+  let changed=false;
+  S.tracking.collections.forEach(col=>{if(col.fields&&col.fields.length){col.fields=[];changed=true;}});
+  if(changed)saveLocal();
 }
 function loadFromLocal(){
   const p=localStorage.getItem('journal_pwa');
@@ -1819,6 +1970,7 @@ function loadFromLocal(){
     S.entryTypes=[...DEFAULT_ENTRY_TYPES.map(t=>({...t,bookColor:bc[t.id]||t.bookColor})),...(d.customTypes||[])];
     S.models=[...DEFAULT_MODELS,...(d.customModels||[])];
   }catch(e){}
+  migrateTrackingFields();
 }
 
 // ── ACCOUNT UI ─────────────────────────────────────────────────────────────
@@ -2127,17 +2279,6 @@ function goHome(){
   switchTab('home');
 }
 
-// ── UTILS ──────────────────────────────────────────────────────────────────
-function setTodayDate(){const t=new Date().toISOString().split('T')[0];document.querySelectorAll('input[type=date]').forEach(i=>i.value=t);}
-function formatDate(ds){
-  if(!ds)return{day:'–',month:'',weekday:'',year:''};
-  const d=new Date(ds+'T00:00:00');
-  return{day:d.getDate(),month:['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'][d.getMonth()],weekday:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()],year:d.getFullYear()};
-}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function getType(id){return S.entryTypes.find(t=>t.id===id)||S.entryTypes[0];}
-function getAllTags(){const a={};S.entries.forEach(e=>(e.tags||[]).forEach(t=>{a[t]=(a[t]||0)+1;}));return a;}
-
 // ── SEARCH ─────────────────────────────────────────────────────────────────
 function onSearch(){
   const q=document.getElementById('globalSearch').value.trim().toLowerCase();
@@ -2364,7 +2505,6 @@ function saveEntry(){
 }
 
 // ── BOOKS ──────────────────────────────────────────────────────────────────
-const BOOK_COLORS=['#7B5EA7','#3B7DD8','#2E9E6C','#C8593A','#D4882A','#8B5E3C','#C44B7A','#2C7B8C','#4A5568','#2D3748'];
 function typeColor(t){return t.bookColor||BOOK_COLORS[Math.abs([...t.id].reduce((a,c)=>a+c.charCodeAt(0),0))%BOOK_COLORS.length];}
 function lighten(hex,amt){let c=hex.replace('#','');const r=Math.min(255,parseInt(c.slice(0,2),16)+amt),g=Math.min(255,parseInt(c.slice(2,4),16)+amt),b=Math.min(255,parseInt(c.slice(4,6),16)+amt);return`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;}
 
@@ -2506,7 +2646,6 @@ document.addEventListener('click',e=>{
 });
 
 // ── SORT DROPDOWN ──────────────────────────────────────────────────────────
-const SORT_LABELS={'date-desc':'Récent','date-asc':'Ancien','title-asc':'A→Z','wordcount-desc':'Plus long','has-scale':'Avec échelle'};
 function toggleSortDropdown(e){
   e.stopPropagation();
   ['sortDropdown','sortDropdownBook'].forEach(id=>{
@@ -2533,20 +2672,6 @@ function selectBookColor(col){
 }
 
 // ── ONBOARDING ─────────────────────────────────────────────────────────────
-const ONBOARD_OPTIONS=[
-  {id:'journal',icon:'📅',name:'Journal quotidien',desc:'Écrire chaque jour',enablesType:'journal',feature:null},
-  {id:'reflexion',icon:'💭',name:'Réflexions & idées',desc:'Capturer mes pensées',enablesType:'reflexion',feature:null},
-  {id:'reve',icon:'🌙',name:'Journal des rêves',desc:'Mes rêves et songes',enablesType:'reve',feature:null},
-  {id:'objectifs',icon:'🎯',name:'Mes objectifs',desc:'Suivre ma progression',enablesType:null,feature:'goals'},
-  {id:'films',icon:'🎬',name:'Films & séries',desc:'Ce que j\'ai regardé',enablesType:null,feature:'tracking'},
-  {id:'livreslu',icon:'📖',name:'Livres lus',desc:'Ma liste de lecture',enablesType:null,feature:'tracking'},
-  {id:'citations',icon:'💬',name:'Citations',desc:'Mes phrases inspirantes',enablesType:null,feature:'quotes'},
-  {id:'libre',icon:'✏️',name:'Écriture libre',desc:'Sans structure imposée',enablesType:'reflexion',feature:null},
-];
-let onboardSelected=new Set();
-let obMode='local';
-let currentOnboardStep=0;
-
 function initOnboard(){
   const el=document.getElementById('onboardCards');if(!el)return;
   el.innerHTML=ONBOARD_OPTIONS.map(o=>`
@@ -2652,7 +2777,7 @@ function applyOnboardSelections(){
   if(S.trackingEnabled){
     initTracking();
     if(onboardSelected.has('films')&&!S.tracking.collections.find(c=>c.id==='tc_films')){
-      S.tracking.collections.push({id:'tc_films',name:'Films',icon:'🎬',desc:'',statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]});
+      S.tracking.collections.push({id:'tc_films',name:'Films',icon:'🎬',desc:'',statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],fields:[]});
     }
     if(onboardSelected.has('livreslu')&&!S.tracking.collections.find(c=>c.id==='tc_livres')){
       S.tracking.collections.push({id:'tc_livres',name:'Livres',icon:'📖',desc:'',statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],fields:[]});
@@ -2669,36 +2794,6 @@ async function onboardFinish(){
 }
 
 // ── COLLECTION MODAL ───────────────────────────────────────────────────────
-let editingColId=null;
-let colModalStatuses=[];
-let colModalFields=[];
-let colModalReviews=true; // default: reviews enabled
-
-// Predefined templates
-const COL_TEMPLATES=[
-  {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,
-   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Réalisateur',type:'text'},{id:uid(),name:'Lieu',type:'text'},{id:uid(),name:'Avec qui',type:'text'},{id:uid(),name:'Date de visionnage',type:'date'}]},
-  {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,
-   statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Saisons',type:'number'},{id:uid(),name:'Plateforme',type:'text'},{id:uid(),name:'Avec qui',type:'text'},{id:uid(),name:'Date de visionnage',type:'date'}]},
-  {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,
-   statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Nombre de pages',type:'progress',min:0,max:100},{id:uid(),name:'Date début lecture',type:'date'},{id:uid(),name:'Date fin lecture',type:'date'}]},
-  {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,
-   statuses:[{id:'avoir',label:'À jouer',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'fini',label:'Terminé',emoji:'🏆'}],
-   fields:[{id:uid(),name:'Plateforme',type:'text'},{id:uid(),name:'Genre',type:'text'},{id:uid(),name:'Progression',type:'progress',min:0,max:100}]},
-  {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,
-   statuses:[{id:'avoir',label:'À écouter',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
-   fields:[{id:uid(),name:'Animateur',type:'text'},{id:uid(),name:'Date d\'écoute',type:'date'}]},
-  {id:'musique',icon:'🎵',name:'Musique',desc:'Albums, artistes…',reviewsEnabled:true,
-   statuses:[{id:'decouvrir',label:'À découvrir',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
-   fields:[{id:uid(),name:'Artiste',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Genre',type:'text'}]},
-  {id:'vide',icon:'✨',name:'Personnalisé',desc:'Partir de zéro',reviewsEnabled:false,
-   statuses:[{id:'todo',label:'À faire',emoji:'🔖'},{id:'done',label:'Terminé',emoji:'✅'}],
-   fields:[]},
-];
-
 function openNewCollectionModal(){
   editingColId=null;
   document.getElementById('colModalTitle').textContent='Nouvelle collection';
@@ -2802,16 +2897,28 @@ function onFieldTypeChange(){
 function renderColFields(){
   const el=document.getElementById('colFieldsList');if(!el)return;
   if(!colModalFields.length){el.innerHTML='<p style="font-size:11px;color:var(--text3);">Aucun champ — ajoutez-en ci-dessous</p>';return;}
-  const typeLabels={text:'Texte',date:'Date 📅',progress:'Progression %',number:'Nombre',select:'Choix'};
+  const typeLabels={text:'Texte',date:'Date 📅',progress:'Progression %',number:'Nombre'};
   el.innerHTML=colModalFields.map((f,i)=>{
     const label=typeLabels[f.type]||f.type;
     const extra=f.type==='progress'?` (${f.min||0}→${f.max||100})`:'';
-    return`<div class="col-field-row">
-      <span class="col-field-name">${f.name}</span>
+    return`<div class="col-field-row" id="cfrow_${i}">
+      <input class="col-field-name-input" value="${f.name.replace(/"/g,'&quot;')}" onchange="renameColField(${i},this.value)" onblur="renameColField(${i},this.value)">
       <span class="col-field-type">${label}${extra}</span>
-      <button class="col-field-del" onclick="removeColField(${i})">✕</button>
+      <button type="button" class="col-field-btn" onclick="event.stopPropagation();moveColField(${i},-1)" ${i===0?'style="opacity:.3;pointer-events:none;"':''} title="Monter">↑</button>
+      <button type="button" class="col-field-btn" onclick="event.stopPropagation();moveColField(${i},1)" ${i===colModalFields.length-1?'style="opacity:.3;pointer-events:none;"':''} title="Descendre">↓</button>
+      <button type="button" class="col-field-del" onclick="event.stopPropagation();removeColField(${i})">✕</button>
     </div>`;
   }).join('');
+}
+function renameColField(i,name){
+  if(!name.trim()||!colModalFields[i])return;
+  colModalFields[i].name=name.trim();
+}
+function moveColField(i,dir){
+  const j=i+dir;
+  if(j<0||j>=colModalFields.length)return;
+  [colModalFields[i],colModalFields[j]]=[colModalFields[j],colModalFields[i]];
+  renderColFields();
 }
 function addColField(){
   const name=document.getElementById('colFieldInput').value.trim();
@@ -2843,15 +2950,6 @@ function saveCollection(){
   }
   saveLocal();closeModal('collectionModal');renderTrackingCollections();
 }
-const DEFAULT_TRACKING_COLLECTIONS=[
-  {id:'tc_films',name:'Films',icon:'🎬',desc:'Films vus ou à voir'},
-  {id:'tc_series',name:'Séries',icon:'📺',desc:'Séries regardées'},
-  {id:'tc_livres',name:'Livres',icon:'📖',desc:'Livres lus ou à lire'},
-];
-let currentTrackingColId=null;
-let currentTrackingItemId=null;
-let trackingStatusFilter='all';
-let newReviewRating=0;
 
 function initTracking(){
   if(!S.tracking)S.tracking={collections:[],items:[]};
@@ -2859,35 +2957,23 @@ function initTracking(){
     S.tracking.collections=[
       {id:'tc_films',name:'Films',icon:'🎬',desc:'',
        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]},
+       fields:[{id:'f_real',name:'Réalisateur',type:'text'}]},
       {id:'tc_series',name:'Séries',icon:'📺',desc:'',
        statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-       fields:[{id:'f_lieu',name:'Lieu',type:'text'},{id:'f_avec',name:'Avec qui',type:'text'},{id:'f_datewatch',name:'Date de visionnage',type:'date'}]},
+       fields:[]},
       {id:'tc_livres',name:'Livres',icon:'📖',desc:'',
        statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-       fields:[{id:'f_datedebut',name:'Date début lecture',type:'date'},{id:'f_datefin',name:'Date fin lecture',type:'date'},{id:'f_pages',name:'Nombre de pages',type:'progress',min:0,max:100}]},
+       fields:[{id:'f_auteur',name:'Auteur',type:'text'}]},
     ];
     saveLocal();
   }
-  // Ensure existing collections have fields and statuses arrays
-  S.tracking.collections.forEach(c=>{if(!c.fields)c.fields=[];if(!c.statuses)c.statuses=[];});
-  // Migration: fix known wrong names
-  const migrations={'tc_films':['Films & Séries','Films & Series'],'tc_series':['Séries']};
-  let migrated=false;
+  // Garantir que chaque collection a bien les tableaux nécessaires
   S.tracking.collections.forEach(c=>{
-    if(c.id==='tc_films'&&(c.name==='Films & Séries'||c.name==='Films & Series')){c.name='Films';migrated=true;}
-    // Add missing date fields to films/series
-    if((c.id==='tc_films'||c.id==='tc_series')&&!c.fields.find(f=>f.id==='f_datewatch')){
-      c.fields.push({id:'f_datewatch',name:'Date de visionnage',type:'date'});migrated=true;
-    }
-    if(c.id==='tc_livres'&&!c.fields.find(f=>f.id==='f_datedebut')){
-      c.fields.push({id:'f_datedebut',name:'Date début lecture',type:'date'},{id:'f_datefin',name:'Date fin lecture',type:'date'});migrated=true;
-    }
-    if(c.id==='tc_livres'&&!c.fields.find(f=>f.id==='f_pages')){
-      c.fields.push({id:'f_pages',name:'Nombre de pages',type:'progress',min:0,max:100});migrated=true;
-    }
+    if(!c.fields)c.fields=[];
+    if(!c.statuses)c.statuses=[];
+    // Correction du nom Films si ancienne valeur
+    if(c.id==='tc_films'&&(c.name==='Films & Séries'||c.name==='Films & Series'))c.name='Films';
   });
-  if(migrated)saveLocal();
 }
 
 function starsHtml(rating,_unused,size){
@@ -3079,11 +3165,6 @@ function renderTrackingItemDetail(item){
         </div>`;
       }).join('')}
     </div>`:''}
-    <!-- Tags -->
-    <div style="margin-bottom:1rem;">
-      <div class="tag-input-wrap"><input type="text" id="tiTagInput" placeholder="Genre, plateforme…" onkeydown="addTrackingTagKD(event)" style="font-size:12px;padding:6px 8px;"><button class="btn btn-secondary btn-sm" onclick="addTrackingTag()">+</button></div>
-      <div class="tags-wrap" id="tiTags">${(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('')}</div>
-    </div>
     <!-- Reviews history (only if collection has reviews enabled) -->
     ${col.reviewsEnabled!==false?`
     <div class="card" style="margin-bottom:1rem;">
@@ -3093,7 +3174,12 @@ function renderTrackingItemDetail(item){
           <div class="tracking-review-item" id="rev_${i}">
             <div class="tracking-review-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}</div>
             ${r.rating?starsHtml(r.rating,'','big'):''}
-            ${r.avis?`<div class="tracking-review-avis" id="revtxt_${i}">${r.avis}</div>`:''}
+            ${(r.avecQui||r.lieu||r.plateforme)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              ${r.avecQui?`<span style="font-size:11px;color:var(--text2);background:var(--bg2);border-radius:6px;padding:2px 8px;">👥 ${r.avecQui}</span>`:''}
+              ${r.plateforme?`<span style="font-size:11px;color:var(--text2);background:var(--bg2);border-radius:6px;padding:2px 8px;">📺 ${r.plateforme}</span>`:''}
+              ${r.lieu?`<span style="font-size:11px;color:var(--text2);background:var(--bg2);border-radius:6px;padding:2px 8px;">📍 ${r.lieu}</span>`:''}
+            </div>`:''}
+            ${r.avis?(()=>{const plain=stripHTML(r.avis);const long=plain.length>300;return`<div class="tracking-review-avis" id="revtxt_${i}" style="${long?'max-height:90px;overflow:hidden;':''}">${r.avis}</div>${long?`<button class="review-voir-plus" id="revbtn_${i}" onclick="toggleReviewExpand(${i})">Voir plus ▾</button>`:''}`})():''}
             <div style="display:flex;gap:4px;margin-top:5px;">
               <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:2px 5px;border-radius:4px;" onclick="startEditReview(${i})">✏️ Modifier</button>
               <button class="tracking-review-del" style="position:static;margin-left:auto;" onclick="deleteReview(${i})">✕</button>
@@ -3114,9 +3200,23 @@ function renderTrackingItemDetail(item){
           <span style="font-size:12px;color:var(--text3);">/10</span>
         </div>
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.7rem;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Date</label>
+          <input type="date" id="tiReviewDate" value="${new Date().toISOString().split('T')[0]}" style="font-size:12px;">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Plateforme</label>
+          <input type="text" id="tiReviewPlateforme" placeholder="Netflix, Canal…" style="font-size:12px;">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Lieu</label>
+          <input type="text" id="tiReviewLieu" placeholder="Cinéma, Maison…" style="font-size:12px;">
+        </div>
+      </div>
       <div class="form-group" style="margin-bottom:.7rem;">
-        <label>Date</label>
-        <input type="date" id="tiReviewDate" value="${new Date().toISOString().split('T')[0]}" style="font-size:12px;">
+        <label>Avec qui</label>
+        <input type="text" id="tiReviewAvecQui" placeholder="Seul·e, avec des amis…" style="font-size:12px;">
       </div>
       <div class="form-group" style="margin-bottom:.5rem;">
         <label>Avis</label>
@@ -3127,6 +3227,8 @@ function renderTrackingItemDetail(item){
           <div class="review-tb-sep"></div>
           <button class="review-tb-btn" onclick="reviewFmt('insertUnorderedList')">≡</button>
           <button class="review-tb-btn" onclick="reviewFmt('insertOrderedList')">1.</button>
+          <div class="review-tb-sep"></div>
+          <button class="review-tb-btn" onclick="execSpoiler()" title="Spoiler (masquer/révéler)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
         <div id="tiReviewAvis" contenteditable="true" style="min-height:70px;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;line-height:1.6;" placeholder="Votre avis, ressenti…"></div>
       </div>
@@ -3204,22 +3306,6 @@ function autoSaveTrackingItem(){
   const t=document.getElementById('tiTitle');if(t)item.title=t.value;
   saveLocal();
 }
-function addTrackingTagKD(e){if(e.key==='Enter'){e.preventDefault();addTrackingTag();}}
-function addTrackingTag(){
-  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
-  const inp=document.getElementById('tiTagInput');
-  const v=inp.value.trim().toLowerCase().replace(/\s+/g,'-');
-  if(!v||item.tags.includes(v))return;
-  item.tags.push(v);inp.value='';saveLocal();
-  const w=document.getElementById('tiTags');
-  if(w)w.innerHTML=(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
-}
-function removeTrackingTag(tag){
-  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
-  item.tags=item.tags.filter(t=>t!==tag);saveLocal();
-  const w=document.getElementById('tiTags');
-  if(w)w.innerHTML=(item.tags||[]).map(t=>`<span class="tag active">#${t} <span onclick="removeTrackingTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');
-}
 
 function previewStars(val){
   document.querySelectorAll('#starInput .ts').forEach((s,i)=>{
@@ -3240,8 +3326,34 @@ function setReviewRating(val){
 }
 
 function reviewFmt(cmd){document.execCommand(cmd,false,null);}
+function annFmt(cmd){document.getElementById('adminAnnContent').focus();document.execCommand(cmd,false,null);}
+function annFmtColor(color){document.getElementById('adminAnnContent').focus();document.execCommand('foreColor',false,color||'inherit');}
 
-let editingReviewIdx=null;
+function execSpoiler(){
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.toString().trim())return;
+  const range=sel.getRangeAt(0);
+  let container=range.commonAncestorContainer;
+  if(container.nodeType===3)container=container.parentNode;
+  const spoilerEl=container.closest&&container.closest('.spoiler');
+  if(spoilerEl){
+    // Unwrap: remplacer le span par son contenu
+    const parent=spoilerEl.parentNode;
+    while(spoilerEl.firstChild)parent.insertBefore(spoilerEl.firstChild,spoilerEl);
+    parent.removeChild(spoilerEl);
+    return;
+  }
+  document.execCommand('insertHTML',false,`<span class="spoiler" onclick="this.classList.toggle('revealed')">${sel.toString()}</span>`);
+}
+
+function toggleReviewExpand(i){
+  const txt=document.getElementById('revtxt_'+i);
+  const btn=document.getElementById('revbtn_'+i);
+  if(!txt||!btn)return;
+  const expanded=txt.dataset.expanded==='1';
+  if(expanded){txt.style.maxHeight='90px';txt.dataset.expanded='0';btn.textContent='Voir plus ▾';}
+  else{txt.style.maxHeight=txt.scrollHeight+'px';txt.dataset.expanded='1';btn.textContent='Voir moins ▴';}
+}
 
 function startEditReview(idx){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item||!item.reviews[idx])return;
@@ -3252,6 +3364,9 @@ function startEditReview(idx){
   const ri=document.getElementById('ratingInput');if(ri)ri.value=r.rating||'';
   const rd=document.getElementById('tiReviewDate');if(rd)rd.value=r.date||'';
   const ra=document.getElementById('tiReviewAvis');if(ra)ra.innerHTML=r.avis||'';
+  const rp=document.getElementById('tiReviewPlateforme');if(rp)rp.value=r.plateforme||'';
+  const rl=document.getElementById('tiReviewLieu');if(rl)rl.value=r.lieu||'';
+  const rw=document.getElementById('tiReviewAvecQui');if(rw)rw.value=r.avecQui||'';
   setReviewRating(r.rating||0);
   const title=document.getElementById('reviewFormTitle');if(title)title.textContent='✏️ Modifier cet avis';
   const submitBtn=document.getElementById('reviewSubmitBtn');if(submitBtn)submitBtn.textContent='Mettre à jour';
@@ -3265,6 +3380,9 @@ function cancelEditReview(){
   const ri=document.getElementById('ratingInput');if(ri)ri.value='';
   const rd=document.getElementById('tiReviewDate');if(rd)rd.value=new Date().toISOString().split('T')[0];
   const ra=document.getElementById('tiReviewAvis');if(ra)ra.innerHTML='';
+  const rp2=document.getElementById('tiReviewPlateforme');if(rp2)rp2.value='';
+  const rl=document.getElementById('tiReviewLieu');if(rl)rl.value='';
+  const rw=document.getElementById('tiReviewAvecQui');if(rw)rw.value='';
   previewStars(0);
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);
   const title=document.getElementById('reviewFormTitle');
@@ -3278,16 +3396,17 @@ function addReview(){
   const avisDom=document.getElementById('tiReviewAvis');
   const avis=avisDom?avisDom.innerHTML.replace(/<br\s*\/?>/gi,'\n').trim():'';
   const date=document.getElementById('tiReviewDate')?.value||'';
+  const plateforme=(document.getElementById('tiReviewPlateforme')?.value||'').trim();
+  const lieu=(document.getElementById('tiReviewLieu')?.value||'').trim();
+  const avecQui=(document.getElementById('tiReviewAvecQui')?.value||'').trim();
   const ratingInputEl=document.getElementById('ratingInput');
   const rating=ratingInputEl?parseFloat(ratingInputEl.value)||newReviewRating:newReviewRating;
-  if(!avis&&!rating)return;
+  if(!avis&&!rating&&!lieu&&!plateforme&&!avecQui)return;
   item.reviews=item.reviews||[];
   if(editingReviewIdx!==null&&item.reviews[editingReviewIdx]){
-    // Update existing
-    item.reviews[editingReviewIdx]={...item.reviews[editingReviewIdx],rating,avis,date};
+    item.reviews[editingReviewIdx]={...item.reviews[editingReviewIdx],rating,avis,date,plateforme,lieu,avecQui};
   } else {
-    // Add new
-    item.reviews.push({rating,avis,date,createdAt:new Date().toISOString()});
+    item.reviews.push({rating,avis,date,plateforme,lieu,avecQui,createdAt:new Date().toISOString()});
     // Auto-set to last status if was first status
     const col=S.tracking.collections.find(c=>c.id===item.colId);
     const statuses=getColStatuses(col);
@@ -3305,9 +3424,6 @@ function deleteTrackingItem(id){
     saveLocal();openTrackingCollection(currentTrackingColId);
   });
 }
-
-let goalsChartDays=30;
-let trackingChartDays=30;
 
 function setGoalsChartPeriod(days,el){
   goalsChartDays=days;
@@ -3374,9 +3490,6 @@ function drawTrackingChart(){
   }
   drawMiniBarChart('trackingChart',data,'#C44B7A');
 }
-let currentGoalId=null;
-let goalPeriodFilter='all';
-
 function goalDaysLeft(g){
   if(!g.dateEnd)return null;
   const diff=Math.ceil((new Date(g.dateEnd+'T00:00:00')-new Date())/(1000*60*60*24));
@@ -3729,55 +3842,15 @@ function deleteGoal(id){
     saveLocal();switchTab('goals');
   });
 }
-const EXAMPLE_GOALS=[
-  {id:'eg1',title:'Lire 12 livres cette année',desc:'Un livre par mois, des genres variés.',status:'encours',priority:'medium',
-   checklist:[{text:'Choisir ma liste de livres',done:true},{text:'Lire le 1er livre',done:true},{text:'Lire le 2ème livre',done:false},{text:'Tenir un journal de lecture',done:false}],
-   progress:0,dateStart:'',dateEnd:new Date().getFullYear()+'-12-31',note:'',tags:['lecture','culture'],
-   sections:[{id:'s1',name:'Pourquoi',content:'Élargir mes horizons et me détendre.'},{id:'s2',name:'Liste de livres',content:''}],
-   createdAt:new Date().toISOString()},
-  {id:'eg2',title:'Courir un 10km',desc:'Progresser et participer à une course.',status:'encours',priority:'high',
-   checklist:[{text:'S\'inscrire à une course',done:false},{text:'Courir 3x/semaine',done:false},{text:'Atteindre 5km sans s\'arrêter',done:false},{text:'Compléter les 10km',done:false}],
-   progress:0,dateStart:'',dateEnd:'',note:'',tags:['sport','santé'],
-   sections:[{id:'s1',name:'Programme',content:''},{id:'s2',name:'Suivi hebdo',content:''}],
-   createdAt:new Date().toISOString()},
-  {id:'eg3',title:'Apprendre l\'espagnol',desc:'Niveau conversationnel d\'ici 6 mois.',status:'pause',priority:'low',
-   checklist:[{text:'30 min de pratique par jour',done:false},{text:'Finir le niveau A2',done:false},{text:'Regarder une série en espagnol',done:false}],
-   progress:15,dateStart:'',dateEnd:'',note:'',tags:['apprentissage','langue'],
-   sections:[{id:'s1',name:'Ressources',content:'Duolingo, Netflix, podcasts espagnols.'},{id:'s2',name:'Notes',content:''}],
-   createdAt:new Date().toISOString()},
-];
 function initGoals(){if(!S.goals||!S.goals.length)S.goals=[...EXAMPLE_GOALS];}
-
-const EXAMPLE_QUOTES=[
-  {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',date:'',tags:['vie','philosophie'],createdAt:new Date().toISOString()},
-  {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',date:'',tags:['sagesse','action'],createdAt:new Date().toISOString()},
-  {id:'eq3',text:'Un ami c\'est quelqu\'un qui vous connaît bien et qui vous aime quand même.',author:'Elbert Hubbard',date:'',tags:['amitié'],createdAt:new Date().toISOString()},
-  {id:'eq4',text:'Le bonheur n\'est pas quelque chose de tout fait. Il vient de vos propres actions.',author:'Dalaï Lama',date:'',tags:['bonheur','sagesse'],createdAt:new Date().toISOString()},
-  {id:'eq5',text:'Il n\'y a qu\'une façon d\'éviter les critiques : ne rien faire, ne rien dire et n\'être rien.',author:'Aristote',date:'',tags:['courage','philosophie'],createdAt:new Date().toISOString()},
-];
-
 function initQuotes(){if(!S.quotes||!S.quotes.length)S.quotes=[...EXAMPLE_QUOTES];}
 function addQuoteTagKD(e){if(e.key==='Enter'){e.preventDefault();addQuoteTag();}}
 function addQuoteTag(){const i=document.getElementById('quoteTagInput'),v=i.value.trim().toLowerCase().replace(/\s+/g,'-');if(!v||quoteTags.includes(v))return;quoteTags.push(v);i.value='';renderQuoteSelTags();}
 function removeQuoteTag(t){quoteTags=quoteTags.filter(x=>x!==t);renderQuoteSelTags();}
 function renderQuoteSelTags(){const w=document.getElementById('selectedQuoteTags');if(w)w.innerHTML=quoteTags.map(t=>`<span class="tag active">#${t} <span onclick="removeQuoteTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');}
 function clearQuoteDate(){document.getElementById('quoteDate').value='';}
-function saveQuote(){
-  const text=document.getElementById('quoteText').value.trim();
-  if(!text)return;
-  const q={id:uid(),text,author:document.getElementById('quoteAuthor').value.trim(),date:document.getElementById('quoteDate').value||'',tags:[...quoteTags],createdAt:new Date().toISOString()};
-  S.quotes.unshift(q);
-  document.getElementById('quoteText').value='';
-  document.getElementById('quoteAuthor').value='';
-  document.getElementById('quoteDate').value='';
-  quoteTags=[];renderQuoteSelTags();
-  saveLocal();renderQuotes();
-}
 function deleteQuote(id){showConfirm('Supprimer cette citation ?','',()=>{S.quotes=S.quotes.filter(q=>q.id!==id);saveLocal();renderQuotes();});}
 function setQuoteTagFilter(tag){quoteFilterTag=quoteFilterTag===tag?null:tag;renderQuotes();}
-let quoteSort='recent';
-let editingQuoteId=null;
-
 function toggleQuoteSortDD(e){e.stopPropagation();const d=document.getElementById('quoteSortDD');d.style.display=d.style.display==='none'?'block':'none';}
 document.addEventListener('click',()=>{const d=document.getElementById('quoteSortDD');if(d)d.style.display='none';});
 function setQuoteSort(s){
@@ -4074,7 +4147,6 @@ function renderScalesHome(){
 }
 
 // ── STATS TABS ─────────────────────────────────────────────────────────────
-let currentStatTab='global';
 function switchStatTab(tab){
   currentStatTab=tab;
   ['global','journal','goals','tracking'].forEach(t=>{
@@ -4238,7 +4310,6 @@ function renderStatsGoals(){
   setTimeout(drawGoalsChart,50);
 }
 
-let currentStatTrackingColId=null;
 function renderStatsTracking(){
   if(!S.trackingEnabled)return;
   initTracking();
@@ -4384,7 +4455,6 @@ function renderStats(){
   switchStatTab(currentStatTab);
 }
 function calcStreak(){if(!S.entries.length)return 0;const dates=[...new Set(S.entries.filter(e=>e.date).map(e=>e.date))].sort().reverse();let streak=0,cur=new Date();cur.setHours(0,0,0,0);for(const d of dates){const dd=new Date(d+'T00:00:00'),diff=Math.round((cur-dd)/864e5);if(diff===0||diff===1){streak++;cur=dd;}else break;}return streak;}
-let chartPeriodDays=7;
 function setPeriod(days,el){
   chartPeriodDays=days;
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
@@ -4557,6 +4627,77 @@ function generatePDF(entries){
   doc.save(entries.length===1?(entries[0].date||'entree')+'.pdf':'journal.pdf');
 }
 
+function exportTrackingItemPDF(){
+  if(!currentTrackingItemId)return;
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);
+  if(!item)return;
+  const col=S.tracking.collections.find(c=>c.id===item.colId)||{name:'Collection',icon:'',statuses:[],fields:[]};
+  const statuses=getColStatuses(col);
+  const status=statuses.find(s=>s.id===item.status)||statuses[0]||{label:'',emoji:''};
+  const exportDateStr=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  // ─ Champs personnalisés ─
+  const fields=col.fields||[];
+  const fieldsHtml=fields.map(f=>{
+    const val=(item.customFields&&item.customFields[f.id])||'';
+    return val?`<div class="field-row"><span class="field-label">${f.name}</span><span class="field-val">${val}</span></div>`:'';
+  }).filter(Boolean).join('');
+
+  // ─ Avis ─
+  const reviews=item.reviews||[];
+  const reviewsHtml=reviews.map((r,i)=>{
+    const dateStr=r.date
+      ?new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
+      :new Date(r.createdAt||Date.now()).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    const starsStr=r.rating?'★'.repeat(Math.round(r.rating/2))+'☆'.repeat(5-Math.round(r.rating/2))+` (${r.rating}/10)`:'';
+    const ctx=[r.avecQui?'👥 '+r.avecQui:'',r.plateforme?'📺 '+r.plateforme:'',r.lieu?'📍 '+r.lieu:''].filter(Boolean).join(' &nbsp;·&nbsp; ');
+    const avis=r.avis?stripHTML(r.avis).trim():'';
+    return`<div class="review-block">
+      <div class="review-meta">${i+1}. ${dateStr}${starsStr?'&nbsp;&nbsp;<span class="stars">'+starsStr+'</span>':''}</div>
+      ${ctx?`<div class="review-ctx">${ctx}</div>`:''}
+      ${avis?`<div class="review-avis">${avis}</div>`:''}
+    </div>`;
+  }).join('');
+
+  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+  <title>${item.title||'Suivi'}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Georgia,'Times New Roman',serif;font-size:12pt;color:#1A1814;background:#fff;padding:20mm 22mm;}
+    .header-cat{font-size:9pt;color:#A09D99;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;}
+    h1{font-size:20pt;font-weight:bold;margin-bottom:6px;line-height:1.2;}
+    .status-badge{display:inline-block;font-size:10pt;color:#8B7355;margin-bottom:14px;}
+    hr{border:none;border-top:1px solid #E5E2DC;margin:14px 0;}
+    .section-title{font-size:9pt;font-weight:bold;color:#6B6760;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+    .field-row{display:flex;gap:8px;margin-bottom:5px;font-size:10.5pt;}
+    .field-label{font-weight:bold;min-width:110px;color:#6B6760;}
+    .field-val{color:#1A1814;}
+    .notes-text{font-size:11pt;line-height:1.65;white-space:pre-wrap;color:#1A1814;}
+    .review-block{margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed #E5E2DC;}
+    .review-block:last-child{border-bottom:none;}
+    .review-meta{font-weight:bold;font-size:10pt;color:#8B7355;margin-bottom:3px;}
+    .stars{font-size:9pt;color:#C0A060;font-weight:normal;}
+    .review-ctx{font-size:9pt;color:#6B6760;margin-bottom:4px;}
+    .review-avis{font-size:11pt;line-height:1.65;white-space:pre-wrap;color:#1A1814;margin-top:4px;}
+    .footer{position:fixed;bottom:12mm;left:22mm;right:22mm;font-size:8pt;color:#A09D99;display:flex;justify-content:space-between;border-top:1px solid #E5E2DC;padding-top:5px;}
+    @media print{body{padding:0;}@page{margin:20mm 22mm 18mm;}}
+  </style></head><body>
+  <div class="header-cat">${col.icon} ${col.name}</div>
+  <h1>${item.title||'Sans titre'}</h1>
+  <div class="status-badge">${status.emoji} ${status.label}</div>
+  ${fieldsHtml?`<hr><div class="section-title">Informations</div>${fieldsHtml}`:''}
+  ${item.notes&&stripHTML(item.notes).trim()?`<hr><div class="section-title">Notes</div><div class="notes-text">${stripHTML(item.notes).trim()}</div>`:''}
+  ${reviewsHtml?`<hr><div class="section-title">Avis (${reviews.length})</div>${reviewsHtml}`:''}
+  <div class="footer"><span>${col.icon} ${col.name} — ${item.title||''}</span><span>Exporté le ${exportDateStr}</span></div>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`;
+
+  const win=window.open('','_blank','width=900,height=700');
+  if(!win){alert('Autorisez les popups pour exporter en PDF.');return;}
+  win.document.write(html);
+  win.document.close();
+}
+
 // ── ANNOUNCEMENTS ─────────────────────────────────────────────────────────
 const ADMIN_SECRET='journal_admin_2025'; // Change this secret
 const ANN_TABLE='journal_announcements';
@@ -4598,7 +4739,7 @@ async function openAnnouncements(){
         <span style="font-size:13px;font-weight:600;color:var(--text);">${a.title||'Mise à jour'}</span>
         <span style="font-size:10px;color:var(--text3);margin-left:auto;">${dateStr}</span>
       </div>
-      <p style="font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-line;">${a.content||''}</p>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;padding-left:2px;" class="ann-body">${a.content||''}</div>
     </div>`;
   }).join('');
 }
@@ -4640,26 +4781,47 @@ async function loadAdminAnnouncements(){
         <div style="font-size:12px;font-weight:500;color:var(--text);">${a.version?`[${a.version}] `:''}${a.title}</div>
         <div style="font-size:10px;color:var(--text3);">${new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
       </div>
+      <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;" onclick="editAnnouncement('${a.id}')">✏️</button>
       <button style="background:none;border:none;color:#E24B4A;cursor:pointer;font-size:12px;" onclick="deleteAnnouncement('${a.id}')">🗑</button>
     </div>`).join('');
+}
+
+let editingAnnId=null;
+function editAnnouncement(id){
+  const a=announcementsCache.find(x=>x.id==id);if(!a)return;
+  editingAnnId=id;
+  document.getElementById('adminAnnTitle').value=a.title||'';
+  document.getElementById('adminAnnContent').innerHTML=a.content||'';
+  document.getElementById('adminAnnVersion').value=a.version||'';
+  document.getElementById('annSubmitBtn').textContent='💾 Mettre à jour';
+  document.getElementById('annCancelEdit').style.display='';
+  document.getElementById('adminAnnTitle').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function cancelAnnEdit(){
+  editingAnnId=null;
+  document.getElementById('adminAnnTitle').value='';
+  document.getElementById('adminAnnContent').innerHTML='';
+  document.getElementById('adminAnnVersion').value='';
+  document.getElementById('annSubmitBtn').textContent='📢 Publier';
+  document.getElementById('annCancelEdit').style.display='none';
 }
 async function publishAnnouncement(){
   if(!adminAuthed)return;
   const title=document.getElementById('adminAnnTitle')?.value.trim();
-  const content=document.getElementById('adminAnnContent')?.value.trim();
+  const content=document.getElementById('adminAnnContent')?.innerHTML.trim();
   const version=document.getElementById('adminAnnVersion')?.value.trim();
   if(!title||!content){alert('Titre et contenu requis.');return;}
   try{
-    const res=await fetch(`${SB_URL}/rest/v1/${ANN_TABLE}`,{
-      method:'POST',
+    const isEdit=!!editingAnnId;
+    const url=isEdit?`${SB_URL}/rest/v1/${ANN_TABLE}?id=eq.${editingAnnId}`:`${SB_URL}/rest/v1/${ANN_TABLE}`;
+    const res=await fetch(url,{
+      method:isEdit?'PATCH':'POST',
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
       body:JSON.stringify({title,content,version:version||null})
     });
-    if(res.ok||res.status===201){
-      document.getElementById('adminAnnTitle').value='';
-      document.getElementById('adminAnnContent').value='';
-      document.getElementById('adminAnnVersion').value='';
-      alert('✓ Annonce publiée !');
+    if(res.ok||res.status===201||res.status===204){
+      cancelAnnEdit();
+      alert(isEdit?'✓ Annonce mise à jour !':'✓ Annonce publiée !');
       loadAdminAnnouncements();
     } else {
       const err=await res.text();
