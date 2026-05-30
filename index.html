@@ -80,6 +80,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .nav-tab.active .nav-tab-icon{transform:scale(1.1);}
 .nav-tab:hover:not(.active){color:var(--text2);}
 .nav-tab:hover:not(.active) .nav-tab-icon{transform:translateY(-1px);}
+.nav-tab-icon-only{font-size:16px;padding:7px 10px 8px;opacity:.4;letter-spacing:0;}
+.nav-tab-icon-only:hover{opacity:.8;}
+.nav-tab-icon-only.active{opacity:1;}
 .nav-badge{position:absolute;top:4px;right:6px;min-width:14px;height:14px;border-radius:7px;background:var(--accent2);color:#fff;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 3px;}
 
 /* PAGES */
@@ -399,15 +402,41 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .book-view-sub{font-size:11px;color:var(--text3);}
 
 /* QUOTES */
-.quote-input-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.35rem;margin-bottom:1rem;box-shadow:var(--shadow);}
-.quote-textarea{width:100%;background:transparent;border:none;outline:none;font-family:var(--font-serif);font-size:18px;color:var(--text);line-height:1.7;resize:none;min-height:80px;font-style:italic;}
-.quote-textarea::placeholder{color:var(--text3);font-style:italic;}
+.quote-input-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.1rem 1.3rem 1rem;margin-bottom:1rem;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.quote-input-box::before{content:'\201C';position:absolute;top:-10px;left:16px;font-family:var(--font-serif);font-size:80px;color:var(--accent2);opacity:.1;line-height:1;pointer-events:none;user-select:none;}
+.quote-textarea{width:100%;background:transparent;border:none;outline:none;font-family:var(--font-serif);font-size:19px;color:var(--text);line-height:1.75;resize:none;min-height:32px;overflow:hidden;font-style:italic;padding-left:2px;}
+.quote-textarea::placeholder{color:var(--text3);font-style:italic;opacity:.6;}
+.quote-meta-row{display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);margin-top:.9rem;padding-top:.7rem;flex-wrap:wrap;}
+.quote-meta-input{flex:1;min-width:110px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px;padding:7px 11px;color:var(--text);font-family:var(--font-ui);outline:none;transition:border-color .15s;}
+.quote-meta-input:focus{border-color:var(--accent2);}
+.quote-meta-input::placeholder{color:var(--text3);}
+.quote-date-input{width:130px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px;padding:7px 10px;color:var(--text);font-family:var(--font-ui);outline:none;transition:border-color .15s;}
+.quote-date-input:focus{border-color:var(--accent2);}
+.quote-fav-btn{width:34px;height:34px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.quote-fav-btn:hover,.quote-fav-btn.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+.quote-submit-btn{height:34px;padding:0 18px;background:var(--accent2);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:opacity .15s;flex-shrink:0;margin-left:auto;}
+.quote-submit-btn:hover{opacity:.85;}
+.quote-tags-area{margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--border);}
+.quote-tag-input-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.quote-tag-input-row input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:12px;padding:6px 11px;color:var(--text);font-family:var(--font-ui);outline:none;}
+.quote-tag-input-row input:focus{border-color:var(--accent2);}
+.quote-tag-add-btn{width:30px;height:30px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.quote-tag-suggestions{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.quote-tag-chip{padding:3px 10px;border-radius:20px;font-size:11px;border:1px dashed var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .12s;font-family:var(--font-ui);}
+.quote-tag-chip:hover{border-color:var(--accent2);color:var(--accent2);border-style:solid;}
+.quote-tag-chip.used{border-style:solid;color:var(--text2);border-color:var(--border2);}
+/* QUOTE STYLES — card (default) */
 .quote-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.35rem 1rem;margin-bottom:8px;box-shadow:var(--shadow);transition:all .2s;position:relative;}
 .quote-card:hover{border-color:var(--border2);transform:translateY(-1px);}
 .quote-card::before{content:'\201C';position:absolute;top:10px;left:14px;font-family:var(--font-serif);font-size:42px;color:var(--accent2);opacity:.25;line-height:1;}
+.quote-card.fav{border-left:3px solid var(--accent2);}
 .quote-text{font-family:var(--font-serif);font-size:16px;color:var(--text);line-height:1.7;font-style:italic;padding-left:18px;margin-bottom:7px;}
 .quote-author{font-size:12px;color:var(--text2);padding-left:18px;margin-bottom:6px;}
+.quote-source{font-size:11px;color:var(--text3);padding-left:18px;margin-bottom:5px;}
 .quote-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding-left:18px;}
+/* emoji-minimal mode */
+body.emoji-minimal .nav-tab-icon{display:none;}
+body.emoji-minimal .entry-type-badge-icon{display:none;}
 
 /* STATS IMPROVED */
 .stats-hero{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:1rem;}
@@ -525,23 +554,89 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
 .goal-section-body[placeholder]:empty::before{content:attr(placeholder);color:var(--text3);}
 
 /* TRACKING */
-.tracking-collections{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem;}
-.tracking-col-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:all .2s;}
-.tracking-col-card:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:var(--shadow);}
-.tracking-col-icon{font-size:28px;margin-bottom:6px;}
-.tracking-col-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
-.tracking-col-count{font-size:11px;color:var(--text3);}
-.tracking-col-new{border:2px dashed var(--border2);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text3);min-height:90px;}
+.tracking-collections{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:1.5rem;}
+.tracking-col-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.1rem 1rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.tracking-col-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,var(--accent2),transparent 70%);opacity:.04;pointer-events:none;border-radius:18px;}
+.tracking-col-card:hover{border-color:var(--accent2);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.09);}
+.tracking-col-icon{font-size:36px;margin-bottom:10px;line-height:1;display:block;}
+.tracking-col-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.tracking-col-count{font-size:11px;color:var(--text3);margin-bottom:10px;}
+.tracking-col-statusbar{display:flex;gap:2px;height:3px;border-radius:2px;overflow:hidden;margin-bottom:10px;}
+.tracking-col-new{border:2px dashed var(--border2);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text3);min-height:120px;border-radius:18px;}
 .tracking-col-new:hover{border-color:var(--accent2);color:var(--accent2);background:var(--bg2);}
-.tracking-items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:1rem;}
-.tracking-item-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;cursor:pointer;transition:all .18s;}
-.tracking-item-card:hover{border-color:var(--accent2);transform:translateY(-1px);box-shadow:var(--shadow);}
+/* ── TRACKING TOOLBAR ── */
+.tracking-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:.9rem;flex-wrap:wrap;}
+.tracking-toolbar-group{display:flex;align-items:center;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px;}
+.tv-btn{height:28px;min-width:28px;padding:0 9px;border:none;background:transparent;color:var(--text3);cursor:pointer;border-radius:16px;font-size:13px;transition:all .15s;font-family:var(--font-ui);}
+.tv-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.tv-btn:hover:not(.active){color:var(--text2);}
+.tv-size-btn{height:26px;min-width:26px;padding:0 7px;border:none;background:transparent;color:var(--text3);cursor:pointer;border-radius:14px;font-size:11px;font-weight:600;transition:all .15s;font-family:var(--font-ui);}
+.tv-size-btn.active{background:var(--accent2);color:#fff;}
+.tv-img-btn{height:28px;padding:0 10px;border:none;background:var(--bg2);border:1px solid var(--border);border-radius:20px;color:var(--text3);cursor:pointer;font-size:12px;transition:all .15s;font-family:var(--font-ui);}
+.tv-img-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+.tracking-toolbar select{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:var(--font-ui);height:28px;}
+.tv-filter-btn{height:28px;padding:0 12px;border:1px solid var(--border);background:var(--bg2);border-radius:20px;color:var(--text3);cursor:pointer;font-size:11px;transition:all .15s;font-family:var(--font-ui);white-space:nowrap;}
+.tv-filter-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+#tvDisplayControls{animation:fadeIn .12s ease;}
+/* ── FILTER BAR ── */
+.tracking-filter-bar{margin-bottom:.7rem;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;gap:7px;}
+.tfilter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tfilter-label{font-size:10px;color:var(--text3);min-width:52px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;}
+.tfilter-chip{padding:2px 10px;border-radius:12px;font-size:11px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .1s;white-space:nowrap;}
+.tfilter-chip.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+.tfilter-chip:hover:not(.active){border-color:var(--accent2);color:var(--accent2);}
+
+/* ── GRID CONTAINER ── */
+.tracking-items-grid{margin-bottom:1rem;}
+.tig-poster{display:grid;gap:10px;}
+.tig-grid{display:grid;gap:10px;}
+.tig-list{display:flex;flex-direction:column;gap:6px;}
+
+/* ── POSTER MODE ── */
+.tic-poster{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:2/3;background:var(--bg3);box-shadow:0 4px 16px rgba(0,0,0,.12);transition:transform .2s,box-shadow .2s;}
+.tic-poster:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 32px rgba(0,0,0,.22);}
+.tic-poster img{width:100%;height:100%;object-fit:cover;display:block;}
+.tic-poster-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(135deg,var(--bg3),var(--bg2));}
+.tic-poster-overlay{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.78) 100%);pointer-events:none;}
+.tic-poster-body{position:absolute;bottom:0;left:0;right:0;padding:10px 10px 10px;}
+.tic-poster-title{color:#fff;font-size:12px;font-weight:700;line-height:1.3;margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,.5);}
+.tic-poster-sub{color:rgba(255,255,255,.7);font-size:10px;margin-bottom:4px;}
+.tic-poster-badge{position:absolute;top:8px;right:8px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;backdrop-filter:blur(8px);}
+.tic-poster-badge.status-vu{background:rgba(46,158,108,.8);color:#fff;}
+.tic-poster-badge.status-encours{background:rgba(59,125,216,.8);color:#fff;}
+.tic-poster-badge.status-avoir{background:rgba(0,0,0,.4);color:rgba(255,255,255,.8);}
+.tic-poster-prog{height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;margin-top:4px;}
+.tic-poster-prog-fill{height:100%;background:var(--accent2);border-radius:2px;}
+
+/* ── GRID MODE ── */
+.tic-grid{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s;overflow:hidden;}
+.tic-grid:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:var(--shadow);}
+.tic-grid-cover{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;background:var(--bg3);}
+.tic-grid-cover-placeholder{width:100%;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(135deg,var(--bg3),var(--bg2));}
+.tic-grid-body{padding:.7rem;}
+
+/* ── LIST MODE ── */
+.tic-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;padding:8px 12px;overflow:hidden;}
+.tic-list:hover{border-color:var(--accent2);background:var(--bg2);}
+.tic-list-thumb{width:36px;height:54px;border-radius:5px;object-fit:cover;flex-shrink:0;background:var(--bg3);}
+.tic-list-thumb-placeholder{width:36px;height:54px;border-radius:5px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.tic-list-body{flex:1;min-width:0;}
+.tic-list-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tic-list-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.tic-list-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+
+/* ── SHARED ── */
 .tracking-item-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;line-height:1.3;}
 .tracking-item-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;}
 .status-vu{background:rgba(46,158,108,.15);color:#2E9E6C;}
 .status-encours{background:rgba(59,125,216,.15);color:#3B7DD8;}
 .status-avoir{background:rgba(160,157,153,.15);color:#6B6760;}
 .tracking-item-views{font-size:10px;color:var(--text3);margin-top:4px;}
+.col-db-opt:hover{border-color:var(--accent2)!important;}
+.col-db-opt.selected{border-color:var(--accent2)!important;background:color-mix(in srgb,var(--accent2) 10%,transparent);}
+.cover-search-results{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.cover-result-img{width:70px;height:105px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:border-color .15s;}
+.cover-result-img:hover{border-color:var(--accent2);}
 .tracking-review-item{background:var(--bg2);border-radius:var(--radius-sm);padding:.85rem;margin-bottom:.7rem;position:relative;}
 .tracking-review-date{font-size:10px;color:var(--text3);margin-bottom:4px;}
 .tracking-review-avis{font-size:13px;color:var(--text);line-height:1.6;margin-top:4px;}
@@ -579,7 +674,9 @@ kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border2);border-
   .type-grid{grid-template-columns:repeat(3,1fr);}
   .books-grid{grid-template-columns:repeat(2,1fr);}
   .tracking-collections{grid-template-columns:repeat(2,1fr);}
-  .tracking-items-grid{grid-template-columns:repeat(2,1fr);}
+  .tig-poster{grid-template-columns:repeat(3,1fr)!important;}
+  .tracking-toolbar{gap:5px;}
+  .tv-btn,.tv-size-btn{font-size:12px;}
 }
 @media print{.topbar,.nav-tabs,.back-btn,.btn,.float-toolbar{display:none!important;}.page{display:block!important;}body{background:#fff;color:#000;}}
 </style>
@@ -760,12 +857,12 @@ window._c = function(fn, args) {
 
 <!-- NAV -->
 <div class="nav-tabs" id="mainNav">
-  <button class="nav-tab active" onclick="switchTab('home')"><span class="nav-tab-icon">📚</span>Livres</button>
-  <button class="nav-tab" onclick="switchTab('stats')"><span class="nav-tab-icon">📊</span>Stats</button>
-  <button class="nav-tab" id="navGoalsBtn" onclick="switchTab('goals')"><span class="nav-tab-icon">🎯</span>Objectifs</button>
-  <button class="nav-tab" id="navTrackingBtn" onclick="switchTab('tracking')"><span class="nav-tab-icon">🎬</span>Suivi</button>
-  <button class="nav-tab" id="navQuotesBtn" onclick="switchTab('quotes')"><span class="nav-tab-icon">💬</span>Citations</button>
-  <button class="nav-tab" onclick="switchTab('settings')"><span class="nav-tab-icon">⚙️</span>Réglages</button>
+  <button class="nav-tab active" data-tab="home" onclick="switchTab('home')"><span class="nav-tab-icon">📚</span>Livres</button>
+  <button class="nav-tab" data-tab="goals" id="navGoalsBtn" onclick="switchTab('goals')"><span class="nav-tab-icon">🎯</span>Objectifs</button>
+  <button class="nav-tab" data-tab="tracking" id="navTrackingBtn" onclick="switchTab('tracking')"><span class="nav-tab-icon">🎬</span>Suivi</button>
+  <button class="nav-tab" data-tab="quotes" id="navQuotesBtn" onclick="switchTab('quotes')"><span class="nav-tab-icon">💬</span>Citations</button>
+  <button class="nav-tab" data-tab="settings" onclick="switchTab('settings')"><span class="nav-tab-icon">⚙️</span>Réglages</button>
+  <button class="nav-tab nav-tab-icon-only" data-tab="stats" onclick="switchTab('stats')" title="Statistiques">📊</button>
 </div>
 
 <!-- HOME: BOOKS GRID -->
@@ -775,7 +872,7 @@ window._c = function(fn, args) {
     <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;overflow-x:auto;">
       <button class="nav-tab active" id="homeTabBooks" onclick="switchHomeTab('books')" style="font-size:12px;padding:6px 14px;">📚 Livres</button>
       <button class="nav-tab" id="homeTabCal" onclick="switchHomeTab('calendar')" style="font-size:12px;padding:6px 14px;">📅 Calendrier</button>
-      <button class="nav-tab" id="homeTabScales" onclick="switchHomeTab('scales')" style="font-size:12px;padding:6px 14px;">📊 Échelles</button>
+      <button class="nav-tab" id="homeTabScales" onclick="switchHomeTab('scales')" style="font-size:12px;padding:6px 14px;">〰 Échelles</button>
       <button class="nav-tab" id="homeTabModels" onclick="switchHomeTab('models')" style="font-size:12px;padding:6px 14px;">🗂 Modèles</button>
     </div>
     <!-- Books grid view -->
@@ -907,15 +1004,12 @@ window._c = function(fn, args) {
         <button class="btn btn-secondary btn-sm" onclick="exportStatsPDF()">📄 PDF</button>
       </div>
     </div>
-    <!-- Stats sub-tabs -->
     <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.1rem;overflow-x:auto;" id="statsTabBar">
       <button class="nav-tab active" id="stab-global" onclick="switchStatTab('global')" style="font-size:11px;padding:6px 12px;">🌐 Global</button>
       <button class="nav-tab" id="stab-journal" onclick="switchStatTab('journal')" style="font-size:11px;padding:6px 12px;">📚 Journal</button>
-      <button class="nav-tab" id="stab-goals" id="stabGoals" onclick="switchStatTab('goals')" style="font-size:11px;padding:6px 12px;display:none;">🎯 Objectifs</button>
+      <button class="nav-tab" id="stab-goals" onclick="switchStatTab('goals')" style="font-size:11px;padding:6px 12px;display:none;">🎯 Objectifs</button>
       <button class="nav-tab" id="stab-tracking" onclick="switchStatTab('tracking')" style="font-size:11px;padding:6px 12px;display:none;">🎬 Suivi</button>
     </div>
-
-    <!-- GLOBAL TAB -->
     <div id="statsTab-global">
       <div class="stats-hero" id="statsHeroGlobal"></div>
       <div class="stats-section-title">Activité récente</div>
@@ -926,25 +1020,13 @@ window._c = function(fn, args) {
           <span style="font-size:10px;color:var(--text3);">Plus</span>
         </div>
       </div>
-      <div id="statsGlobalGoals" style="display:none;">
-        <div class="stats-section-title">🎯 Objectifs</div>
-        <div class="card" style="margin-bottom:1rem;" id="statsGlobalGoalsCard"></div>
-      </div>
-      <div id="statsGlobalTracking" style="display:none;">
-        <div class="stats-section-title">🎬 Suivi</div>
-        <div class="card" style="margin-bottom:1rem;" id="statsGlobalTrackingCard"></div>
-      </div>
+      <div id="statsGlobalGoals" style="display:none;"><div class="stats-section-title">🎯 Objectifs</div><div class="card" style="margin-bottom:1rem;" id="statsGlobalGoalsCard"></div></div>
+      <div id="statsGlobalTracking" style="display:none;"><div class="stats-section-title">🎬 Suivi</div><div class="card" style="margin-bottom:1rem;" id="statsGlobalTrackingCard"></div></div>
     </div>
-
-    <!-- JOURNAL TAB -->
     <div id="statsTab-journal" style="display:none;">
       <div class="stats-hero" id="statsHeroJournal"></div>
-      <!-- Scale averages -->
       <div class="stats-section-title" id="scaleStatTitle">Humeur & Échelles</div>
-      <div class="card" style="margin-bottom:1rem;" id="scaleStatsCard">
-        <div id="scaleStatRows"></div>
-      </div>
-      <!-- Chart -->
+      <div class="card" style="margin-bottom:1rem;" id="scaleStatsCard"><div id="scaleStatRows"></div></div>
       <div class="stats-section-title">Évolution humeur</div>
       <div class="chart-wrap" id="chartWrap" style="margin-bottom:1rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:6px;">
@@ -960,73 +1042,42 @@ window._c = function(fn, args) {
         </div>
         <canvas id="moodChart" style="width:100%;display:block;"></canvas>
       </div>
-      <!-- Heatmap journal -->
       <div class="stats-section-title">Activité Journal (12 semaines)</div>
-      <div class="card" style="margin-bottom:1rem;">
-        <div class="heatmap-wrap" id="heatmapWrap"></div>
+      <div class="card" style="margin-bottom:1rem;"><div class="heatmap-wrap" id="heatmapWrap"></div>
         <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
           <span style="font-size:10px;color:var(--text3);">Moins</span>
           <div class="heatmap-cell"></div><div class="heatmap-cell h1"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div>
           <span style="font-size:10px;color:var(--text3);">Plus</span>
         </div>
       </div>
-      <!-- Type distribution -->
       <div class="stats-section-title">Répartition par livre</div>
       <div class="card" style="margin-bottom:1rem;" id="typeDistCard"></div>
-      <!-- Top tags -->
       <div class="stats-section-title">Tags fréquents</div>
       <div class="card" style="margin-bottom:1rem;"><div id="topTags" class="tags-wrap"></div></div>
-      <!-- Export -->
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-secondary btn-sm" onclick="exportEntriesJSON()">⬇ JSON Journal</button>
-        <button class="btn btn-secondary btn-sm" onclick="exportAllPDF()">📄 PDF Journal</button>
-      </div>
+      <div style="display:flex;gap:6px;"><button class="btn btn-secondary btn-sm" onclick="exportAllPDF()">📄 PDF Journal</button></div>
     </div>
-
-    <!-- Goals TAB evolution -->
     <div id="statsTab-goals" style="display:none;">
       <div class="stats-hero" id="statsHeroGoals"></div>
       <div class="stats-section-title">Répartition</div>
       <div class="card" style="margin-bottom:1rem;" id="goalsDistCard"></div>
       <div class="stats-section-title">Évolution des ajouts</div>
       <div class="mini-chart-wrap">
-        <div class="mini-chart-title">
-          Objectifs créés
-          <div class="mini-period-btns">
-            <button class="mini-period-btn active" onclick="setGoalsChartPeriod(30,this)">1m</button>
-            <button class="mini-period-btn" onclick="setGoalsChartPeriod(90,this)">3m</button>
-            <button class="mini-period-btn" onclick="setGoalsChartPeriod(365,this)">1an</button>
-          </div>
-        </div>
+        <div class="mini-chart-title">Objectifs créés<div class="mini-period-btns"><button class="mini-period-btn active" onclick="setGoalsChartPeriod(30,this)">1m</button><button class="mini-period-btn" onclick="setGoalsChartPeriod(90,this)">3m</button><button class="mini-period-btn" onclick="setGoalsChartPeriod(365,this)">1an</button></div></div>
         <canvas id="goalsChart" style="width:100%;display:block;"></canvas>
       </div>
       <div class="stats-section-title">Progression</div>
       <div class="card" style="margin-bottom:1rem;" id="goalsProgressCard"></div>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-secondary btn-sm" onclick="exportGoalsJSON()">⬇ JSON Objectifs</button>
-        <button class="btn btn-secondary btn-sm" onclick="exportGoalsPDF()">📄 PDF Objectifs</button>
-      </div>
+      <div style="display:flex;gap:6px;"><button class="btn btn-secondary btn-sm" onclick="exportGoalsPDF()">📄 PDF Objectifs</button></div>
     </div>
-
-    <!-- TRACKING TAB -->
     <div id="statsTab-tracking" style="display:none;">
-      <!-- Collection picker -->
       <div style="display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;" id="trackingStatColPicker"></div>
       <div id="trackingStatContent"></div>
       <div class="stats-section-title" style="margin-top:.5rem;">Évolution des ajouts</div>
       <div class="mini-chart-wrap">
-        <div class="mini-chart-title">
-          Éléments ajoutés
-          <div class="mini-period-btns">
-            <button class="mini-period-btn active" onclick="setTrackingChartPeriod(30,this)">1m</button>
-            <button class="mini-period-btn" onclick="setTrackingChartPeriod(90,this)">3m</button>
-            <button class="mini-period-btn" onclick="setTrackingChartPeriod(365,this)">1an</button>
-          </div>
-        </div>
+        <div class="mini-chart-title">Éléments ajoutés<div class="mini-period-btns"><button class="mini-period-btn active" onclick="setTrackingChartPeriod(30,this)">1m</button><button class="mini-period-btn" onclick="setTrackingChartPeriod(90,this)">3m</button><button class="mini-period-btn" onclick="setTrackingChartPeriod(365,this)">1an</button></div></div>
         <canvas id="trackingChart" style="width:100%;display:block;"></canvas>
       </div>
       <div style="display:flex;gap:6px;margin-top:1rem;" id="trackingStatExport">
-        <button class="btn btn-secondary btn-sm" onclick="exportTrackingJSON()">⬇ JSON Suivi</button>
         <button class="btn btn-secondary btn-sm" onclick="exportTrackingPDF()">📄 PDF Suivi</button>
       </div>
     </div>
@@ -1039,7 +1090,6 @@ window._c = function(fn, args) {
     <div class="section-header">
       <div><h1 class="section-title">Objectifs</h1><p class="section-subtitle" id="goalsCount">–</p></div>
       <div style="display:flex;gap:5px;">
-        <button class="btn btn-secondary btn-sm" onclick="exportGoalsJSON()">⬇</button>
         <button class="btn btn-secondary btn-sm" onclick="exportGoalsPDF()">📄</button>
         <button class="btn btn-primary btn-sm" onclick="openNewGoal()">+ Objectif</button>
       </div>
@@ -1116,21 +1166,32 @@ window._c = function(fn, args) {
       <button class="btn btn-primary btn-sm" onclick="openNewTrackingItem()">+ Ajouter</button>
     </div>
     <!-- Filter by status -->
-    <div style="display:flex;gap:5px;margin-bottom:.5rem;flex-wrap:wrap;" id="trackingStatusFilter">
+    <div style="display:flex;gap:5px;margin-bottom:.6rem;flex-wrap:wrap;" id="trackingStatusFilter">
       <button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>
     </div>
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:.8rem;flex-wrap:wrap;">
-      <select id="trackingSortSelect" onchange="renderTrackingItems()" style="font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);color:var(--text);flex:1;max-width:200px;">
-        <option value="createdAt_desc">⬇ Date d'ajout (récent)</option>
-        <option value="createdAt_asc">⬆ Date d'ajout (ancien)</option>
-        <option value="title_asc">A→Z Titre</option>
-        <option value="title_desc">Z→A Titre</option>
-        <option value="rating_desc">⭐ Note (haute)</option>
-      </select>
-      <select id="trackingTagFilter" onchange="renderTrackingItems()" style="font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);color:var(--text);flex:1;max-width:180px;display:none;">
-        <option value="">🏷️ Toutes étiquettes</option>
-      </select>
+    <!-- Toolbar: vue / taille / images / tri / filtres -->
+    <div class="tracking-toolbar">
+      <!-- Contrôles d'affichage (masquables) -->
+      <div id="tvDisplayControls" style="display:flex;align-items:center;gap:8px;">
+        <div class="tracking-toolbar-group">
+          <button class="tv-btn" id="tvPoster" onclick="setTrackingView('poster')" title="Poster">🪟</button>
+          <button class="tv-btn" id="tvGrid"   onclick="setTrackingView('grid')"   title="Grille">⊞</button>
+          <button class="tv-btn" id="tvList"   onclick="setTrackingView('list')"   title="Liste">☰</button>
+        </div>
+        <div class="tracking-toolbar-group" id="tvSizeGroup">
+          <button class="tv-size-btn" id="tvSizeS" onclick="setTrackingSize('s')">S</button>
+          <button class="tv-size-btn" id="tvSizeM" onclick="setTrackingSize('m')">M</button>
+          <button class="tv-size-btn" id="tvSizeL" onclick="setTrackingSize('l')">L</button>
+        </div>
+        <button class="tv-img-btn" id="tvImgBtn" onclick="toggleTrackingImages()">🖼 Pochettes</button>
+      </div>
+      <!-- Toggle masquer -->
+      <button class="tv-img-btn" id="tvDisplayToggle" onclick="toggleDisplayControls()" title="Masquer/afficher les contrôles d'affichage" style="font-size:11px;opacity:.55;">⚙</button>
+      <!-- Tri + Filtres -->
+      <select id="trackingSortSelect" onchange="renderTrackingItems()" style="flex:1;max-width:180px;"></select>
+      <button class="tv-filter-btn" id="tvFilterBtn" onclick="toggleFilterBar()">Filtrer</button>
     </div>
+    <div id="trackingFilterBar" class="tracking-filter-bar" style="display:none;"></div>
     <div class="tracking-items-grid" id="trackingItemsGrid"></div>
   </div>
 </div>
@@ -1153,28 +1214,33 @@ window._c = function(fn, args) {
   <div class="page-content">
     <div class="section-header">
       <div><h1 class="section-title">Citations</h1><p class="section-subtitle" id="quotesCount">–</p></div>
+      <button class="btn btn-secondary btn-sm" onclick="exportQuotesPDF()">📄 PDF</button>
     </div>
     <!-- Quick add / edit box -->
     <div class="quote-input-box" id="quoteInputBox">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
-        <span style="font-size:12px;font-weight:500;color:var(--text2);" id="quoteFormLabel">Nouvelle citation</span>
-        <button class="btn btn-secondary btn-sm" id="quoteCancelEditBtn" style="display:none;margin-left:auto;" onclick="cancelQuoteEdit()">Annuler</button>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+        <span style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;" id="quoteFormLabel">Nouvelle citation</span>
+        <button class="btn btn-secondary btn-sm" id="quoteCancelEditBtn" style="display:none;margin-left:auto;font-size:11px;" onclick="cancelQuoteEdit()">Annuler</button>
       </div>
-      <textarea class="quote-textarea" id="quoteText" placeholder="Tapez ou collez une citation…" rows="3"></textarea>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <input type="text" id="quoteAuthor" placeholder="Auteur (optionnel)" style="flex:1;min-width:120px;font-size:12px;padding:6px 9px;">
-        <input type="date" id="quoteDate" style="width:140px;font-size:12px;padding:6px 9px;">
-        <button class="btn btn-secondary btn-sm" onclick="clearQuoteDate()" title="Sans date">✕</button>
-        <button class="btn btn-primary btn-sm" onclick="saveQuote()" id="quoteSubmitBtn">＋ Ajouter</button>
+      <textarea class="quote-textarea" id="quoteText" placeholder="Tapez ou collez une citation…" rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="quote-meta-row">
+        <input type="text" id="quoteAuthor" placeholder="— Auteur" class="quote-meta-input">
+        <input type="text" id="quoteSource" placeholder="Source…" class="quote-meta-input" style="max-width:130px;">
+        <span id="quoteDateDisplay" onclick="document.getElementById('quoteDate').showPicker?document.getElementById('quoteDate').showPicker():document.getElementById('quoteDate').click()" style="flex-shrink:0;font-size:12px;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:7px 11px;cursor:pointer;white-space:nowrap;user-select:none;">📅 <span id="quoteDateLabel">Aujourd'hui</span></span>
+<input type="date" id="quoteDate" class="quote-date-input" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0;" onchange="updateQuoteDateDisplay()">
+<button class="quote-submit-btn" onclick="saveQuote()" id="quoteSubmitBtn" style="height:30px;padding:0 14px;font-size:12px;">Ajouter</button>
       </div>
-      <div style="margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <div class="tag-input-wrap" style="flex:1;min-width:160px;"><input type="text" id="quoteTagInput" placeholder="Tag…" onkeydown="addQuoteTagKD(event)" style="font-size:12px;padding:5px 8px;"><button class="btn btn-secondary btn-sm" onclick="addQuoteTag()">+</button></div>
-        <div class="tags-wrap" id="selectedQuoteTags"></div>
+      <div class="quote-tags-area">
+        <div class="quote-tag-input-row">
+          <input type="text" id="quoteTagInput" placeholder="Tag…" onkeydown="addQuoteTagKD(event)" oninput="renderQuoteTagSuggestions()" onfocus="renderQuoteTagSuggestions()">
+          <button class="quote-tag-add-btn" onclick="addQuoteTag()">+</button>
+        </div>
+        <div class="tags-wrap" id="selectedQuoteTags" style="margin-bottom:5px;"></div>
+        <div id="quoteTagSuggestions" class="quote-tag-suggestions"></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:.8rem;flex-wrap:wrap;">
-      <button class="btn btn-secondary btn-sm" onclick="exportQuotesJSON()">⬇ JSON</button>
-      <button class="btn btn-secondary btn-sm" onclick="exportQuotesPDF()">📄 PDF</button>
+      <button class="tv-filter-btn" id="quoteFavFilterBtn" onclick="toggleQuoteFavFilter()" style="font-size:13px;">☆ Favoris</button>
       <div style="position:relative;margin-left:auto;">
         <button class="btn btn-secondary btn-sm" onclick="toggleQuoteSortDD(event)">↕ <span id="quoteSortLabel">Récent</span></button>
         <div id="quoteSortDD" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:200;min-width:150px;overflow:hidden;">
@@ -1182,6 +1248,7 @@ window._c = function(fn, args) {
           <div class="sort-opt" onclick="setQuoteSort('oldest')">📅 Plus ancien</div>
           <div class="sort-opt" onclick="setQuoteSort('author')">🔤 Auteur A→Z</div>
           <div class="sort-opt" onclick="setQuoteSort('alpha')">🔤 Citation A→Z</div>
+          <div class="sort-opt" onclick="setQuoteSort('fav')">⭐ Favoris d'abord</div>
         </div>
       </div>
     </div>
@@ -1258,6 +1325,24 @@ window._c = function(fn, args) {
     </div>
 
     <div class="card" style="margin-bottom:.9rem;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:9px;">🖼 Pochettes (films & séries)</p>
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px;">Clé OMDb pour la recherche automatique de pochettes de films/séries. Gratuite sur <a href="https://www.omdbapi.com/apikey.aspx" target="_blank" style="color:var(--accent2);">omdbapi.com</a> (1000 req/jour).</p>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="omdbKeyInput" placeholder="Votre clé OMDb…" value="${localStorage.getItem('omdb_api_key')||''}" style="flex:1;font-size:13px;">
+        <button class="btn btn-primary btn-sm" onclick="saveOmdbKey()">Sauver</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:.9rem;">
+      <p style="font-size:13px;font-weight:500;margin-bottom:4px;">Emojis dans l'interface</p>
+      <p style="font-size:11px;color:var(--text3);margin-bottom:10px;">Choisissez la densité d'emojis affichés dans la navigation et les titres.</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;" id="emojiModeGroup">
+        <button class="tv-filter-btn" id="emojiModeExpressif" onclick="setEmojiMode('expressif')">🎨 Expressif</button>
+        <button class="tv-filter-btn" id="emojiModeMinimal" onclick="setEmojiMode('minimal')">✦ Minimaliste</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:.9rem;">
       <p style="font-size:13px;font-weight:500;margin-bottom:9px;">Couleur d'accent</p>
       <div class="color-grid" id="colorGrid"></div>
     </div>
@@ -1302,6 +1387,26 @@ window._c = function(fn, args) {
 </div>
 
 <!-- MODALS -->
+
+<!-- DB SEARCH MODAL -->
+<div class="modal-overlay" id="dbSearchModal" onclick="if(event.target===this)closeDbSearch()">
+  <div class="modal" style="max-width:560px;padding:1.2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;">
+      <h3 class="modal-title" style="margin:0;" id="dbSearchTitle">Rechercher…</h3>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-secondary btn-sm" onclick="createBlankTrackingItem()" title="Créer sans recherche">+ Vide</button>
+        <button onclick="closeDbSearch()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text3);">✕</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:6px;">
+      <input type="text" id="dbSearchInput" placeholder="Titre…" style="flex:1;font-size:14px;" onkeydown="if(event.key==='Enter')runDbSearch()">
+      <button class="btn btn-primary" onclick="runDbSearch()" style="padding:8px 14px;">🔍</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;" id="dbSearchHint"></div>
+    <div id="dbSearchResults" style="max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modelModal">
   <div class="modal">
     <h3 class="modal-title" id="modelModalTitle">Nouveau modèle</h3>
@@ -1388,6 +1493,17 @@ window._c = function(fn, args) {
   </div>
 </div>
 
+<!-- COL STATS MODAL -->
+<div class="modal-overlay" id="colStatsModal">
+  <div class="modal" style="max-width:480px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;">
+      <h3 class="modal-title" id="colStatsTitle" style="margin:0;">Statistiques</h3>
+      <button onclick="closeModal('colStatsModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text3);">✕</button>
+    </div>
+    <div id="colStatsContent"></div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="collectionModal">
   <div class="modal" style="max-width:540px;">
     <h3 class="modal-title" id="colModalTitle">Nouvelle collection</h3>
@@ -1435,9 +1551,36 @@ window._c = function(fn, args) {
           <button class="scale-toggle" id="colNotesToggle" onclick="toggleColNotes()"></button>
         </div>
       </div>
+      <!-- Base de données -->
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>🔎 Base de données <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(recherche auto à l'ajout)</span></label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;" id="colDbPicker">
+          <div class="col-db-opt" data-db="" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">🚫</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">Aucune</div>
+          </div>
+          <div class="col-db-opt" data-db="openlibrary" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">📖</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">Open Library</div><div style="font-size:9px;color:var(--text3);">Livres</div>
+          </div>
+          <div class="col-db-opt" data-db="omdb_movie" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">🎬</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">OMDb Films</div><div style="font-size:9px;color:var(--text3);">Nécessite une clé</div>
+          </div>
+          <div class="col-db-opt" data-db="omdb_series" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">📺</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">OMDb Séries</div><div style="font-size:9px;color:var(--text3);">Nécessite une clé</div>
+          </div>
+          <div class="col-db-opt" data-db="rawg" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">🎮</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">RAWG</div><div style="font-size:9px;color:var(--text3);">Jeux vidéo</div>
+          </div>
+          <div class="col-db-opt" data-db="musicbrainz" onclick="selectColDb(this)" style="padding:8px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:18px;">🎵</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">MusicBrainz</div><div style="font-size:9px;color:var(--text3);">Musique</div>
+          </div>
+        </div>
+      </div>
       <!-- Champs infos -->
       <div class="form-group">
-        <label>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;">
+          <span>Champs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(optionnel)</span></span>
+          <button type="button" onclick="resetColFieldsToDefault()" style="background:none;border:none;font-size:10px;color:var(--text3);cursor:pointer;text-decoration:underline;font-weight:400;text-transform:none;letter-spacing:0;padding:0;">↺ Défaut</button>
+        </label>
         <div id="colFieldsList" style="margin-bottom:7px;"></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
           <input type="text" id="colFieldInput" placeholder="Nom du champ…" style="flex:1;min-width:100px;font-size:12px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addColField();}">
@@ -1617,7 +1760,7 @@ let S={
   quotesEnabled:true,goalsEnabled:true,trackingEnabled:true,
 };
 let editingModelId=null,editingTypeId=null,editingScaleId=null;
-let currentEntryId=null,currentReadId=null;
+let currentEntryId=null,currentReadId=null,_readOriginView=null;
 let selectedTypeId='journal',selectedModelId='m1';
 let entryTags=[],scaleValues={};
 let storageMode='';
@@ -1735,7 +1878,7 @@ function startLocalMode(){
   loadFromLocal();
   document.getElementById('authPage').style.display='none';
   document.getElementById('app').style.display='block';
-  applyTheme();applyFont();applyColor();
+  applyTheme();applyFont();applyColor();applyEmojiMode();
   renderAll();
   setupEventListeners();
 }
@@ -1749,7 +1892,7 @@ async function startOnlineMode(token,userId){
   document.getElementById('authModeChoice').style.display='none';
   document.getElementById('authLoadingMsg').textContent='Chargement de votre journal…';
   loadFromLocal();
-  applyTheme();applyFont();applyColor();
+  applyTheme();applyFont();applyColor();applyEmojiMode();
   await loadFromSupabase();
   document.getElementById('authPage').style.display='none';
   document.getElementById('app').style.display='block';
@@ -1969,6 +2112,12 @@ function loadFromLocal(){
 }
 
 // ── ACCOUNT UI ─────────────────────────────────────────────────────────────
+function saveOmdbKey(){
+  const key=document.getElementById('omdbKeyInput')?.value?.trim()||'';
+  if(key)localStorage.setItem('omdb_api_key',key);
+  else localStorage.removeItem('omdb_api_key');
+  showToast(key?'Clé OMDb sauvegardée ✓':'Clé OMDb supprimée');
+}
 function renderAccountInfo(){
   const el=document.getElementById('accountInfo');if(!el)return;
   if(storageMode==='online'&&currentUser){
@@ -2021,7 +2170,7 @@ function showExportReminder(cb){
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 function renderAll(){
-  applyTheme();applyFont();applyColor();
+  applyTheme();applyFont();applyColor();applyEmojiMode();
   initQuotes();
   if(S.goalsEnabled)initGoals();
   applyFeatureSettings();
@@ -2136,6 +2285,19 @@ const COLORS=[
   {id:'sage',label:'Sauge',hex:'#5A7A5A'},{id:'bordeaux',label:'Bordeaux',hex:'#8B2635'},
   {id:'lavande',label:'Lavande',hex:'#7B6FA0'},{id:'noir',label:'Encre',hex:'#2C2C2A'},
 ];
+function setEmojiMode(mode){
+  localStorage.setItem('emojiMode',mode);
+  applyEmojiMode();
+  // Update button states
+  document.getElementById('emojiModeExpressif')?.classList.toggle('active',mode==='expressif');
+  document.getElementById('emojiModeMinimal')?.classList.toggle('active',mode==='minimal');
+}
+function applyEmojiMode(){
+  const mode=localStorage.getItem('emojiMode')||'expressif';
+  document.body.classList.toggle('emoji-minimal',mode==='minimal');
+  document.getElementById('emojiModeExpressif')?.classList.toggle('active',mode==='expressif');
+  document.getElementById('emojiModeMinimal')?.classList.toggle('active',mode==='minimal');
+}
 function applyColor(){
   const isDark=S.theme==='dark';
   const themes={
@@ -2242,14 +2404,13 @@ function switchTab(tab){
     currentTrackingItemId=null;
     if(tab!=='tracking')currentTrackingColId=null;
   }
-  const TABS=['home','stats','goals','tracking','quotes','settings'];
-  document.querySelectorAll('#mainNav .nav-tab').forEach((el,i)=>el.classList.toggle('active',TABS[i]===tab));
+  document.querySelectorAll('#mainNav .nav-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById('page-'+tab);
   if(pg)pg.classList.add('active');
   hideToolbar();
   if(tab==='stats')renderStats();
-  if(tab==='quotes')renderQuotes();
+  if(tab==='quotes'){renderQuotes();renderQuoteTagSuggestions();const qd=document.getElementById('quoteDate');if(qd&&!qd.value){qd.value=new Date().toISOString().split('T')[0];updateQuoteDateDisplay();}}
   if(tab==='goals')renderGoals();
   if(tab==='tracking'){initTracking();renderTrackingCollections();}
   if(tab==='home'){renderBooksGrid();updateEntryCount();}
@@ -3110,19 +3271,19 @@ let colModalReviews=true;let colModalNotes=false; // default: reviews enabled
 const COL_TEMPLATES=[
   {id:'films',icon:'🎬',name:'Films',desc:'Films vus, à voir…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Réalisateur',type:'text'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire','Aventure','Biopic']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','Cinéma','DVD','Blu-ray']}],
+   fields:[{id:uid(),name:'Réalisateur',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire','Aventure','Biopic']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','Cinéma','DVD','Blu-ray']}],
    reviewFields:[{id:uid(),name:'Lieu',type:'text'},{id:uid(),name:'Avec qui',type:'text'}]},
   {id:'series',icon:'📺',name:'Séries',desc:'Séries TV, streaming…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À voir',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'vu',label:'Vu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Saisons',type:'number'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','HBO','Max','Paramount+']}],
+   fields:[{id:uid(),name:'Créateur',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Saisons',type:'number'},{id:uid(),name:'Genre',type:'tags',options:['Action','Comédie','Drame','Thriller','Sci-fi','Animation','Horreur','Romance','Documentaire']},{id:uid(),name:'Plateforme',type:'tags',options:['Netflix','Disney+','Amazon','Canal+','Apple TV+','OCS','HBO','Max','Paramount+']}],
    reviewFields:[]},
   {id:'livres',icon:'📖',name:'Livres',desc:'Livres lus, à lire…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À lire',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'lu',label:'Lu',emoji:'✅'}],
-   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Pages',type:'progress',min:0,max:300},{id:uid(),name:'Début',type:'date'},{id:uid(),name:'Fin',type:'date'},{id:uid(),name:'Genre',type:'tags',options:['Roman','Essai','Biographie','Thriller','Sci-fi','Fantasy','Développement perso','BD','Manga','Policier','Histoire','Philosophie']}],
+   fields:[{id:uid(),name:'Auteur',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Pages',type:'progress',min:0,max:300},{id:uid(),name:'Début',type:'date'},{id:uid(),name:'Fin',type:'date'},{id:uid(),name:'Genre',type:'tags',options:['Roman','Essai','Biographie','Thriller','Sci-fi','Fantasy','Développement perso','BD','Manga','Policier','Histoire','Philosophie']}],
    reviewFields:[]},
   {id:'jeux',icon:'🎮',name:'Jeux vidéo',desc:'Jeux terminés, en cours…',reviewsEnabled:true,notesEnabled:true,
    statuses:[{id:'avoir',label:'À jouer',emoji:'🔖'},{id:'encours',label:'En cours',emoji:'▶'},{id:'fini',label:'Terminé',emoji:'🏆'}],
-   fields:[{id:uid(),name:'Progression',type:'progress',min:0,max:100},{id:uid(),name:'Genre',type:'tags',options:['Action','RPG','FPS','Aventure','Stratégie','Sport','Simulation','Puzzle','Horreur','Plateforme']},{id:uid(),name:'Plateforme',type:'tags',options:['PC','PS5','PS4','Xbox Series','Xbox One','Switch','Mobile','Game Pass','Steam']}],
+   fields:[{id:uid(),name:'Studio',type:'text'},{id:uid(),name:'Année',type:'text'},{id:uid(),name:'Progression',type:'progress',min:0,max:100},{id:uid(),name:'Genre',type:'tags',options:['Action','RPG','FPS','Aventure','Stratégie','Sport','Simulation','Puzzle','Horreur','Plateforme']},{id:uid(),name:'Plateforme jouée',type:'tags',options:['PC','PS5','PS4','Xbox Series','Xbox One','Switch','Mobile']}],
    reviewFields:[]},
   {id:'podcasts',icon:'🎙️',name:'Podcasts',desc:'Épisodes écoutés…',reviewsEnabled:false,notesEnabled:true,
    statuses:[{id:'avoir',label:'À écouter',emoji:'🔖'},{id:'ecoute',label:'Écouté',emoji:'✅'}],
@@ -3154,7 +3315,10 @@ function openNewCollectionModal(){
   document.getElementById('collectionModal').classList.add('open');
 }
 
+const TEMPLATE_DB_MAP={films:'omdb_movie',series:'omdb_series',livres:'openlibrary',jeux:'rawg',musique:'musicbrainz',podcasts:'',vide:''};
+let colModalTemplateId='';
 function applyColTemplate(templateId){
+  colModalTemplateId=templateId;
   const tpl=COL_TEMPLATES.find(t=>t.id===templateId)||COL_TEMPLATES[COL_TEMPLATES.length-1];
   document.getElementById('colIcon').value=tpl.icon;
   document.getElementById('colName').value=tpl.id==='vide'?'':tpl.name;
@@ -3162,15 +3326,28 @@ function applyColTemplate(templateId){
   colModalFields=tpl.fields.map(f=>({...f,id:uid()}));
   colModalReviewFields=(tpl.reviewFields||[]).map(f=>({...f,id:uid()}));
   colModalReviews=tpl.reviewsEnabled!==false;colModalNotes=tpl.notesEnabled===true;
+  colModalDatabase=TEMPLATE_DB_MAP[templateId]||'';
   colGoToEdit();
 }
 
+let colModalDatabase='';
+function selectColDb(el){
+  document.querySelectorAll('#colDbPicker .col-db-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  colModalDatabase=el.dataset.db||'';
+}
+function setColDbPicker(db){
+  colModalDatabase=db||'';
+  document.querySelectorAll('#colDbPicker .col-db-opt').forEach(o=>{
+    o.classList.toggle('selected',o.dataset.db===colModalDatabase);
+  });
+}
 function colGoToEdit(){
   document.getElementById('colTemplateStep').style.display='none';
   document.getElementById('colEditStep').style.display='';
   renderColStatuses();renderColFields();renderColReviewFields();
   setColReviewsToggle(colModalReviews);
-  // Afficher/masquer champs d'avis selon si reviews activés
+  setColDbPicker(colModalDatabase);
   const nameEl=document.getElementById('colName');
   if(nameEl&&!nameEl.value)setTimeout(()=>nameEl.focus(),50);
 }
@@ -3221,12 +3398,15 @@ function openEditCollectionModal(colId){
     }
   }
   colModalReviews=col.reviewsEnabled!==false;colModalNotes=col.notesEnabled===true;
+  colModalDatabase=col.database||'';
+  colModalTemplateId=col.templateId||(col.database?Object.entries(TEMPLATE_DB_MAP).find(([k,v])=>v===col.database)?.[0]:'');
   document.getElementById('colTemplateStep').style.display='none';
   document.getElementById('colEditStep').style.display='';
   document.getElementById('colBackBtn').style.display='none';
   document.getElementById('colSaveBtn').textContent='Enregistrer';
   renderColStatuses();renderColFields();renderColReviewFields();
   setColReviewsToggle(colModalReviews);
+  setColDbPicker(colModalDatabase);
   document.getElementById('collectionModal').classList.add('open');
 }
 function renderColStatuses(){
@@ -3321,15 +3501,26 @@ function addColField(){
   renderColFields();
 }
 function removeColField(i){colModalFields.splice(i,1);renderColFields();}
+function resetColFieldsToDefault(){
+  // Find which template matches the current collection
+  const col=S.tracking.collections.find(c=>c.id===editingColId);
+  const templateId=col?.templateId||(col?.database?Object.entries(TEMPLATE_DB_MAP).find(([k,v])=>v===col.database)?.[0]:null);
+  const tpl=COL_TEMPLATES.find(t=>t.id===templateId);
+  if(!tpl){showToast('Aucun modèle trouvé pour cette collection.');return;}
+  if(!confirm('Remettre les champs par défaut du modèle "'+tpl.name+'" ? Vos champs personnalisés seront remplacés.'))return;
+  colModalFields=tpl.fields.map(f=>({...f,id:uid()}));
+  renderColFields();
+}
 function saveCollection(){
   const icon=document.getElementById('colIcon').value.trim()||'📋';
   const name=document.getElementById('colName').value.trim();
   if(!name)return;
+  const db=colModalDatabase||'';
   if(editingColId){
     const col=S.tracking.collections.find(c=>c.id===editingColId);
-    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];col.reviewFields=[...colModalReviewFields];col.reviewsEnabled=colModalReviews;col.notesEnabled=colModalNotes;}
+    if(col){col.icon=icon;col.name=name;col.statuses=[...colModalStatuses];col.fields=[...colModalFields];col.reviewFields=[...colModalReviewFields];col.reviewsEnabled=colModalReviews;col.notesEnabled=colModalNotes;col.database=db||undefined;if(colModalTemplateId)col.templateId=colModalTemplateId;}
   } else {
-    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields],reviewFields:[...colModalReviewFields],reviewsEnabled:colModalReviews,notesEnabled:colModalNotes});
+    S.tracking.collections.push({id:'tc_'+uid(),icon,name,desc:'',statuses:[...colModalStatuses],fields:[...colModalFields],reviewFields:[...colModalReviewFields],reviewsEnabled:colModalReviews,notesEnabled:colModalNotes,database:db||undefined,templateId:colModalTemplateId||undefined});
   }
   saveLocal();closeModal('collectionModal');renderTrackingCollections();
 }
@@ -3413,16 +3604,28 @@ function renderTrackingCollections(){
   if(cnt)cnt.textContent=total+' élément'+(total>1?'s':'');
   let html=S.tracking.collections.map(col=>{
     const count=S.tracking.items.filter(i=>i.colId===col.id).length;
-    return`<div class="tracking-col-card" style="position:relative;">
-      <div onclick="openTrackingCollection('${col.id}')" style="cursor:pointer;padding-bottom:2px;">
-        <div class="tracking-col-icon">${col.icon}</div>
+    const statuses=col.statuses||[];
+    const statusBar=statuses.map(s=>{
+      const cnt=S.tracking.items.filter(i=>i.colId===col.id&&(i.statusId===s.id||i.status===s.id)).length;
+      const pct=count?Math.round(cnt/count*100):0;
+      const colors=['var(--border2)','var(--accent2)','#5AAD7A'];
+      const ci=statuses.indexOf(s);
+      return pct>0?`<div style="flex:${pct};background:${colors[ci%colors.length]||'var(--accent2)'};opacity:${ci===0?.3:ci===1?.6:1};"></div>`:'';
+    }).join('');
+    return`<div class="tracking-col-card">
+      <button onclick="openColStats('${col.id}')" title="Statistiques" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:12px;cursor:pointer;color:var(--text3);opacity:.4;padding:2px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">📊</button>
+      <div onclick="openTrackingCollection('${col.id}')" style="cursor:pointer;">
+        <span class="tracking-col-icon">${col.icon}</span>
         <div class="tracking-col-name">${col.name}</div>
         <div class="tracking-col-count">${count} élément${count>1?'s':''}</div>
+        ${count>0?`<div class="tracking-col-statusbar">${statusBar}</div>`:'<div style="height:13px;"></div>'}
       </div>
-      <!-- Always visible action bar -->
-      <div style="display:flex;gap:4px;margin-top:8px;padding-top:7px;border-top:1px solid var(--border);">
-        <button class="btn btn-secondary btn-sm" style="flex:1;font-size:11px;" onclick="openEditCollectionModal('${col.id}')">✏️ Modifier</button>
-        <button class="btn btn-danger btn-sm" style="font-size:11px;" onclick="deleteTrackingCollection('${col.id}')">🗑</button>
+      <div style="position:relative;text-align:right;">
+        <button onclick="toggleColMenu(event,'${col.id}')" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);padding:0 2px;line-height:1;letter-spacing:2px;opacity:.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">···</button>
+        <div id="colMenu_${col.id}" style="display:none;position:absolute;bottom:calc(100% + 4px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:300;min-width:130px;overflow:hidden;">
+          <div class="sort-opt" onclick="openEditCollectionModal('${col.id}');closeAllColMenus()">✏️ Modifier</div>
+          <div class="sort-opt" style="color:#E24B4A;" onclick="deleteTrackingCollection('${col.id}');closeAllColMenus()">🗑 Supprimer</div>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -3433,13 +3636,154 @@ function renderTrackingCollections(){
   </div>`;
   el.innerHTML=html;
 }
+let _colStatsPeriod=30;
+let _colStatsChart='ajouts'; // 'ajouts' | 'notes'
+let _colStatsColId=null;
+
+function openColStats(colId){
+  _colStatsColId=colId;
+  _colStatsPeriod=30;
+  _colStatsChart='ajouts';
+  const col=S.tracking.collections.find(c=>c.id===colId);if(!col)return;
+  const title=document.getElementById('colStatsTitle');
+  if(title)title.textContent=col.icon+' '+col.name;
+  renderColStatsContent();
+  openModal('colStatsModal');
+}
+
+function renderColStatsContent(){
+  const colId=_colStatsColId;
+  const col=S.tracking.collections.find(c=>c.id===colId);
+  const el=document.getElementById('colStatsContent');
+  if(!el||!col)return;
+  const items=S.tracking.items.filter(i=>i.colId===colId);
+  const total=items.length;
+  const statuses=col.statuses||[];
+  const allReviews=items.flatMap(i=>i.reviews||[]).filter(r=>r.rating);
+  const avgRating=allReviews.length?(allReviews.reduce((a,r)=>a+parseFloat(r.rating||0),0)/allReviews.length).toFixed(1):null;
+  const topRated=[...items].filter(i=>i.reviews?.some(r=>r.rating)).sort((a,b)=>{
+    const ar=a.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/a.reviews.length;
+    const br=b.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/b.reviews.length;
+    return br-ar;
+  }).slice(0,5);
+  const genreField=(col.fields||[]).find(f=>f.type==='tags');
+  const genreCounts={};
+  if(genreField)items.forEach(i=>{const v=i.customFields?.[genreField.id];(Array.isArray(v)?v:[v]).filter(Boolean).forEach(g=>{genreCounts[g]=(genreCounts[g]||0)+1;});});
+  const topGenres=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const lastStatus=statuses[statuses.length-1];
+  const doneCount=lastStatus?items.filter(i=>i.statusId===lastStatus.id||i.status===lastStatus.id).length:0;
+
+  // Chart data
+  const now=new Date();
+  const days=_colStatsPeriod===7?7:_colStatsPeriod===30?30:_colStatsPeriod===90?90:365;
+  const chartData=[];
+  if(_colStatsChart==='ajouts'){
+    // Group by day (7j) or week (30j) or month (90j+)
+    if(days<=30){
+      for(let i=days-1;i>=0;i--){
+        const d=new Date(now);d.setDate(d.getDate()-i);
+        const key=d.toISOString().split('T')[0];
+        chartData.push({v:items.filter(x=>x.createdAt?.startsWith(key)).length,label:days<=7?d.toLocaleDateString('fr-FR',{weekday:'short'}):String(d.getDate())});
+      }
+    } else {
+      const months=days===90?3:12;
+      for(let m=months-1;m>=0;m--){
+        const d=new Date(now.getFullYear(),now.getMonth()-m,1);
+        const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        chartData.push({v:items.filter(x=>x.createdAt?.startsWith(key)).length,label:d.toLocaleDateString('fr-FR',d.getFullYear()!==now.getFullYear()?{month:'short',year:'2-digit'}:{month:'short'})});
+      }
+    }
+  } else {
+    // Notes avg per period
+    if(days<=30){
+      for(let i=days-1;i>=0;i--){
+        const d=new Date(now);d.setDate(d.getDate()-i);
+        const key=d.toISOString().split('T')[0];
+        const revs=allReviews.filter(r=>(r.date||r.createdAt?.split('T')[0])===key);
+        chartData.push({v:revs.length?+(revs.reduce((s,r)=>s+parseFloat(r.rating),0)/revs.length).toFixed(1):0,label:days<=7?d.toLocaleDateString('fr-FR',{weekday:'short'}):String(d.getDate())});
+      }
+    } else {
+      const months=days===90?3:12;
+      for(let m=months-1;m>=0;m--){
+        const d=new Date(now.getFullYear(),now.getMonth()-m,1);
+        const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        const revs=allReviews.filter(r=>(r.date||r.createdAt?.split('T')[0]||'').startsWith(key));
+        chartData.push({v:revs.length?+(revs.reduce((s,r)=>s+parseFloat(r.rating),0)/revs.length).toFixed(1):0,label:d.toLocaleDateString('fr-FR',d.getFullYear()!==now.getFullYear()?{month:'short',year:'2-digit'}:{month:'short'})});
+      }
+    }
+  }
+
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim()||'#8B7355';
+  const periods=[{v:7,l:'7j'},{v:30,l:'1m'},{v:90,l:'3m'},{v:365,l:'1an'}];
+  const charts=[{v:'ajouts',l:'Ajouts'},{v:'notes',l:'Notes'}];
+
+  el.innerHTML=!total?`<div style="text-align:center;padding:2rem 0;color:var(--text3);">Aucun élément.</div>`:`
+    <!-- Hero -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem;">
+      <div class="stat-hero-card"><div style="font-size:20px;font-weight:700;color:var(--accent2);">${total}</div><div style="font-size:10px;color:var(--text3);">Total</div></div>
+      <div class="stat-hero-card"><div style="font-size:20px;font-weight:700;color:var(--accent2);">${doneCount}</div><div style="font-size:10px;color:var(--text3);">${lastStatus?.label||'Finis'}</div></div>
+      <div class="stat-hero-card"><div style="font-size:20px;font-weight:700;color:var(--accent2);">${allReviews.length}</div><div style="font-size:10px;color:var(--text3);">Avis</div></div>
+      <div class="stat-hero-card"><div style="font-size:20px;font-weight:700;color:var(--accent2);">${avgRating?'⭐'+avgRating:'—'}</div><div style="font-size:10px;color:var(--text3);">Moyenne</div></div>
+    </div>
+
+    <!-- Graphique interactif -->
+    <div class="card" style="margin-bottom:1rem;padding:.85rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:6px;">
+        <div style="display:flex;gap:4px;">
+          ${charts.map(c=>`<button onclick="_colStatsChart='${c.v}';renderColStatsContent()" style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;border:1px solid var(--border);cursor:pointer;background:${_colStatsChart===c.v?accent:'var(--bg2)'};color:${_colStatsChart===c.v?'#fff':'var(--text3)'};">${c.l}</button>`).join('')}
+        </div>
+        <div style="display:flex;gap:3px;">
+          ${periods.map(p=>`<button onclick="_colStatsPeriod=${p.v};renderColStatsContent()" style="padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid var(--border);cursor:pointer;background:${_colStatsPeriod===p.v?accent:'var(--bg2)'};color:${_colStatsPeriod===p.v?'#fff':'var(--text3)'};">${p.l}</button>`).join('')}
+        </div>
+      </div>
+      <canvas id="colStatsChart" style="width:100%;display:block;"></canvas>
+    </div>
+
+    <!-- Statuts -->
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Statuts</div>
+    <div class="card" style="margin-bottom:1rem;">
+      ${statuses.map(s=>{
+        const cnt=items.filter(i=>i.statusId===s.id||i.status===s.id).length;
+        const pct=total?Math.round(cnt/total*100):0;
+        return`<div style="margin-bottom:9px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${s.emoji||''} ${s.label}</span><span style="color:var(--text3);">${cnt} · ${pct}%</span></div>
+          <div style="height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${accent};border-radius:3px;transition:width .4s;"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    ${topGenres.length?`
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Genres</div>
+    <div class="card" style="margin-bottom:1rem;">
+      ${topGenres.map(([g,c])=>{const pct=Math.round(c/total*100);return`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${g}</span><span style="color:var(--text3);">${c}</span></div><div style="height:4px;background:var(--bg2);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${accent};opacity:.7;border-radius:3px;"></div></div></div>`;}).join('')}
+    </div>`:''}
+
+    ${topRated.length?`
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Mieux notés</div>
+    <div class="card">
+      ${topRated.map((i,idx)=>{
+        const avg=(i.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/i.reviews.length).toFixed(1);
+        return`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
+          <span style="width:18px;font-size:13px;">${['🥇','🥈','🥉'][idx]||''}</span>
+          <span style="flex:1;font-size:12px;font-weight:500;">${i.title||'Sans titre'}</span>
+          <span style="font-size:13px;font-weight:700;color:${accent};">${avg}<span style="font-size:10px;font-weight:400;color:var(--text3);">/10</span></span>
+        </div>`;
+      }).join('')}
+    </div>`:''}
+  `;
+
+  requestAnimationFrame(()=>drawMiniBarChart('colStatsChart',chartData,accent));
+}
+function toggleColMenu(e,colId){e.stopPropagation();closeAllColMenus();const m=document.getElementById('colMenu_'+colId);if(m)m.style.display=m.style.display==='none'?'block':'none';}
+function closeAllColMenus(){document.querySelectorAll('[id^="colMenu_"]').forEach(m=>m.style.display='none');}
+document.addEventListener('click',closeAllColMenus);
 function deleteTrackingCollection(colId){
   const col=S.tracking.collections.find(c=>c.id===colId);
   const cnt=S.tracking.items.filter(i=>i.colId===colId).length;
   showConfirm(`Supprimer "${col?.name}" ?`,cnt?`${cnt} élément${cnt>1?'s':''} seront supprimés.`:'',()=>{
     S.tracking.collections=S.tracking.collections.filter(c=>c.id!==colId);
     S.tracking.items=S.tracking.items.filter(i=>i.colId!==colId);
-    saveLocal();renderTrackingCollections();
+    saveLocal();debouncedSaveTracking();renderTrackingCollections();
   });
 }
 
@@ -3463,26 +3807,142 @@ function openTrackingCollection(colId){
     sf.innerHTML=`<button class="filter-tab active" onclick="setTrackingStatusFilter('all',this)">Tous</button>`+
       statuses.map(s=>`<button class="filter-tab" onclick="setTrackingStatusFilter('${s.id}',this)">${s.emoji||''} ${s.label}</button>`).join('');
   }
-  // Date sort: add date fields as sort options
+  // Build sort options: base + date + text + number + progress fields
   const sortSel=document.getElementById('trackingSortSelect');
   if(sortSel){
-    const dateFields=(col.fields||[]).filter(f=>f.type==='date');
-    const baseOpts='<option value="createdAt_desc">&#11015; Date ajout (récent)</option><option value="createdAt_asc">&#11014; Date ajout (ancien)</option><option value="title_asc">A&#8594;Z Titre</option><option value="title_desc">Z&#8594;A Titre</option><option value="rating_desc">&#11088; Note (haute)</option>';
-    const dateOpts=dateFields.map(f=>`<option value="date_${f.id}_desc">⬇ ${f.name} (récent)</option><option value="date_${f.id}_asc">⬆ ${f.name} (ancien)</option>`).join('');
-    sortSel.innerHTML=baseOpts+dateOpts;
+    const fields=col.fields||[];
+    const dateFields=fields.filter(f=>f.type==='date');
+    const numFields=fields.filter(f=>f.type==='number'||f.type==='progress');
+    const txtFields=fields.filter(f=>f.type==='text');
+    let opts='<option value="createdAt_desc">↓ Récent</option><option value="createdAt_asc">↑ Ancien</option><option value="title_asc">A→Z</option><option value="title_desc">Z→A</option>';
+    if(col.reviewsEnabled!==false)opts+='<option value="rating_desc">⭐ Note</option><option value="views_desc">↩ Vus</option>';
+    dateFields.forEach(f=>{opts+=`<option value="date_${f.id}_desc">↓ ${f.name}</option><option value="date_${f.id}_asc">↑ ${f.name}</option>`;});
+    numFields.forEach(f=>{opts+=`<option value="num_${f.id}_desc">↓ ${f.name}</option><option value="num_${f.id}_asc">↑ ${f.name}</option>`;});
+    txtFields.forEach(f=>{opts+=`<option value="txt_${f.id}_asc">${f.name} A→Z</option>`;});
+    sortSel.innerHTML=opts;
   }
-  // Tag filter: populate from all tag fields of this collection
-  const tagSel=document.getElementById('trackingTagFilter');
-  if(tagSel){
-    const tagFields=(col.fields||[]).filter(f=>f.type==='tags');
-    const allOpts=[...new Set(tagFields.flatMap(f=>f.options||[]))];
-    if(allOpts.length){
-      tagSel.innerHTML='<option value="">🏷️ Toutes étiquettes</option>'+allOpts.map(o=>`<option value="${o}">${o}</option>`).join('');
-      tagSel.style.display='';
-    } else tagSel.style.display='none';
-  }
+  // Reset active filters when switching collection
+  window._activeFilters={};
+  const fb=document.getElementById('trackingFilterBar');
+  if(fb)fb.style.display='none';
+  const fBtn=document.getElementById('tvFilterBtn');
+  if(fBtn)fBtn.classList.remove('active');
+  applyTrackingToolbar();
   renderTrackingItems();
   updateCurrentAppTabLabel();
+}
+
+// ── TRACKING VIEW PREFS ───────────────────────────────────────────────────
+function getTrackingPrefs(colId){
+  try{return JSON.parse(localStorage.getItem('tvprefs_'+colId)||'{}');}catch{return {};}
+}
+function saveTrackingPrefs(colId,patch){
+  const p={...getTrackingPrefs(colId),...patch};
+  localStorage.setItem('tvprefs_'+colId,JSON.stringify(p));
+}
+function applyTrackingToolbar(){
+  const p=getTrackingPrefs(currentTrackingColId);
+  const view=p.view||'poster';
+  const size=p.size||'m';
+  const imgs=p.imgs!==false;
+  ['Poster','Grid','List'].forEach(v=>document.getElementById('tv'+v)?.classList.toggle('active',view===v.toLowerCase()));
+  ['S','M','L'].forEach(s=>document.getElementById('tvSize'+s)?.classList.toggle('active',size===s.toLowerCase()));
+  const imgBtn=document.getElementById('tvImgBtn');
+  if(imgBtn)imgBtn.classList.toggle('active',imgs);
+  // Hide S/M/L in list mode
+  ['S','M','L'].forEach(s=>{const b=document.getElementById('tvSize'+s);if(b)b.style.display=view==='list'?'none':'';});
+  // Restore display controls visibility
+  const ctrl=document.getElementById('tvDisplayControls');
+  const toggleBtn=document.getElementById('tvDisplayToggle');
+  const hidden=p.displayCtrl==='hide';
+  if(ctrl)ctrl.style.display=hidden?'none':'flex';
+  if(toggleBtn)toggleBtn.style.opacity=hidden?'1':'.55';
+}
+function toggleDisplayControls(){
+  const ctrl=document.getElementById('tvDisplayControls');
+  const btn=document.getElementById('tvDisplayToggle');
+  if(!ctrl)return;
+  const hidden=ctrl.style.display==='none';
+  ctrl.style.display=hidden?'flex':'none';
+  if(btn){btn.style.opacity=hidden?'.55':'1';btn.title=hidden?'Masquer les contrôles':'Afficher les contrôles';}
+  saveTrackingPrefs(currentTrackingColId,{displayCtrl:hidden?'show':'hide'});
+  if(hidden)applyTrackingToolbar();
+}
+function setTrackingView(v){
+  saveTrackingPrefs(currentTrackingColId,{view:v});
+  applyTrackingToolbar();
+  renderTrackingItems();
+}
+function setTrackingSize(s){
+  saveTrackingPrefs(currentTrackingColId,{size:s});
+  applyTrackingToolbar();
+  renderTrackingItems();
+}
+function toggleTrackingImages(){
+  const p=getTrackingPrefs(currentTrackingColId);
+  saveTrackingPrefs(currentTrackingColId,{imgs:p.imgs===false?true:false});
+  applyTrackingToolbar();
+  renderTrackingItems();
+}
+
+// ── FILTER BAR ────────────────────────────────────────────────────────────────
+if(!window._activeFilters)window._activeFilters={};
+
+function toggleFilterBar(){
+  const fb=document.getElementById('trackingFilterBar');
+  const btn=document.getElementById('tvFilterBtn');
+  if(!fb)return;
+  const open=fb.style.display==='none'||!fb.style.display;
+  if(open){buildFilterBar();fb.style.display='flex';btn?.classList.add('active');}
+  else{fb.style.display='none';btn?.classList.remove('active');}
+}
+
+function buildFilterBar(){
+  const fb=document.getElementById('trackingFilterBar');if(!fb)return;
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId);if(!col)return;
+  const items=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
+  const tagFields=(col.fields||[]).filter(f=>f.type==='tags');
+  fb.innerHTML='';
+  if(!tagFields.length){fb.innerHTML='<span style="font-size:11px;color:var(--text3);">Aucun champ filtre dans cette collection.</span>';return;}
+  tagFields.forEach(field=>{
+    // Collect actual values used in items for this field
+    const used=[...new Set(items.flatMap(i=>{const v=i.customFields?.[field.id];return Array.isArray(v)?v:[];}))]
+      .sort((a,b)=>a.localeCompare(b));
+    if(!used.length)return;
+    const row=document.createElement('div');row.className='tfilter-row';
+    row.innerHTML=`<span class="tfilter-label">${field.name}</span>`;
+    used.forEach(val=>{
+      const af=window._activeFilters[field.id];
+      const active=af&&af.has(val);
+      const chip=document.createElement('button');
+      chip.className='tfilter-chip'+(active?' active':'');
+      chip.textContent=val;
+      chip.onclick=()=>toggleFilterChip(field.id,val,chip);
+      row.appendChild(chip);
+    });
+    fb.appendChild(row);
+  });
+  // Reset button + button label update
+  const totalActive=Object.values(window._activeFilters).reduce((n,s)=>n+(s?s.size:0),0);
+  const fBtn=document.getElementById('tvFilterBtn');
+  if(fBtn)fBtn.textContent=totalActive?`Filtrer (${totalActive})`:'Filtrer';
+  if(totalActive){
+    const resetBtn=document.createElement('button');
+    resetBtn.style.cssText='font-size:10px;color:var(--text3);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;align-self:flex-start;margin-top:2px;';
+    resetBtn.textContent='Réinitialiser';
+    resetBtn.onclick=()=>{window._activeFilters={};buildFilterBar();renderTrackingItems();};
+    fb.appendChild(resetBtn);
+  }
+}
+
+function toggleFilterChip(fieldId,value,chip){
+  if(!window._activeFilters[fieldId])window._activeFilters[fieldId]=new Set();
+  const s=window._activeFilters[fieldId];
+  if(s.has(value)){s.delete(value);chip.classList.remove('active');}
+  else{s.add(value);chip.classList.add('active');}
+  // Update reset button
+  buildFilterBar();
+  renderTrackingItems();
 }
 
 function renderTrackingItems(){
@@ -3490,67 +3950,363 @@ function renderTrackingItems(){
   const statuses=getColStatuses(col);
   let items=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
   if(trackingStatusFilter!=='all')items=items.filter(i=>i.status===trackingStatusFilter);
-  // Tag filter
-  const tagF=document.getElementById('trackingTagFilter')?.value||'';
-  if(tagF)items=items.filter(i=>Object.values(i.customFields||{}).some(v=>Array.isArray(v)&&v.includes(tagF)));
+  // Apply multi-field active filters (AND between fields, OR within field)
+  const af=window._activeFilters||{};
+  Object.entries(af).forEach(([fid,vals])=>{
+    if(!vals||!vals.size)return;
+    items=items.filter(i=>{
+      const v=i.customFields?.[fid];
+      if(Array.isArray(v))return v.some(x=>vals.has(x));
+      return vals.has(v);
+    });
+  });
   // Sort
   const sortV=document.getElementById('trackingSortSelect')?.value||'createdAt_desc';
   if(sortV==='createdAt_asc')items.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   else if(sortV==='title_asc')items.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
   else if(sortV==='title_desc')items.sort((a,b)=>(b.title||'').localeCompare(a.title||''));
-  else if(sortV==='rating_desc')items.sort((a,b)=>{const ra=a.reviews?.length?a.reviews[a.reviews.length-1].rating||0:0;const rb=b.reviews?.length?b.reviews[b.reviews.length-1].rating||0:0;return rb-ra;});
-  else if(sortV.startsWith('date_')){const [,fid,dir]=sortV.split('_');items.sort((a,b)=>{const va=a.customFields?.[fid]||'';const vb=b.customFields?.[fid]||'';return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);});}
+  else if(sortV==='rating_desc')items.sort((a,b)=>{const ra=a.reviews?.reduce((m,r)=>Math.max(m,r.rating||0),0)||0;const rb=b.reviews?.reduce((m,r)=>Math.max(m,r.rating||0),0)||0;return rb-ra;});
+  else if(sortV==='views_desc')items.sort((a,b)=>(b.reviews?.length||0)-(a.reviews?.length||0));
+  else if(sortV.startsWith('date_')){const[,fid,dir]=sortV.split('_');items.sort((a,b)=>{const va=a.customFields?.[fid]||'';const vb=b.customFields?.[fid]||'';return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);});}
+  else if(sortV.startsWith('num_')){const[,fid,dir]=sortV.split('_');items.sort((a,b)=>{const va=parseFloat(a.customFields?.[fid])||0;const vb=parseFloat(b.customFields?.[fid])||0;return dir==='asc'?va-vb:vb-va;});}
+  else if(sortV.startsWith('txt_')){const[,fid]=sortV.split('_');items.sort((a,b)=>(a.customFields?.[fid]||'').localeCompare(b.customFields?.[fid]||''));}
   else items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const sub=document.getElementById('trackingColSub');
   const all=S.tracking.items.filter(i=>i.colId===currentTrackingColId);
   if(sub)sub.textContent=all.length+' élément'+(all.length>1?'s':'');
+  // Update filter button label
+  const totalAF=Object.values(window._activeFilters||{}).reduce((n,s)=>n+(s?s.size:0),0);
+  const fBtnR=document.getElementById('tvFilterBtn');
+  if(fBtnR){fBtnR.textContent=totalAF?`Filtrer (${totalAF})`:'Filtrer';fBtnR.classList.toggle('active',totalAF>0||document.getElementById('trackingFilterBar')?.style.display!=='none');}
+  // Rebuild filter bar chips if open (to keep counts/state in sync)
+  if(document.getElementById('trackingFilterBar')?.style.display!=='none')buildFilterBar();
   const grid=document.getElementById('trackingItemsGrid');if(!grid)return;
+
+  // Prefs
+  const p=getTrackingPrefs(currentTrackingColId);
+  const view=p.view||'poster';
+  const size=p.size||'m';
+  const showImgs=p.imgs!==false;
+  applyTrackingToolbar();
+
   if(!items.length){
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">${col.icon}</div><h3 class="empty-title">Aucun élément</h3><p class="empty-desc">Ajoutez votre premier élément</p></div>`;
+    grid.className='tracking-items-grid';
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">${col.icon}</div><h3 class="empty-title">Aucun élément</h3><p class="empty-desc">Ajoutez votre premier élément</p></div>`;
     return;
   }
-  grid.innerHTML=items.map(item=>{
+
+  // Shared item data builder
+  const itemData=(item)=>{
     const views=item.reviews?item.reviews.length:0;
-    const lastReview=item.reviews&&item.reviews.length?item.reviews[item.reviews.length-1]:null;
+    const lastReview=item.reviews?.length?item.reviews[item.reviews.length-1]:null;
     const rating=lastReview?lastReview.rating:0;
     const st=statuses.find(s=>s.id===item.status)||statuses[0]||{label:'–',emoji:''};
     const statusColors={'avoir':'status-avoir','encours':'status-encours','vu':'status-vu'};
     const statusClass=statusColors[item.status]||'status-avoir';
     const progField=col.fields?.find(f=>f.type==='progress');
     const progVal=progField&&item.customFields?parseFloat(item.customFields[progField.id])||0:null;
-    const progPct=progField&&progVal!==null?Math.min(100,Math.round((progVal-(progField.min||0))/((progField.max||100)-(progField.min||0))*100)):null;
-    const showRating=col.reviewsEnabled!==false;
+    const progMin=progField?(progField.min||0):0;
+    const progMax=progField?((item.customFieldsMax?.[progField.id]!=null)?item.customFieldsMax[progField.id]:(progField.max||100)):100;
+    const progPct=progField&&progVal!==null&&progMax>progMin?Math.min(100,Math.round((progVal-progMin)/(progMax-progMin)*100)):null;
+    const tagFields=(col.fields||[]).filter(f=>f.type==='tags');
+    const tags=tagFields.flatMap(f=>Array.isArray(item.customFields?.[f.id])?item.customFields[f.id]:[]);
     const dateFields=col.fields?.filter(f=>f.type==='date')||[];
     const firstDateField=dateFields[0];
     const itemDate=firstDateField&&item.customFields?.[firstDateField.id]?item.customFields[firstDateField.id]:null;
     const reviewDate=lastReview?.date||null;
     const displayDate=itemDate||reviewDate||(item.createdAt?item.createdAt.slice(0,10):null);
-    const fmtDate=displayDate?new Date(displayDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):null;
-    return`<div class="tracking-item-card" onclick="openTrackingItem('${item.id}')" oncontextmenu="event.preventDefault();openTrackingItemNewTab('${item.id}','${item.colId}')">
-      <div class="tracking-item-title">${item.title||'Sans titre'}</div>
-      ${fmtDate?`<div style="font-size:10px;color:var(--text3);margin-bottom:3px;">${firstDateField?firstDateField.name+' · ':''} ${fmtDate}</div>`:''}
-      ${showRating&&rating?starsHtml(rating):''}
-      ${progPct!==null?`<div style="margin:5px 0 3px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:2px;">
-          <span>${progField.name}</span><span style="color:var(--accent2);font-weight:600;">${progPct}%</span>
+    const fmtDate=displayDate?new Date(displayDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):null;
+    const textField=col.fields?.find(f=>f.type==='text');
+    const textVal=textField&&item.customFields?.[textField.id]?item.customFields[textField.id]:'';
+    return{views,lastReview,rating,st,statusClass,progField,progPct,tags,fmtDate,firstDateField,textVal};
+  };
+
+  const onClick=`onclick="openTrackingItem('{ID}')" oncontextmenu="event.preventDefault();openTrackingItemNewTab('{ID}','{CID}')"`;
+
+  if(view==='poster'){
+    // Column count by size
+    const cols={s:5,m:4,l:3}[size]||4;
+    grid.className='tracking-items-grid tig-poster';
+    grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+    grid.innerHTML=items.map(item=>{
+      const d=itemData(item);
+      const cover=showImgs&&item.coverUrl;
+      return`<div class="tic-poster" ${onClick.replaceAll('{ID}',item.id).replaceAll('{CID}',item.colId)}>
+        ${cover?`<img src="${item.coverUrl}" alt="" loading="lazy" onerror="this.remove()">`:`<div class="tic-poster-placeholder">${col.icon}</div>`}
+        <div class="tic-poster-overlay"></div>
+        <span class="tic-poster-badge ${d.statusClass}">${d.st.emoji}</span>
+        <div class="tic-poster-body">
+          ${d.rating&&col.reviewsEnabled!==false?`<div style="font-size:11px;margin-bottom:2px;">${'⭐'.repeat(Math.round(d.rating/2))}</div>`:''}
+          <div class="tic-poster-title">${item.title||'Sans titre'}</div>
+          ${d.textVal?`<div class="tic-poster-sub">${d.textVal}</div>`:''}
+          ${d.progPct!==null?`<div class="tic-poster-prog"><div class="tic-poster-prog-fill" style="width:${d.progPct}%"></div></div><div style="font-size:9px;color:rgba(255,255,255,.6);margin-top:2px;">${d.progPct}%</div>`:''}
+          ${d.views>1?`<div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:2px;">↺ ${d.views}×</div>`:''}
         </div>
-        <div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;">
-          <div style="height:100%;width:${progPct}%;background:var(--accent2);border-radius:2px;"></div>
+      </div>`;
+    }).join('');
+  }else if(view==='grid'){
+    const minW={s:'130px',m:'160px',l:'200px'}[size]||'160px';
+    grid.className='tracking-items-grid tig-grid';
+    grid.style.gridTemplateColumns=`repeat(auto-fill,minmax(${minW},1fr))`;
+    grid.innerHTML=items.map(item=>{
+      const d=itemData(item);
+      const cover=showImgs&&item.coverUrl;
+      return`<div class="tic-grid" ${onClick.replaceAll('{ID}',item.id).replaceAll('{CID}',item.colId)}>
+        ${showImgs?(cover?`<img class="tic-grid-cover" src="${item.coverUrl}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'tic-grid-cover-placeholder',textContent:'${col.icon}'}))">`:
+          `<div class="tic-grid-cover-placeholder">${col.icon}</div>`):''}
+        <div class="tic-grid-body">
+          <div class="tracking-item-title">${item.title||'Sans titre'}</div>
+          ${d.textVal?`<div style="font-size:10px;color:var(--text3);margin-bottom:3px;">${d.textVal}</div>`:''}
+          ${d.fmtDate?`<div style="font-size:10px;color:var(--text3);margin-bottom:3px;">${d.fmtDate}</div>`:''}
+          ${d.rating&&col.reviewsEnabled!==false?`<div style="font-size:11px;margin-bottom:3px;">${starsHtml(d.rating)}</div>`:''}
+          ${d.progPct!==null?`<div style="margin:4px 0 3px;"><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-bottom:2px;"><span>${d.progField.name}</span><span style="color:var(--accent2);font-weight:600;">${d.progPct}%</span></div><div style="height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:${d.progPct}%;background:var(--accent2);border-radius:2px;"></div></div></div>`:''}
+          <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:3px;">
+            <span class="tracking-item-status ${d.statusClass}">${d.st.emoji} ${d.st.label}</span>
+            ${d.tags.slice(0,2).map(t=>`<span style="font-size:10px;background:var(--bg3);color:var(--text3);padding:1px 6px;border-radius:10px;">${t}</span>`).join('')}
+          </div>
+          ${d.views>1?`<div class="tracking-item-views">↺ ${d.views} fois</div>`:''}
         </div>
-      </div>`:''}
-      <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
-        <span class="tracking-item-status ${statusClass}">${st.emoji} ${st.label}</span>
-        ${(()=>{const tagFields=(col.fields||[]).filter(f=>f.type==='tags');const tags=tagFields.flatMap(f=>Array.isArray(item.customFields&&item.customFields[f.id])?item.customFields[f.id]:[]);return tags.slice(0,3).map(t=>`<span style="font-size:10px;background:var(--bg3);color:var(--text3);padding:1px 7px;border-radius:10px;">${t}</span>`).join('');})()}
-      </div>
-      ${views>1?`<div class="tracking-item-views">↺ ${views} fois</div>`:''}
-    </div>`;
-  }).join('');
+      </div>`;
+    }).join('');
+  }else{
+    // List mode
+    grid.className='tracking-items-grid tig-list';
+    grid.style.gridTemplateColumns='';
+    grid.innerHTML=items.map(item=>{
+      const d=itemData(item);
+      const cover=showImgs&&item.coverUrl;
+      return`<div class="tic-list" ${onClick.replaceAll('{ID}',item.id).replaceAll('{CID}',item.colId)}>
+        ${showImgs?(cover?`<img class="tic-list-thumb" src="${item.coverUrl}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'tic-list-thumb-placeholder',textContent:'${col.icon}'}))">`:
+          `<div class="tic-list-thumb-placeholder">${col.icon}</div>`):''}
+        <div class="tic-list-body">
+          <div class="tic-list-title">${item.title||'Sans titre'}</div>
+          <div class="tic-list-sub">
+            ${d.textVal?`${d.textVal} · `:''}
+            ${d.st.emoji} ${d.st.label}
+            ${d.fmtDate?` · ${d.fmtDate}`:''}
+            ${d.tags.length?` · ${d.tags.slice(0,2).join(', ')}`:''}
+          </div>
+        </div>
+        <div class="tic-list-right">
+          ${d.rating&&col.reviewsEnabled!==false?`<span style="font-size:12px;">${'⭐'.repeat(Math.round(d.rating/2))}</span>`:''}
+          ${d.progPct!==null?`<div style="display:flex;align-items:center;gap:5px;"><div style="width:60px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;"><div style="height:100%;width:${d.progPct}%;background:var(--accent2);border-radius:2px;"></div></div><span style="font-size:10px;color:var(--accent2);font-weight:600;">${d.progPct}%</span></div>`:''}
+          ${d.views>1?`<span style="font-size:10px;color:var(--text3);">↺ ${d.views}×</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 
+function getColDatabase(col){
+  // Explicit DB wins; fallback to icon-based detection
+  if(col.database)return col.database;
+  const icon=col.icon||'';
+  if(['📖','📚'].includes(icon))return'openlibrary';
+  if(icon==='🎬')return'omdb_movie';
+  if(icon==='📺')return'omdb_series';
+  if(icon==='🎮')return'rawg';
+  if(icon==='🎵')return'musicbrainz';
+  return'';
+}
 function openNewTrackingItem(){
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId)||{};
+  if(getColDatabase(col)){
+    openDbSearch();
+  }else{
+    createBlankTrackingItem();
+  }
+}
+function createBlankTrackingItem(){
+  closeDbSearch();
   const item={id:uid(),colId:currentTrackingColId,title:'',status:'avoir',reviews:[],tags:[],createdAt:new Date().toISOString()};
   S.tracking.items.push(item);
   saveLocal();debouncedSaveTracking();
+  openTrackingItem(item.id);
+}
+// ── DATABASE SEARCH ───────────────────────────────────────────────────────
+const DB_META={
+  openlibrary:{label:'livre',icon:'📖',hint:'Open Library (gratuit, sans clé)'},
+  omdb_movie:  {label:'film',icon:'🎬',hint:'OMDb'},
+  omdb_series: {label:'série',icon:'📺',hint:'OMDb'},
+  rawg:        {label:'jeu',icon:'🎮',hint:'RAWG (gratuit)'},
+  musicbrainz: {label:'album',icon:'🎵',hint:'MusicBrainz (gratuit)'},
+};
+function openDbSearch(){
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId)||{};
+  const db=getColDatabase(col);
+  const meta=DB_META[db]||{label:'élément',hint:''};
+  const titleEl=document.getElementById('dbSearchTitle');
+  if(titleEl)titleEl.textContent=`Rechercher un ${meta.label}`;
+  const hint=document.getElementById('dbSearchHint');
+  if(hint){
+    if(db==='omdb_movie'||db==='omdb_series'){
+      const key=localStorage.getItem('omdb_api_key');
+      hint.textContent=key?'Source : OMDb':'⚠ Ajoutez une clé OMDb dans Paramètres. Ou créez un élément vide.';
+    } else {
+      hint.textContent=meta.hint?`Source : ${meta.hint}`:'';
+    }
+  }
+  document.getElementById('dbSearchResults').innerHTML='';
+  document.getElementById('dbSearchInput').value='';
+  document.getElementById('dbSearchModal').classList.add('open');
+  setTimeout(()=>document.getElementById('dbSearchInput')?.focus(),100);
+}
+function closeDbSearch(){
+  document.getElementById('dbSearchModal')?.classList.remove('open');
+}
+async function runDbSearch(){
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId)||{};
+  const db=getColDatabase(col);
+  const q=document.getElementById('dbSearchInput')?.value?.trim();
+  if(!q)return;
+  const res=document.getElementById('dbSearchResults');
+  res.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0;">Recherche en cours…</div>';
+  try{
+    let results=[];
+    if(db==='openlibrary'){
+      const r=await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(q)}&limit=10&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year`);
+      const d=await r.json();
+      results=(d.docs||[]).map(b=>({
+        title:b.title||'',
+        subtitle:(b.author_name||[]).slice(0,2).join(', '),
+        cover:b.cover_i?`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`:'',
+        meta:{auteur:(b.author_name||[]).join(', '),pages:b.number_of_pages_median||'',annee:b.first_publish_year||'',genres:(b.subject||[]).slice(0,3)},
+        type:'livre'
+      }));
+    }else if(db==='omdb_movie'||db==='omdb_series'){
+      const key=localStorage.getItem('omdb_api_key');
+      if(!key){res.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0;">Clé OMDb manquante — ajoutez-la dans Paramètres, ou créez un élément vide.</div>';return;}
+      const type=db==='omdb_series'?'series':'movie';
+      const r=await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(q)}&apikey=${key}&type=${type}`);
+      const d=await r.json();
+      if(d.Response==='False'){res.innerHTML=`<div style="font-size:13px;color:var(--text3);padding:8px 0;">${d.Error||'Aucun résultat'}</div>`;return;}
+      // Fetch detail for results to get full info
+      const searches=(d.Search||[]).slice(0,8);
+      const details=await Promise.allSettled(searches.map(m=>fetch(`https://www.omdbapi.com/?i=${m.imdbID}&apikey=${key}&plot=full`).then(r=>r.json())));
+      const nna=v=>(!v||v==='N/A')?'':v;
+      results=details.map((p,i)=>{
+        const det=p.status==='fulfilled'?p.value:{};
+        const base=searches[i];
+        const year=nna(det.Year||base.Year);
+        const director=nna(det.Director);
+        const actors=nna(det.Actors);
+        const runtime=nna(det.Runtime);
+        const plot=nna(det.Plot);
+        const genres=nna(det.Genre)?det.Genre.split(',').map(g=>g.trim()):[];
+        const cover=nna(det.Poster||base.Poster);
+        const saisons=nna(det.totalSeasons);
+        return{
+          title:nna(det.Title||base.Title),
+          subtitle:`${year}${director?' · '+director:''}${runtime?' · '+runtime:''}`,
+          cover,
+          meta:{realisateur:director,createur:nna(det.Writer||'').split(',')[0].trim()||director,annee:year,genres,saisons,acteurs:actors,duree:runtime,synopsis:plot},
+          imdbId:base.imdbID,type:db==='omdb_series'?'serie':'film'
+        };
+      });
+    }else if(db==='rawg'){
+      const r=await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(q)}&page_size=10&key=`);
+      const d=await r.json();
+      results=(d.results||[]).map(g=>({
+        title:g.name||'',
+        subtitle:(g.genres||[]).map(x=>x.name).slice(0,3).join(', '),
+        cover:g.background_image||'',
+        meta:{annee:g.released?g.released.slice(0,4):'',genres:(g.genres||[]).map(x=>x.name),studio:(g.developers||[]).map(x=>x.name).join(', ')},
+        type:'jeu'
+      }));
+    }else if(db==='musicbrainz'){
+      const r=await fetch(`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&limit=10&inc=tags&fmt=json`,{headers:{'User-Agent':'AppliJournal/1.0'}});
+      const d=await r.json();
+      results=(d['release-groups']||[]).map(rg=>({
+        title:rg.title||'',
+        subtitle:(rg['artist-credit']||[]).map(a=>a.artist?.name).filter(Boolean).join(', '),
+        cover:rg.id?`https://coverartarchive.org/release-group/${rg.id}/front-250`:'',
+        meta:{
+          artiste:(rg['artist-credit']||[]).map(a=>a.artist?.name).filter(Boolean).join(', '),
+          annee:rg['first-release-date']?rg['first-release-date'].slice(0,4):'',
+          genres:(rg.tags||[]).sort((a,b)=>b.count-a.count).slice(0,4).map(t=>t.name)
+        },
+        mbid:rg.id,type:'musique'
+      }));
+    }
+    if(!results.length){res.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0;">Aucun résultat.</div>';return;}
+    res.innerHTML=results.map((r,i)=>{
+      const genres=(r.meta?.genres||[]).slice(0,3).join(', ');
+      const synopsis=r.meta?.synopsis||'';
+      return`<div style="display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)'" onclick="addItemFromDb(${i})">
+        ${r.cover?`<img src="${r.cover}" alt="" style="width:50px;height:75px;object-fit:cover;border-radius:6px;flex-shrink:0;" loading="lazy" onerror="this.style.display='none'">`:`<div style="width:50px;height:75px;border-radius:6px;background:var(--bg3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;">${col.icon||'?'}</div>`}
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">${r.title}</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">${r.subtitle||''}</div>
+          ${genres?`<div style="font-size:10px;color:var(--accent2);">${genres}</div>`:''}
+          ${synopsis?`<div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${synopsis}</div>`:''}
+        </div>
+        <button class="btn btn-primary btn-sm" style="flex-shrink:0;margin-top:2px;" onclick="event.stopPropagation();addItemFromDb(${i})">+ Ajouter</button>
+      </div>`;
+    }).join('');
+    // Store results for click handler
+    window._dbSearchResults=results;
+  }catch(e){res.innerHTML=`<div style="font-size:13px;color:var(--text3);padding:8px 0;">Erreur réseau : ${e.message}</div>`;}
+}
+function addItemFromDb(idx){
+  const r=window._dbSearchResults?.[idx];if(!r)return;
+  const col=S.tracking.collections.find(c=>c.id===currentTrackingColId)||{};
+  const fields=col.fields||[];
+  const item={id:uid(),colId:currentTrackingColId,title:r.title||'',status:'avoir',reviews:[],tags:[],customFields:{},createdAt:new Date().toISOString()};
+  if(r.cover)item.coverUrl=r.cover;
+  const meta=r.meta||{};
+
+  // Helper: find field by name (case-insensitive, accent-tolerant)
+  const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const ff=(...names)=>fields.find(f=>names.some(n=>norm(f.name)===norm(n)));
+  const ffContains=(...words)=>fields.find(f=>words.some(w=>norm(f.name).includes(norm(w))));
+
+  // ── TEXT / NUMBER FIELDS ──
+  const setTxt=(val,...names)=>{if(!val)return;const f=ff(...names);if(f&&f.type==='text')item.customFields[f.id]=val;};
+  const setNum=(val,...names)=>{if(!val)return;const f=ff(...names);if(f&&f.type==='number')item.customFields[f.id]=parseInt(val)||'';};
+
+  setTxt(meta.auteur,'Auteur','Auteure','Author');
+  setTxt(meta.artiste,'Artiste','Artist');
+  setTxt(meta.realisateur,'Réalisateur','Réalisatrice','Director','Réal');
+  setTxt(meta.createur,'Créateur','Créatrice','Creator','Showrunner','Créé par');
+  setTxt(meta.studio,'Studio','Développeur','Developer','Éditeur');
+  setTxt(meta.annee,'Année','Annee','An','Year','Date de sortie','Sortie');
+  setTxt(meta.duree,'Durée','Duration','Runtime');
+  setTxt(meta.acteurs,'Acteurs','Casting','Cast');
+  setNum(meta.saisons,'Saisons','Seasons');
+
+  // ── PROGRESS FIELD (pages, durée…) ──
+  if(meta.pages&&meta.pages>0){
+    const f=ffContains('page','Page');
+    if(f&&f.type==='progress'){
+      item.customFields[f.id]='';
+      if(!item.customFieldsMax)item.customFieldsMax={};
+      item.customFieldsMax[f.id]=parseInt(meta.pages);
+    }
+  }
+
+  // ── TAG FIELDS ──
+  const matchTags=(vals,fieldNameHint)=>{
+    if(!vals||!vals.length)return;
+    const tagField=fields.find(f=>f.type==='tags'&&norm(f.name).includes(norm(fieldNameHint)));
+    if(!tagField)return;
+    const opts=tagField.options||[];
+    const matched=vals.map(g=>{
+      if(!opts.length)return g;
+      return opts.find(o=>norm(o)===norm(g))||opts.find(o=>norm(g).includes(norm(o))||norm(o).includes(norm(g)))||g;
+    });
+    item.customFields[tagField.id]=[...new Set(matched)].slice(0,4);
+  };
+  matchTags(meta.genres,'genre');
+  // Plateformes non auto-remplies : c'est le choix de l'utilisateur (où il a regardé/joué)
+
+  // ── NOTES : synopsis si disponible ──
+  if(meta.synopsis&&col.notesEnabled){
+    item.notesSections=[{id:'ns_'+Date.now(),name:'Synopsis',content:meta.synopsis}];
+  }
+
+  S.tracking.items.push(item);
+  saveLocal();debouncedSaveTracking();
+  closeDbSearch();
   openTrackingItem(item.id);
 }
 
@@ -3582,7 +4338,39 @@ function renderTrackingItemDetail(item){
   const tagFields=customFields.filter(f=>f.type==='tags');
   const infoFields=customFields.filter(f=>f.type!=='tags'&&!getReviewFields(col).find(rf=>rf.id===f.id));
   document.getElementById('trackingItemDetail').innerHTML=`
-    <input type="text" class="entry-title-input" id="tiTitle" value="${(item.title||'').replace(/"/g,'&quot;')}" placeholder="${col.icon} Titre…" oninput="autoSaveTrackingItem()">
+    <!-- Cover image -->
+    <div style="display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;">
+      <div id="tiCoverWrap" style="flex-shrink:0;">
+        ${item.coverUrl
+          ? `<img id="tiCoverImg" src="${item.coverUrl}" alt="Pochette" style="width:90px;height:135px;object-fit:cover;border-radius:10px;display:block;cursor:pointer;" onclick="openCoverSearch()" title="Changer la pochette" onerror="this.style.display='none';document.getElementById('tiCoverFallback').style.display='flex'"><button id="tiCoverFallback" onclick="openCoverSearch()" style="display:none;width:90px;height:135px;border:2px dashed var(--border2);border-radius:10px;background:var(--bg2);color:var(--text3);font-size:11px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style='font-size:22px'>🖼</span>Pochette</button>`
+          : `<button onclick="openCoverSearch()" style="width:90px;height:135px;border:2px dashed var(--border2);border-radius:10px;background:var(--bg2);color:var(--text3);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style="font-size:22px;">🖼</span>Pochette</button>`
+        }
+      </div>
+      <div style="flex:1;min-width:0;">
+        <input type="text" class="entry-title-input" id="tiTitle" value="${(item.title||'').replace(/"/g,'&quot;')}" placeholder="${col.icon} Titre…" oninput="autoSaveTrackingItem()" style="margin-bottom:.5rem;">
+      </div>
+    </div>
+    <!-- Cover search panel (hidden by default) -->
+    <div id="coverSearchPanel" style="display:none;margin-bottom:1rem;" class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">
+        <span style="font-size:13px;font-weight:500;">🖼 Pochette</span>
+        <button onclick="closeCoverSearch()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);">✕</button>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <input type="text" id="coverSearchInput" placeholder="Titre à rechercher…" style="flex:1;font-size:13px;" onkeydown="if(event.key==='Enter')searchCover()">
+        <button class="btn btn-secondary btn-sm" onclick="searchCover()">🔍</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px;" id="coverSearchHint"></div>
+      <div id="coverSearchResults" class="cover-search-results"></div>
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Ou colle une URL d'image directement :</div>
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="coverUrlInput" placeholder="https://…" value="${item.coverUrl||''}" style="flex:1;font-size:12px;">
+          <button class="btn btn-primary btn-sm" onclick="applyCoverUrl()">OK</button>
+          ${item.coverUrl?`<button class="btn btn-danger btn-sm" onclick="removeCover()">✕</button>`:''}
+        </div>
+      </div>
+    </div>
     <!-- Tags en haut, style Notion -->
     ${tagFields.length?`<div style="margin-bottom:.9rem;">
       ${tagFields.map(f=>{
@@ -3668,61 +4456,80 @@ function renderTrackingItemDetail(item){
     <!-- Reviews history (only if collection has reviews enabled) -->
     ${col.reviewsEnabled!==false?`
     <div class="card" style="margin-bottom:1rem;">
-      <p style="font-size:13px;font-weight:500;margin-bottom:.8rem;">Historique ${item.reviews&&item.reviews.length?`<span style="font-size:11px;color:var(--text3);">${item.reviews.length} fois</span>`:''}</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;">
+        <p style="font-size:13px;font-weight:500;margin:0;">Historique ${item.reviews&&item.reviews.length?`<span style="font-size:11px;color:var(--text3);font-weight:400;">${item.reviews.length} fois</span>`:''}</p>
+      </div>
       <div id="tiReviews">
         ${(item.reviews||[]).map((r,i)=>`
           <div class="tracking-review-item" id="rev_${i}">
             <div class="tracking-review-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):new Date(r.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}</div>
             ${r.rating?starsHtml(r.rating,'','big'):''}
             ${r.avis?`<div class="review-avis-wrap" id="aviswrap_${i}"><div class="tracking-review-avis" id="revtxt_${i}">${r.avis}</div></div><button class="review-voir-plus" id="vp_${i}" style="display:none;" onclick="toggleReviewAvis(${i})">Voir plus ↓</button>`:''}
-            ${(()=>{if(!r.context)return'';let parts=[];if(Array.isArray(r.context)){parts=r.context.filter(x=>x&&x.value).map(x=>`<span>${x.label}: <strong>${x.value}</strong></span>`);}else{const rfs=getReviewFields(col);parts=rfs.filter(f=>r.context[f.id]).map(f=>`<span>${f.name}: <strong>${r.context[f.id]}</strong></span>`);}return parts.length?`<div style="font-size:11px;color:var(--text3);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;">${parts.join('')}</div>`:'';})()} 
+            ${(()=>{if(!r.context)return'';let parts=[];if(Array.isArray(r.context)){parts=r.context.filter(x=>x&&x.value).map(x=>`<span>${x.label}: <strong>${x.value}</strong></span>`);}else{const rfs=getReviewFields(col);parts=rfs.filter(f=>r.context[f.id]).map(f=>`<span>${f.name}: <strong>${r.context[f.id]}</strong></span>`);}return parts.length?`<div style="font-size:11px;color:var(--text3);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;">${parts.join('')}</div>`:'';})()}
             <div style="display:flex;gap:4px;margin-top:5px;">
               <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:2px 5px;border-radius:4px;" onclick="startEditReview(${i})">✏️ Modifier</button>
               <button class="tracking-review-del" style="position:static;margin-left:auto;" onclick="deleteReview(${i})">✕</button>
             </div>
-          </div>`).join('')||`<p style="font-size:12px;color:var(--text3);">Aucun avis pour l'instant.</p>`}
+          </div>`).join('')}
       </div>
+      ${!(item.reviews&&item.reviews.length)?`
+      <!-- Prompt visuel quand aucun visionnage -->
+      <div style="border:2px dashed var(--border2);border-radius:var(--radius);padding:1.2rem;text-align:center;margin-bottom:.8rem;background:var(--bg2);">
+        <div style="font-size:28px;margin-bottom:.4rem;">${col.icon==='📖'||col.icon==='📚'?'📚':'🎬'}</div>
+        <p style="font-size:13px;font-weight:500;color:var(--text2);margin:0 0 .3rem;">${col.icon==='📖'||col.icon==='📚'?'Tu l\'as lu ?':'Tu l\'as regardé ?'}</p>
+        <p style="font-size:11px;color:var(--text3);margin:0 0 .8rem;">Enregistre la date pour suivre ton historique</p>
+        <button class="btn btn-primary btn-sm" onclick="addQuickLog()">📅 Marquer ${col.icon==='📖'||col.icon==='📚'?'lu':'vu'} aujourd\'hui</button>
+      </div>`:''}
     </div>
-    <!-- Add new review -->
+    <!-- Add new review / quick log -->
     <div class="tracking-add-review" id="reviewForm">
-      <p style="font-size:13px;font-weight:500;margin-bottom:.8rem;" id="reviewFormTitle">${item.reviews&&item.reviews.length?'↺ Ajouter un revisionnage':'＋ Ajouter un avis'}</p>
-      <!-- Decimal rating input -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem;">
-        <div class="star-input" id="starInput">
-          ${[1,2,3,4,5].map(i=>`<span class="ts" data-val="${i*2}" onclick="setReviewRating(${i*2})" onmouseover="previewStars(${i*2})" onmouseout="resetStarPreview()">☆</span>`).join('')}
-        </div>
-        <div style="display:flex;align-items:center;gap:4px;">
-          <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="${newReviewRating||''}" placeholder="0" style="width:52px;font-size:14px;padding:4px 6px;text-align:center;" oninput="setReviewRatingInput(this.value)">
-          <span style="font-size:12px;color:var(--text3);">/10</span>
-        </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:6px;">
+        <p style="font-size:13px;font-weight:500;margin:0;" id="reviewFormTitle">${item.reviews&&item.reviews.length?'↺ Nouveau visionnage':'＋ Ajouter'}</p>
+        ${item.reviews&&item.reviews.length?`<button class="btn btn-secondary btn-sm" onclick="addQuickLog()" title="Enregistre juste la date d'aujourd'hui">📅 Marquer ${col.icon==='📖'||col.icon==='📚'?'lu':'vu'} aujourd'hui</button>`:''}
       </div>
-      <div class="form-group" style="margin-bottom:.7rem;">
-        <label>Date</label>
-        <input type="date" id="tiReviewDate" value="${new Date().toISOString().split('T')[0]}" style="font-size:12px;">
+      <!-- Date + Note rapide sur une ligne -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem;flex-wrap:wrap;">
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:3px;">Date</label>
+          <input type="date" id="tiReviewDate" value="${new Date().toISOString().split('T')[0]}" style="font-size:12px;width:auto;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:3px;">Note <span style="opacity:.6;">(optionnel)</span></label>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div class="star-input" id="starInput">
+              ${[1,2,3,4,5].map(i=>`<span class="ts" data-val="${i*2}" onclick="setReviewRating(${i*2})" onmouseover="previewStars(${i*2})" onmouseout="resetStarPreview()">☆</span>`).join('')}
+            </div>
+            <input type="number" id="ratingInput" min="0" max="10" step="0.5" value="${newReviewRating||''}" placeholder="–" style="width:46px;font-size:13px;padding:4px 6px;text-align:center;" oninput="setReviewRatingInput(this.value)">
+            <span style="font-size:11px;color:var(--text3);">/10</span>
+          </div>
+        </div>
       </div>
       <!-- Champs contexte dynamiques -->
       <div id="reviewContextFields" style="margin-bottom:.3rem;"></div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.8rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem;flex-wrap:wrap;">
         <button onclick="addReviewContextRow()" style="background:none;border:1px dashed var(--border2);color:var(--text3);font-size:11px;padding:3px 10px;border-radius:var(--radius-sm);cursor:pointer;line-height:1.8;">＋ Ajouter un champ</button>
-        <button onclick="saveReviewDefaults('${col.id}')" style="background:none;border:none;color:var(--accent2);font-size:11px;cursor:pointer;padding:3px 0;" title="Mémoriser les champs actuels comme défaut pour cette catégorie">📌 Mémoriser pour ${col.name}</button>
+        <button onclick="toggleCtxSuggestions(this,'${getColDatabase(col)}')" style="background:none;border:1px solid var(--border2);color:var(--text3);font-size:11px;padding:3px 8px;border-radius:var(--radius-sm);cursor:pointer;line-height:1.8;" title="Suggestions de champs">💡</button>
+        <button onclick="saveReviewDefaults('${col.id}')" style="background:none;border:none;color:var(--accent2);font-size:11px;cursor:pointer;padding:3px 0;" title="Mémoriser les champs actuels comme défaut">📌 Mémoriser</button>
       </div>
-      <div class="form-group" style="margin-bottom:.5rem;">
-        <label>Avis</label>
-        <div class="review-toolbar">
+      <div id="ctxSuggestions" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:.8rem;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);"></div>
+      <!-- Avis (pliable) -->
+      <details id="reviewAvisDetails" style="margin-bottom:.5rem;">
+        <summary style="font-size:12px;color:var(--text3);cursor:pointer;user-select:none;margin-bottom:.5rem;list-style:none;display:flex;align-items:center;gap:5px;"><span id="reviewAvisSummaryArrow">▶</span> Avis écrit <span style="opacity:.6;">(optionnel)</span></summary>
+        <div class="review-toolbar" style="margin-top:.4rem;">
           <button class="review-tb-btn" onclick="document.execCommand('undo')" title="Annuler">↩</button>
           <button class="review-tb-btn" onclick="document.execCommand('redo')" title="Refaire">↪</button>
           <div class="review-tb-sep"></div>
-          <button class="review-tb-btn" onclick="reviewFmt('bold')" title="Gras"><b>B</b></button>
-          <button class="review-tb-btn" onclick="reviewFmt('italic')" title="Italique"><i style="font-style:italic">I</i></button>
-          <button class="review-tb-btn" onclick="reviewFmt('underline')" title="Souligné"><u>U</u></button>
+          <button class="review-tb-btn" onclick="reviewFmt('bold')"><b>B</b></button>
+          <button class="review-tb-btn" onclick="reviewFmt('italic')"><i style="font-style:italic">I</i></button>
+          <button class="review-tb-btn" onclick="reviewFmt('underline')"><u>U</u></button>
           <div class="review-tb-sep"></div>
           <button class="review-tb-btn" onclick="reviewFmt('insertUnorderedList')">≡</button>
           <button class="review-tb-btn" onclick="reviewFmt('insertOrderedList')">1.</button>
           <div class="review-tb-sep"></div>
-          <button class="review-tb-btn" onclick="insertSpoiler()" title="Cacher le texte sélectionné (spoiler)">👁</button>
+          <button class="review-tb-btn" onclick="insertSpoiler()">👁</button>
         </div>
         <div id="tiReviewAvis" contenteditable="true" style="min-height:70px;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text);outline:none;line-height:1.6;" placeholder="Votre avis, ressenti…"></div>
-      </div>
+      </details>
       <div style="display:flex;gap:6px;margin-top:.7rem;">
         <button class="btn btn-primary btn-sm" onclick="addReview()" id="reviewSubmitBtn">Enregistrer</button>
         <button class="btn btn-secondary btn-sm" id="reviewCancelBtn" style="display:none;" onclick="cancelEditReview()">Annuler</button>
@@ -3770,6 +4577,94 @@ function saveProgressMax(fieldId,value,min){
   if(bar)bar.style.width=pct+'%';
   const pctEl=document.getElementById('pfpct_'+fieldId);
   if(pctEl)pctEl.textContent=pct+'%';
+}
+// ── COVER IMAGE ──────────────────────────────────────────────────────────
+function openCoverSearch(){
+  const panel=document.getElementById('coverSearchPanel');
+  if(!panel)return;
+  panel.style.display='block';
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);
+  const inp=document.getElementById('coverSearchInput');
+  if(inp&&item&&!inp.value)inp.value=item.title||'';
+  const hint=document.getElementById('coverSearchHint');
+  if(hint){
+    const col=S.tracking.collections.find(c=>c.id===item?.colId)||{};
+    const icon=col.icon||'';
+    if(['📖','📚'].includes(icon))hint.textContent='Recherche via Open Library (gratuit, sans clé)';
+    else if(['🎬','📺'].includes(icon)){
+      const key=localStorage.getItem('omdb_api_key');
+      hint.textContent=key?'Recherche via OMDb':'Ajoutez une clé OMDb dans Paramètres pour les films/séries';
+    }else if(icon==='🎮')hint.textContent='Recherche via RAWG (gratuit)';
+    else if(icon==='🎵')hint.textContent='Recherche via MusicBrainz (gratuit)';
+    else hint.textContent='Collez une URL d\'image ci-dessous';
+  }
+}
+function closeCoverSearch(){
+  const panel=document.getElementById('coverSearchPanel');
+  if(panel)panel.style.display='none';
+}
+async function searchCover(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const col=S.tracking.collections.find(c=>c.id===item.colId)||{};
+  const icon=col.icon||'';
+  const q=document.getElementById('coverSearchInput')?.value?.trim();
+  if(!q)return;
+  const res=document.getElementById('coverSearchResults');
+  if(res)res.innerHTML='<span style="font-size:12px;color:var(--text3);">Recherche…</span>';
+  try{
+    let covers=[];
+    if(['📖','📚'].includes(icon)){
+      // Open Library — free, no key
+      const r=await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(q)}&limit=8&fields=cover_i,title`);
+      const d=await r.json();
+      covers=(d.docs||[]).filter(b=>b.cover_i).map(b=>({
+        url:`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`,
+        title:b.title||''
+      }));
+    }else if(['🎬','📺'].includes(icon)){
+      const key=localStorage.getItem('omdb_api_key');
+      if(!key){if(res)res.innerHTML='<span style="font-size:12px;color:var(--text3);">Clé OMDb manquante — ajoutez-la dans Paramètres.</span>';return;}
+      const r=await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(q)}&apikey=${key}&type=${icon==='📺'?'series':'movie'}`);
+      const d=await r.json();
+      covers=(d.Search||[]).filter(m=>m.Poster&&m.Poster!=='N/A').map(m=>({url:m.Poster,title:m.Title||''}));
+    }else if(icon==='🎮'){
+      // RAWG — free, demo key works
+      const r=await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(q)}&page_size=8&key=`);
+      const d=await r.json();
+      covers=(d.results||[]).filter(g=>g.background_image).map(g=>({url:g.background_image,title:g.name||''}));
+    }else if(icon==='🎵'){
+      const r=await fetch(`https://musicbrainz.org/ws/2/release-group/?query=${encodeURIComponent(q)}&limit=8&fmt=json`,{headers:{'User-Agent':'AppliJournal/1.0'}});
+      const d=await r.json();
+      const rgs=d['release-groups']||[];
+      covers=rgs.filter(rg=>rg.id).map(rg=>({
+        url:`https://coverartarchive.org/release-group/${rg.id}/front-250`,
+        title:rg.title||''
+      }));
+    }
+    if(!covers.length){if(res)res.innerHTML='<span style="font-size:12px;color:var(--text3);">Aucun résultat.</span>';return;}
+    if(res)res.innerHTML=covers.map(c=>`
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;" onclick="selectCover('${c.url.replace(/'/g,"\\'")}')">
+        <img class="cover-result-img" src="${c.url}" alt="${(c.title||'').replace(/"/g,'')}" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <span style="font-size:9px;color:var(--text3);max-width:70px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${c.title||''}</span>
+      </div>`).join('');
+  }catch(e){if(res)res.innerHTML='<span style="font-size:12px;color:var(--text3);">Erreur réseau.</span>';}
+}
+function selectCover(url){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  item.coverUrl=url;
+  saveLocal();debouncedSaveTracking();
+  renderTrackingItemDetail(item);
+}
+function applyCoverUrl(){
+  const url=document.getElementById('coverUrlInput')?.value?.trim();
+  if(!url)return;
+  selectCover(url);
+}
+function removeCover(){
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  delete item.coverUrl;
+  saveLocal();debouncedSaveTracking();
+  renderTrackingItemDetail(item);
 }
 // ── NOTES MULTI-SECTIONS ──────────────────────────────────────────────────
 let _notesSaveTimer=null;
@@ -4090,10 +4985,12 @@ function startEditReview(idx){
   const ri=document.getElementById('ratingInput');if(ri)ri.value=r.rating||'';
   const rd=document.getElementById('tiReviewDate');if(rd)rd.value=r.date||'';
   const ra=document.getElementById('tiReviewAvis');if(ra)ra.innerHTML=r.avis||'';
+  // Open avis section if there's content
+  if(r.avis){const det=document.getElementById('reviewAvisDetails');if(det)det.open=true;}
   // Pre-fill context fields (dynamic rows)
   initReviewContextFields(r.context);
   setReviewRating(r.rating||0);
-  const title=document.getElementById('reviewFormTitle');if(title)title.textContent='✏️ Modifier cet avis';
+  const title=document.getElementById('reviewFormTitle');if(title)title.textContent='✏️ Modifier';
   const submitBtn=document.getElementById('reviewSubmitBtn');if(submitBtn)submitBtn.textContent='Mettre à jour';
   const cancelBtn=document.getElementById('reviewCancelBtn');if(cancelBtn)cancelBtn.style.display='';
   // Scroll to form
@@ -4110,7 +5007,7 @@ function cancelEditReview(){
   initReviewContextFields();
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);
   const title=document.getElementById('reviewFormTitle');
-  if(title)title.textContent=item&&item.reviews&&item.reviews.length?'↺ Ajouter un revisionnage':'＋ Ajouter un avis';
+  if(title)title.textContent=item&&item.reviews&&item.reviews.length?'↺ Nouveau visionnage':'＋ Ajouter';
   const submitBtn=document.getElementById('reviewSubmitBtn');if(submitBtn)submitBtn.textContent='Enregistrer';
   const cancelBtn=document.getElementById('reviewCancelBtn');if(cancelBtn)cancelBtn.style.display='none';
 }
@@ -4161,6 +5058,48 @@ function saveReviewDefaults(colId){
   const btn=event.target;const orig=btn.textContent;btn.textContent='✓ Mémorisé';setTimeout(()=>btn.textContent=orig,1500);
 }
 
+function toggleCtxSuggestions(btn, dbType){
+  const box=document.getElementById('ctxSuggestions');if(!box)return;
+  const visible=box.style.display==='flex';
+  if(visible){box.style.display='none';btn.style.background='';return;}
+  // Build suggestion list based on collection type
+  const common=[['📍','Lieu'],['👥','Avec qui'],['💭','Humeur'],['⭐','Contexte']];
+  const byDb={
+    omdb_movie:[['🎭','Salle / Streaming'],['🍿','Occasion'],['🗣','Langue VO/VF']],
+    omdb_series:[['📺','Épisodes vus'],['🗓','Soirée'],['🗣','Langue VO/VF']],
+    openlibrary:[['📚','Format'],['🔖','Page arrêtée'],['🌍','Langue']],
+    rawg:[['🎮','Plateforme jouée'],['⏱','Heures jouées'],['🏆','Avancement']],
+    musicbrainz:[['🎧','Écoute sur'],['🎼','Concert ?'],['🔁','Times écouté']],
+  };
+  const extra=(byDb[dbType]||[]);
+  const all=[...common,...extra];
+  // Filter out already-added labels
+  const existing=[...document.querySelectorAll('#reviewContextFields .ctx-label')].map(i=>i.value.trim().toLowerCase());
+  box.innerHTML='';
+  all.filter(([,name])=>!existing.includes(name.toLowerCase())).forEach(([icon,name])=>{
+    const chip=document.createElement('button');
+    chip.textContent=icon+' '+name;
+    chip.style.cssText='background:var(--bg);border:1px solid var(--border2);color:var(--text2);font-size:11px;padding:3px 10px;border-radius:16px;cursor:pointer;white-space:nowrap;';
+    chip.onclick=()=>{addReviewContextRow(name,'');chip.remove();if(!box.children.length)box.style.display='none';};
+    box.appendChild(chip);
+  });
+  if(!box.children.length){box.style.display='none';return;}
+  box.style.display='flex';
+  btn.style.background='var(--surface)';
+}
+
+function addQuickLog(){
+  // Log just today's date with no rating/review
+  const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
+  const today=new Date().toISOString().split('T')[0];
+  item.reviews=item.reviews||[];
+  item.reviews.push({rating:0,avis:'',date:today,createdAt:new Date().toISOString()});
+  const col=S.tracking.collections.find(c=>c.id===item.colId);
+  const statuses=getColStatuses(col);
+  if(statuses.length>1&&item.status===statuses[0]?.id)item.status=statuses[statuses.length-1].id;
+  saveLocal();debouncedSaveTracking();renderTrackingItemDetail(item);
+  showToast('✓ Visionnage enregistré');
+}
 function addReview(){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   const avisDom=document.getElementById('tiReviewAvis');
@@ -4168,7 +5107,7 @@ function addReview(){
   const date=document.getElementById('tiReviewDate')?.value||'';
   const ratingInputEl=document.getElementById('ratingInput');
   const rating=ratingInputEl?parseFloat(ratingInputEl.value)||newReviewRating:newReviewRating;
-  if(!avis&&!rating)return;
+  // Allow saving with just a date (no avis/rating required)
   item.reviews=item.reviews||[];
   if(editingReviewIdx!==null&&item.reviews[editingReviewIdx]){
     // Update existing
@@ -4188,7 +5127,7 @@ function addReview(){
 function deleteReview(idx){
   const item=S.tracking.items.find(i=>i.id===currentTrackingItemId);if(!item)return;
   showConfirm('Supprimer cet avis ?','Cette action est irréversible.',()=>{
-    item.reviews.splice(idx,1);saveLocal();debouncedSaveTracking();renderTrackingItemDetail(item);
+    item.reviews.splice(idx,1);saveLocal();debouncedSaveTracking();newReviewRating=0;editingReviewIdx=null;renderTrackingItemDetail(item);
   });
 }
 function deleteTrackingItem(id){
@@ -4640,20 +5579,55 @@ const EXAMPLE_GOALS=[
 ];
 function initGoals(){if(!S.goals||!S.goals.length)S.goals=[...EXAMPLE_GOALS];}
 
+// Tags suggérés : vie · sagesse · motivation · amour · humour · pensée
 const EXAMPLE_QUOTES=[
-  {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',date:'',tags:['vie','philosophie'],createdAt:new Date().toISOString()},
-  {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',date:'',tags:['sagesse','action'],createdAt:new Date().toISOString()},
-  {id:'eq3',text:'Un ami c\'est quelqu\'un qui vous connaît bien et qui vous aime quand même.',author:'Elbert Hubbard',date:'',tags:['amitié'],createdAt:new Date().toISOString()},
-  {id:'eq4',text:'Le bonheur n\'est pas quelque chose de tout fait. Il vient de vos propres actions.',author:'Dalaï Lama',date:'',tags:['bonheur','sagesse'],createdAt:new Date().toISOString()},
-  {id:'eq5',text:'Il n\'y a qu\'une façon d\'éviter les critiques : ne rien faire, ne rien dire et n\'être rien.',author:'Aristote',date:'',tags:['courage','philosophie'],createdAt:new Date().toISOString()},
+  {id:'eq1',text:'La vie est ce qui arrive quand on est occupé à faire d\'autres projets.',author:'John Lennon',source:'',date:'',tags:['vie'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq2',text:'Sois le changement que tu veux voir dans le monde.',author:'Gandhi',source:'',date:'',tags:['motivation'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq3',text:'Il n\'y a qu\'une façon d\'éviter les critiques : ne rien faire, ne rien dire et n\'être rien.',author:'Aristote',source:'',date:'',tags:['sagesse'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq4',text:'On reconnaît un homme à ce qui le fait rire.',author:'Fiodor Dostoïevski',source:'',date:'',tags:['pensée'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq5',text:'Aimer, ce n\'est pas se regarder l\'un l\'autre, c\'est regarder ensemble dans la même direction.',author:'Antoine de Saint-Exupéry',source:'Terre des hommes',date:'',tags:['amour'],isFavorite:true,createdAt:new Date().toISOString()},
+  {id:'eq6',text:'Je n\'ai pas échoué. J\'ai juste trouvé 10 000 façons qui ne fonctionnent pas.',author:'Thomas Edison',source:'',date:'',tags:['motivation'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq7',text:'Le temps que tu consacres à ta rose fait ta rose si importante.',author:'Antoine de Saint-Exupéry',source:'Le Petit Prince',date:'',tags:['vie','amour'],isFavorite:false,createdAt:new Date().toISOString()},
+  {id:'eq8',text:'L\'imagination est plus importante que la connaissance.',author:'Albert Einstein',source:'',date:'',tags:['pensée'],isFavorite:false,createdAt:new Date().toISOString()},
 ];
 
+let quoteFormFav=false;
+let quoteFavFilterOn=false;
 function initQuotes(){if(!S.quotes||!S.quotes.length)S.quotes=[...EXAMPLE_QUOTES];}
 function addQuoteTagKD(e){if(e.key==='Enter'){e.preventDefault();addQuoteTag();}}
 function addQuoteTag(){const i=document.getElementById('quoteTagInput'),v=i.value.trim().toLowerCase().replace(/\s+/g,'-');if(!v||quoteTags.includes(v))return;quoteTags.push(v);i.value='';renderQuoteSelTags();}
 function removeQuoteTag(t){quoteTags=quoteTags.filter(x=>x!==t);renderQuoteSelTags();}
 function renderQuoteSelTags(){const w=document.getElementById('selectedQuoteTags');if(w)w.innerHTML=quoteTags.map(t=>`<span class="tag active">#${t} <span onclick="removeQuoteTag('${t}')" style="cursor:pointer;opacity:.7;">✕</span></span>`).join('');}
-function clearQuoteDate(){document.getElementById('quoteDate').value='';}
+function clearQuoteDate(){document.getElementById('quoteDate').value='';updateQuoteDateDisplay();}
+function updateQuoteDateDisplay(){
+  const v=document.getElementById('quoteDate').value;
+  const lbl=document.getElementById('quoteDateLabel');
+  if(!lbl)return;
+  if(!v){lbl.textContent='Aujourd\'hui';return;}
+  const d=new Date(v+'T00:00:00');
+  lbl.textContent=d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+}
+function toggleQuoteFormFav(){quoteFormFav=!quoteFormFav;const b=document.getElementById('quoteFavBtn');if(b){b.textContent=quoteFormFav?'⭐':'☆';b.classList.toggle('active',quoteFormFav);}}
+function toggleQuoteFavFilter(){quoteFavFilterOn=!quoteFavFilterOn;const b=document.getElementById('quoteFavFilterBtn');if(b){b.textContent=quoteFavFilterOn?'⭐ Favoris':'☆ Favoris';b.classList.toggle('active',quoteFavFilterOn);}renderQuotes();}
+const QUOTE_SUGGESTED_TAGS=['vie','sagesse','motivation','amour','humour','pensée'];
+function renderQuoteTagSuggestions(){
+  const input=document.getElementById('quoteTagInput');
+  const wrap=document.getElementById('quoteTagSuggestions');
+  if(!wrap||!input)return;
+  const q=input.value.trim().toLowerCase();
+  const allTags={};
+  (S.quotes||[]).forEach(qt=>(qt.tags||[]).forEach(t=>{allTags[t]=(allTags[t]||0)+1;}));
+  // Merge suggested + existing, deduplicate
+  const pool=[...new Set([...QUOTE_SUGGESTED_TAGS,...Object.keys(allTags)])];
+  const visible=pool.filter(t=>!quoteTags.includes(t)&&(!q||t.includes(q))).slice(0,12);
+  if(!visible.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=visible.map(t=>{
+    const isSuggested=QUOTE_SUGGESTED_TAGS.includes(t);
+    return`<span class="quote-tag-chip${isSuggested?'':' used'}" onclick="addQuoteTagDirect('${t}')">#${t}</span>`;
+  }).join('');
+}
+function addQuoteTagDirect(t){if(!quoteTags.includes(t))quoteTags.push(t);renderQuoteSelTags();renderQuoteTagSuggestions();}
+document.addEventListener('click',e=>{const d=document.getElementById('quoteSortDD');if(d&&!d.contains(e.target))d.style.display='none';});
 function saveQuote(){
   const text=document.getElementById('quoteText').value.trim();
   if(!text)return;
@@ -4684,7 +5658,10 @@ function editQuote(id){
   editingQuoteId=id;
   document.getElementById('quoteText').value=q.text||'';
   document.getElementById('quoteAuthor').value=q.author||'';
+  document.getElementById('quoteSource').value=q.source||'';
   document.getElementById('quoteDate').value=q.date||'';
+  quoteFormFav=!!(q.isFavorite);
+  const fb=document.getElementById('quoteFavBtn');if(fb)fb.textContent=quoteFormFav?'⭐':'☆';
   quoteTags=[...(q.tags||[])];renderQuoteSelTags();
   const lbl=document.getElementById('quoteFormLabel');if(lbl)lbl.textContent='Modifier la citation';
   const btn=document.getElementById('quoteSubmitBtn');if(btn)btn.textContent='💾 Mettre à jour';
@@ -4692,10 +5669,13 @@ function editQuote(id){
   document.getElementById('quoteInputBox')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function cancelQuoteEdit(){
-  editingQuoteId=null;quoteTags=[];renderQuoteSelTags();
+  editingQuoteId=null;quoteTags=[];quoteFormFav=false;renderQuoteSelTags();
   document.getElementById('quoteText').value='';
   document.getElementById('quoteAuthor').value='';
-  document.getElementById('quoteDate').value='';
+  document.getElementById('quoteSource').value='';
+  document.getElementById('quoteDate').value=new Date().toISOString().split('T')[0];
+  updateQuoteDateDisplay();
+  const fb=document.getElementById('quoteFavBtn');if(fb)fb.textContent='☆';
   const lbl=document.getElementById('quoteFormLabel');if(lbl)lbl.textContent='Nouvelle citation';
   const btn=document.getElementById('quoteSubmitBtn');if(btn)btn.textContent='＋ Ajouter';
   const cancel=document.getElementById('quoteCancelEditBtn');if(cancel)cancel.style.display='none';
@@ -4703,14 +5683,14 @@ function cancelQuoteEdit(){
 function saveQuote(){
   const text=document.getElementById('quoteText').value.trim();
   if(!text)return;
-  const data={text,author:document.getElementById('quoteAuthor').value.trim(),date:document.getElementById('quoteDate').value||'',tags:[...quoteTags]};
+  const data={text,author:document.getElementById('quoteAuthor').value.trim(),source:document.getElementById('quoteSource').value.trim(),date:document.getElementById('quoteDate').value||'',tags:[...quoteTags],isFavorite:quoteFormFav};
   if(editingQuoteId){
     const q=S.quotes.find(x=>x.id===editingQuoteId);
     if(q)Object.assign(q,data);
   } else {
     S.quotes.unshift({id:uid(),...data,createdAt:new Date().toISOString()});
   }
-  saveLocal();cancelQuoteEdit();renderQuotes();
+  saveLocal();debouncedSaveTracking();cancelQuoteEdit();renderQuotes();
 }
 function renderQuotes(){
   initQuotes();
@@ -4719,29 +5699,37 @@ function renderQuotes(){
   if(fb)fb.innerHTML=Object.keys(allTags).sort((a,b)=>allTags[b]-allTags[a]).slice(0,10).map(t=>`<span class="tag ${quoteFilterTag===t?'active':''}" onclick="setQuoteTagFilter('${t}')">#${t}</span>`).join('');
   let quotes=[...S.quotes];
   if(quoteFilterTag)quotes=quotes.filter(q=>(q.tags||[]).includes(quoteFilterTag));
-  // Sort
+  if(quoteFavFilterOn)quotes=quotes.filter(q=>q.isFavorite);
   if(quoteSort==='oldest')quotes.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   else if(quoteSort==='author')quotes.sort((a,b)=>(a.author||'').localeCompare(b.author||'','fr'));
   else if(quoteSort==='alpha')quotes.sort((a,b)=>(a.text||'').localeCompare(b.text||'','fr'));
+  else if(quoteSort==='fav')quotes.sort((a,b)=>(b.isFavorite?1:0)-(a.isFavorite?1:0));
   else quotes.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const el=document.getElementById('quotesList');if(!el)return;
   const cnt=document.getElementById('quotesCount');if(cnt)cnt.textContent=S.quotes.length+' citation'+(S.quotes.length>1?'s':'');
-  if(!quotes.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><h3 class="empty-title">Aucune citation</h3><p class="empty-desc">Ajoutez votre première citation ci-dessus</p></div>`;return;}
+  if(!quotes.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><h3 class="empty-title">Aucune citation</h3><p class="empty-desc">${quoteFavFilterOn?'Aucun favori encore — cliquez ⭐ pour en ajouter':'Ajoutez votre première citation ci-dessus'}</p></div>`;return;}
   el.innerHTML=quotes.map(q=>{
     const d=q.date?formatDate(q.date):null;
-    return`<div class="quote-card">
+    return`<div class="quote-card${q.isFavorite?' fav':''}">
       <div class="quote-text">${q.text}</div>
       ${q.author?`<div class="quote-author">— ${q.author}</div>`:''}
+      ${q.source?`<div class="quote-source">📖 ${q.source}</div>`:''}
       <div class="quote-meta">
         ${d?`<span style="font-size:10px;color:var(--text3);">📅 ${d.day} ${d.month} ${d.year}</span>`:''}
         ${(q.tags||[]).map(t=>`<span class="tag" style="font-size:10px;">#${t}</span>`).join('')}
         <div style="display:flex;gap:4px;margin-left:auto;">
+          <button class="btn btn-secondary btn-sm" onclick="toggleQuoteFav('${q.id}')" title="${q.isFavorite?'Retirer des favoris':'Ajouter aux favoris'}" style="font-size:13px;padding:0 7px;">${q.isFavorite?'⭐':'☆'}</button>
           <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️</button>
           <button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑</button>
         </div>
       </div>
     </div>`;
   }).join('');
+}
+function toggleQuoteFav(id){
+  const q=S.quotes.find(x=>x.id===id);if(!q)return;
+  q.isFavorite=!q.isFavorite;
+  saveLocal();debouncedSaveTracking();renderQuotes();
 }
 function updateEntryCount(){
   const c=S.entries.length;
@@ -4798,6 +5786,9 @@ function renderEntries(){
 // ── READ ───────────────────────────────────────────────────────────────────
 function readEntry(id){
   currentReadId=id;
+  // Mémoriser quelle sous-vue home était active pour pouvoir y revenir
+  const homeViews=['booksView','bookEntriesView','homeCalendarView','homeModelsView','homeScalesView'];
+  _readOriginView=homeViews.find(v=>{const el=document.getElementById(v);return el&&el.style.display!=='none';})||'booksView';
   const entry=S.entries.find(e=>e.id===id);if(!entry)return;
   const t=getType(entry.typeId),d=entry.date?formatDate(entry.date):null;
   const disp=entry.title||(d?`${d.weekday} ${d.day} ${d.month} ${d.year}`:t.name);
@@ -4832,14 +5823,14 @@ function goBackFromRead(){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-home').classList.add('active');
   document.querySelectorAll('.nav-tab')[0].classList.add('active');
-  if(currentBookTypeId){
-    document.getElementById('booksView').style.display='none';
-    document.getElementById('bookEntriesView').style.display='';
-  } else {
-    document.getElementById('booksView').style.display='';
-    document.getElementById('bookEntriesView').style.display='none';
-    renderBooksGrid();
-  }
+  // Masquer toutes les sous-vues home
+  ['booksView','bookEntriesView','homeCalendarView','homeModelsView','homeScalesView']
+    .forEach(v=>{const el=document.getElementById(v);if(el)el.style.display='none';});
+  // Restaurer la vue d'origine
+  const origin=_readOriginView||'booksView';
+  const target=document.getElementById(origin);
+  if(target)target.style.display='';
+  if(origin==='booksView')renderBooksGrid();
   hideToolbar();
 }
 function renderStorageUsage(){
@@ -5161,46 +6152,117 @@ function showTrackingColStats(colId){
   const avgRating=allReviews.length?(allReviews.reduce((a,r)=>a+parseFloat(r.rating),0)/allReviews.length).toFixed(1):null;
   const totalViews=items.reduce((a,i)=>a+(i.reviews?i.reviews.length:0),0);
   const multiViewed=items.filter(i=>i.reviews&&i.reviews.length>1).length;
-  // Frequency: reviews per week over last 30 days
   const now=new Date();
-  const recent=allReviews.filter(r=>{const d=r.date?new Date(r.date+'T00:00:00'):new Date(r.createdAt);return(now-d)/864e5<=30;});
-  const perWeek=recent.length?(recent.length/4).toFixed(1):0;
-  // Custom stats from col.customStats
+  const recent30=allReviews.filter(r=>{const d=r.date?new Date(r.date+'T00:00:00'):new Date(r.createdAt);return(now-d)/864e5<=30;});
+  const perWeek=recent30.length?(recent30.length/4).toFixed(1):0;
+
+  // Genre field
+  const genreField=(col.fields||[]).find(f=>f.type==='tags'&&f.name.toLowerCase().includes('genre'));
+  const genreCounts={};
+  if(genreField)items.forEach(i=>{const v=i.customFields?.[genreField.id];(Array.isArray(v)?v:[v]).filter(Boolean).forEach(g=>{genreCounts[g]=(genreCounts[g]||0)+1;});});
+  const topGenres=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  // Rating histogram 1-10
+  const ratingBuckets=Array.from({length:10},(_,i)=>({label:String(i+1),v:allReviews.filter(r=>Math.round(parseFloat(r.rating))===i+1).length}));
+
+  // Monthly activity (last 6 months)
+  const monthData=[];
+  for(let m=5;m>=0;m--){
+    const d=new Date(now.getFullYear(),now.getMonth()-m,1);
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const count=items.filter(i=>i.createdAt&&i.createdAt.startsWith(key)).length;
+    const label=d.toLocaleDateString('fr-FR',{month:'short'});
+    monthData.push({v:count,label});
+  }
+
+  // Completion rate (last status = "finished")
+  const lastStatus=statuses[statuses.length-1];
+  const doneCount=lastStatus?items.filter(i=>i.statusId===lastStatus.id||i.status===lastStatus.id).length:0;
+  const doneRate=items.length?Math.round(doneCount/items.length*100):0;
+
+  // Top rated
+  const topRated=[...items].filter(i=>i.reviews?.some(r=>r.rating)).sort((a,b)=>{
+    const ar=a.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/a.reviews.length;
+    const br=b.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/b.reviews.length;
+    return br-ar;
+  }).slice(0,5);
+
   const customStats=col.customStats||[];
+
   el.innerHTML=`
-    <!-- Hero -->
-    <div class="stats-hero" style="margin-bottom:1rem;">
+    <!-- Hero 4 chiffres -->
+    <div class="stats-hero" style="grid-template-columns:repeat(4,1fr);margin-bottom:1rem;">
       <div class="stat-hero-card"><div class="stat-hero-val">${items.length}</div><div class="stat-hero-lbl">Total</div></div>
-      ${avgRating?`<div class="stat-hero-card"><div class="stat-hero-val">${avgRating}</div><div class="stat-hero-lbl">⭐ Note moy./10</div></div>`:''}
-      <div class="stat-hero-card"><div class="stat-hero-val">${totalViews}</div><div class="stat-hero-lbl">Visionnages</div></div>
-      <div class="stat-hero-card"><div class="stat-hero-val">${perWeek}</div><div class="stat-hero-lbl">/ semaine (30j)</div></div>
+      <div class="stat-hero-card"><div class="stat-hero-val" style="color:var(--accent2);">${avgRating?'⭐ '+avgRating:'—'}</div><div class="stat-hero-lbl">Moyenne</div></div>
+      <div class="stat-hero-card"><div class="stat-hero-val">${totalViews}</div><div class="stat-hero-lbl">Avis</div></div>
+      <div class="stat-hero-card"><div class="stat-hero-val">${doneRate}%</div><div class="stat-hero-lbl">${lastStatus?.label||'Fini'}</div></div>
     </div>
-    <!-- Status dist -->
-    <div class="stats-section-title">Répartition</div>
+
+    <!-- Statuts avec barres animées -->
+    <div class="stats-section-title">Statuts</div>
     <div class="card" style="margin-bottom:1rem;">
       ${statuses.map(s=>{
-        const cnt=items.filter(i=>i.status===s.id).length;
+        const cnt=items.filter(i=>i.statusId===s.id||i.status===s.id).length;
         const pct=items.length?Math.round(cnt/items.length*100):0;
-        return`<div class="type-dist-row"><div class="type-dist-lbl" style="font-size:12px;">${s.emoji||''} ${s.label}</div><div class="type-dist-bar"><div class="type-dist-fill" style="width:${pct}%;background:var(--accent2);"></div></div><div class="type-dist-val">${cnt}</div></div>`;
+        return`<div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:12px;font-weight:500;">${s.emoji||''} ${s.label}</span>
+            <span style="font-size:11px;color:var(--text3);">${cnt} · ${pct}%</span>
+          </div>
+          <div style="height:6px;background:var(--bg2);border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:var(--accent2);border-radius:4px;transition:width .5s ease;"></div>
+          </div>
+        </div>`;
       }).join('')}
-      ${multiViewed?`<div style="margin-top:8px;font-size:11px;color:var(--text3);">↺ ${multiViewed} élément${multiViewed>1?'s':''} revus plusieurs fois</div>`:''}
+      ${multiViewed?`<div style="margin-top:4px;font-size:11px;color:var(--text3);">↺ ${multiViewed} élément${multiViewed>1?'s':''} revus plusieurs fois</div>`:''}
     </div>
-    <!-- Top rated -->
+
+    <!-- Graphique activité mensuelle -->
+    <div class="stats-section-title">Ajouts par mois</div>
+    <div class="card" style="margin-bottom:1rem;padding:.9rem;">
+      <canvas id="tsc_monthly" style="width:100%;display:block;"></canvas>
+    </div>
+
     ${allReviews.length?`
-    <div class="stats-section-title">Mieux notés</div>
+    <!-- Histogramme des notes -->
+    <div class="stats-section-title">Distribution des notes</div>
+    <div class="card" style="margin-bottom:1rem;padding:.9rem;">
+      <canvas id="tsc_ratings" style="width:100%;display:block;"></canvas>
+    </div>`:''}
+
+    ${topGenres.length?`
+    <!-- Top genres barres horizontales -->
+    <div class="stats-section-title">Genres</div>
     <div class="card" style="margin-bottom:1rem;">
-      ${[...items].filter(i=>i.reviews&&i.reviews.some(r=>r.rating)).sort((a,b)=>{
-        const ar=a.reviews.reduce((s,r)=>s+(r.rating||0),0)/a.reviews.length;
-        const br=b.reviews.reduce((s,r)=>s+(r.rating||0),0)/b.reviews.length;
-        return br-ar;
-      }).slice(0,5).map(i=>{
-        const avg=(i.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/i.reviews.length).toFixed(1);
-        return`<div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);">
-          <span style="flex:1;font-size:13px;color:var(--text);">${i.title||'Sans titre'}</span>
-          ${starsHtml(parseFloat(avg))}
+      ${topGenres.map(([g,c])=>{
+        const pct=Math.round(c/items.length*100);
+        return`<div style="margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
+            <span style="font-weight:500;">${g}</span>
+            <span style="color:var(--text3);">${c}</span>
+          </div>
+          <div style="height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:var(--accent2);opacity:.75;border-radius:3px;transition:width .4s;"></div>
+          </div>
         </div>`;
       }).join('')}
     </div>`:''}
+
+    ${topRated.length?`
+    <!-- Top rated -->
+    <div class="stats-section-title">Mieux notés</div>
+    <div class="card" style="margin-bottom:1rem;">
+      ${topRated.map((i,idx)=>{
+        const avg=(i.reviews.reduce((s,r)=>s+(parseFloat(r.rating)||0),0)/i.reviews.length).toFixed(1);
+        const medals=['🥇','🥈','🥉'];
+        return`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:14px;width:20px;">${medals[idx]||''}</span>
+          <span style="flex:1;font-size:13px;color:var(--text);font-weight:500;">${i.title||'Sans titre'}</span>
+          <span style="font-size:13px;color:var(--accent2);font-weight:700;">${avg}<span style="font-size:10px;color:var(--text3);font-weight:400;">/10</span></span>
+        </div>`;
+      }).join('')}
+    </div>`:''}
+
     <!-- Custom stats -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
       <div class="stats-section-title" style="margin:0;">Stats personnalisées</div>
@@ -5209,15 +6271,46 @@ function showTrackingColStats(colId){
     <div class="card" style="margin-bottom:1rem;" id="customStatsCard_${colId}">
       ${customStats.length?customStats.map((cs,i)=>`
         <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
-          <div style="flex:1;">
-            <div style="font-size:12px;font-weight:500;color:var(--text);">${cs.name}</div>
-            <div style="font-size:11px;color:var(--text3);">${cs.desc||''}</div>
-          </div>
+          <div style="flex:1;"><div style="font-size:12px;font-weight:500;">${cs.name}</div><div style="font-size:11px;color:var(--text3);">${cs.desc||''}</div></div>
           <div style="font-family:var(--font-serif);font-size:20px;color:var(--accent2);">${computeCustomStat(colId,cs)}</div>
           <button onclick="deleteCustomStat('${colId}',${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;">🗑</button>
         </div>`).join(''):'<p style="font-size:12px;color:var(--text3);">Aucune stat personnalisée. Ajoutez-en une.</p>'}
     </div>
   `;
+
+  // Draw charts after render
+  requestAnimationFrame(()=>{
+    drawMiniBarChart('tsc_monthly', monthData, getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim()||'#8B7355');
+    if(allReviews.length) drawRatingHistogram('tsc_ratings', ratingBuckets);
+  });
+}
+
+function drawRatingHistogram(canvasId, buckets){
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const W=canvas.parentElement?.offsetWidth||360, H=90;
+  const dpr=window.devicePixelRatio||1;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+  const maxV=Math.max(1,...buckets.map(b=>b.v));
+  const bw=Math.floor((W-20)/buckets.length)-3;
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const tc=isDark?'#6B6860':'#A09D99';
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim()||'#8B7355';
+  buckets.forEach((b,i)=>{
+    const x=10+i*(bw+3);
+    const bh=Math.max(2,Math.round((b.v/maxV)*(H-22)));
+    const y=H-14-bh;
+    // Color gradient: low=blue, high=green
+    const t=i/9;
+    ctx.fillStyle=b.v>0?accent:'rgba(0,0,0,.06)';
+    ctx.globalAlpha=b.v>0?0.4+t*0.6:1;
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,bw,bh,2);ctx.fill();}else{ctx.fillRect(x,y,bw,bh);}
+    ctx.globalAlpha=1;
+    ctx.fillStyle=tc;ctx.font=`9px DM Sans,sans-serif`;ctx.textAlign='center';
+    ctx.fillText(b.label,x+bw/2,H-2);
+    if(b.v>0){ctx.fillStyle=accent;ctx.font=`bold 8px DM Sans,sans-serif`;ctx.fillText(b.v,x+bw/2,y-2);}
+  });
 }
 function computeCustomStat(colId,cs){
   const items=S.tracking.items.filter(i=>i.colId===colId);
